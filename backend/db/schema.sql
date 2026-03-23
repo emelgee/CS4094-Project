@@ -25,6 +25,27 @@ CREATE TABLE pokemon (
   ability_hidden VARCHAR(50) NULL
 );
 
+CREATE TABLE item (
+  id INT PRIMARY KEY,
+  name VARCHAR(20) NOT NULL
+)
+
+CREATE TABLE move (
+  id INT PRIMARY KEY,
+  name VARCHAR(20) NOT NULL,
+  type1 VARCHAR(20) NOT NULL,
+  power INT NOT NULL,
+  accuracy INT NOT NULL CHECK (accuracy BETWEEN 0 AND 100),
+  pp INT NOT NULL
+)
+
+CREATE TABLE ability(
+  id INT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  effect JSON NOT NULL,
+  flavorText VARCHAR(255)
+)
+
 CREATE TABLE encounter (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
@@ -48,12 +69,24 @@ CREATE TABLE encounter (
   sp_defense_ev INT NOT NULL DEFAULT 0 CHECK (sp_defense_ev BETWEEN 0 AND 252),
   speed_ev INT NOT NULL DEFAULT 0 CHECK (speed_ev BETWEEN 0 AND 252),
 
+  move1_id INT NULL,
+  move2_id INT NULL,
+  move3_id INT NULL,
+  move4_id INT NULL,
+
+  item_id INT NULL,
+
   CHECK (
   hp_ev + attack_ev + defense_ev + sp_attack_ev + sp_defense_ev + speed_ev <= 510
   ),
 
   status VARCHAR(20),
 
+  FOREIGN KEY (item_id) REFERENCES item(id),
+  FOREIGN KEY (move1_id) REFERENCES move(id),
+  FOREIGN KEY (move2_id) REFERENCES move(id),
+  FOREIGN KEY (move3_id) REFERENCES move(id),
+  FOREIGN KEY (move4_id) REFERENCES move(id),
   FOREIGN KEY (pokemon_id) REFERENCES pokemon(id),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
