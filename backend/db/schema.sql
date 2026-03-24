@@ -1,5 +1,9 @@
-DROP TABLE IF EXISTS pokemon;
 DROP TABLE IF EXISTS encounter;
+DROP TABLE IF EXISTS ability;
+DROP TABLE IF EXISTS move;
+DROP TABLE IF EXISTS item;
+DROP TABLE IF EXISTS pokemon;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -28,23 +32,23 @@ CREATE TABLE pokemon (
 CREATE TABLE item (
   id INT PRIMARY KEY,
   name VARCHAR(20) NOT NULL
-)
+);
 
 CREATE TABLE move (
   id INT PRIMARY KEY,
   name VARCHAR(20) NOT NULL,
-  type1 VARCHAR(20) NOT NULL,
-  power INT NOT NULL,
-  accuracy INT NOT NULL CHECK (accuracy BETWEEN 0 AND 100),
+  type VARCHAR(20) NOT NULL,
+  power INT NULL,
+  accuracy INT NULL CHECK (accuracy BETWEEN 0 AND 100 OR accuracy IS NULL),
   pp INT NOT NULL
-)
+);
 
 CREATE TABLE ability(
   id INT PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   effect JSON NOT NULL,
   flavorText VARCHAR(255)
-)
+);
 
 CREATE TABLE encounter (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -53,14 +57,14 @@ CREATE TABLE encounter (
   location VARCHAR(50),
   nickname VARCHAR(20),
   ability VARCHAR(50),
-  nature VARCHAR(20) NOT NULL DEFAULT 'Serious',
+  nature VARCHAR(20) NOT NULL DEFAULT 'serious',
 
-  hp_iv INT NOT NULL DEFAULT 0 CHECK (hp_iv BETWEEN 0 AND 31),
-  attack_iv INT NOT NULL DEFAULT 0 CHECK (attack_iv BETWEEN 0 AND 31),
-  defense_iv INT NOT NULL DEFAULT 0 CHECK (defense_iv BETWEEN 0 AND 31),
-  sp_attack_iv INT NOT NULL DEFAULT 0 CHECK (sp_attack_iv BETWEEN 0 AND 31),
-  sp_defense_iv INT NOT NULL DEFAULT 0 CHECK (sp_defense_iv BETWEEN 0 AND 31),
-  speed_iv INT NOT NULL DEFAULT 0 CHECK (speed_iv BETWEEN 0 AND 31),
+  hp_iv INT NOT NULL DEFAULT 31 CHECK (hp_iv BETWEEN 0 AND 31),
+  attack_iv INT NOT NULL DEFAULT 31 CHECK (attack_iv BETWEEN 0 AND 31),
+  defense_iv INT NOT NULL DEFAULT 31 CHECK (defense_iv BETWEEN 0 AND 31),
+  sp_attack_iv INT NOT NULL DEFAULT 31 CHECK (sp_attack_iv BETWEEN 0 AND 31),
+  sp_defense_iv INT NOT NULL DEFAULT 31 CHECK (sp_defense_iv BETWEEN 0 AND 31),
+  speed_iv INT NOT NULL DEFAULT 31 CHECK (speed_iv BETWEEN 0 AND 31),
 
   hp_ev INT NOT NULL DEFAULT 0 CHECK (hp_ev BETWEEN 0 AND 252),
   attack_ev INT NOT NULL DEFAULT 0 CHECK (attack_ev BETWEEN 0 AND 252),
