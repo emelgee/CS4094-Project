@@ -26,7 +26,7 @@ async function insertMoves(moveRows) {
       await connection.execute(INSERT_MOVE_SQL, [
         move.id,
         move.name,
-        move.type,        // scraped as "type", mapped to type1 column
+        move.type,
         move.power ?? null,
         move.accuracy ?? null,
         move.pp,

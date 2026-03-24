@@ -1,43 +1,159 @@
 const BASE_URL = "https://pokeapi.co/api/v2/pokemon";
+const SPECIES_URL = "https://pokeapi.co/api/v2/pokemon-species";
 const fs = require("fs/promises");
 const path = require("path");
 
 const OUTPUT_PATH = path.join(__dirname, "../data/pokemon.json");
 
-async function fetchPokemon(id) {
-  try {
-    const res = await fetch(`${BASE_URL}/${id}`);
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
+const VERSION_GROUP_ORDER = [
+  "red-blue", "yellow", "gold-silver", "crystal",
+  "ruby-sapphire", "emerald", "firered-leafgreen", "colosseum", "xd",
+  // Gen 4+ below — anything from here on is "after Gen 3"
+  "diamond-pearl", "platinum", "heartgold-soulsilver", "black-white",
+  "black-2-white-2", "x-y", "omega-ruby-alpha-sapphire", "sun-moon",
+  "ultra-sun-ultra-moon", "sword-shield", "scarlet-violet",
+];
+
+const GEN3_LAST_INDEX = VERSION_GROUP_ORDER.indexOf("xd"); // index 8
+
+function versionGroupIndex(name) {
+  const idx = VERSION_GROUP_ORDER.indexOf(name);
+  return idx === -1 ? 999 : idx;
+}
+
+// Generation order for past_types / past_abilities resolution
+const GENERATION_ORDER = [
+  "generation-i", "generation-ii", "generation-iii",
+  "generation-iv", "generation-v", "generation-vi",
+  "generation-vii", "generation-viii", "generation-ix",
+];
+
+const POST_GEN3_GENERATIONS = new Set([
+  "generation-iv", "generation-v", "generation-vi",
+  "generation-vii", "generation-viii", "generation-ix",
+]);
+
+function generationIndex(name) {
+  const idx = GENERATION_ORDER.indexOf(name);
+  return idx === -1 ? 999 : idx;
+}
+
+/**
+ * Stats are stored in past_stats as { generation, stats[] }.
+ * Each stat entry has { base_stat, stat: { name } }.
+ * Find the earliest post-Gen3 generation entry that contains the stat we want
+ * — its base_stat is what was active in Gen 3.
+ */
+function resolveGen3Stat(pastStats, statName, currentValue) {
+  // Gather all post-Gen3 entries that include this specific stat
+  const postGen3Entries = (pastStats || [])
+    .filter((ps) => POST_GEN3_GENERATIONS.has(ps.generation?.name))
+    .sort((a, b) => generationIndex(a.generation.name) - generationIndex(b.generation.name));
+
+  for (const entry of postGen3Entries) {
+    const statEntry = (entry.stats || []).find((s) => s.stat?.name === statName);
+    if (statEntry !== undefined) {
+      return statEntry.base_stat;
     }
+  }
 
-    const data = await res.json();
-    const abilities = data.abilities || [];
-    const normalAbilities = abilities
-      .filter((entry) => !entry.is_hidden)
-      .map((entry) => entry.ability?.name)
-      .filter(Boolean);
-    const hiddenAbility = abilities.find((entry) => entry.is_hidden)?.ability?.name || null;
+  return currentValue;
+}
 
-    const types = (data.types || [])
+/**
+ * Types are stored in past_types as { generation, types[] }.
+ * Find the earliest post-Gen3 generation entry — those types are what Gen 3 had.
+ */
+function resolveGen3Types(pastTypes, currentTypes) {
+  const postGen3Entries = (pastTypes || [])
+    .filter((pt) => POST_GEN3_GENERATIONS.has(pt.generation?.name))
+    .sort((a, b) => generationIndex(a.generation.name) - generationIndex(b.generation.name));
+
+  if (postGen3Entries.length > 0) {
+    return postGen3Entries[0].types
       .sort((a, b) => a.slot - b.slot)
       .map((entry) => entry.type?.name)
       .filter(Boolean);
+  }
+
+  return currentTypes;
+}
+
+/**
+ * Abilities are stored in past_abilities on the SPECIES endpoint as { generation, abilities[] }.
+ * Each ability entry has { ability, is_hidden, slot }. Hideen abilities didnt exist until Gen V,
+ * so always null.
+ */
+function resolveGen3Abilities(pastAbilities, currentAbilities) {
+  const postGen3Entries = (pastAbilities || [])
+    .filter((pa) => POST_GEN3_GENERATIONS.has(pa.generation?.name))
+    .sort((a, b) => generationIndex(a.generation.name) - generationIndex(b.generation.name));
+
+  const abilityList = postGen3Entries.length > 0
+    ? postGen3Entries[0].abilities
+    : currentAbilities;
+
+  const normal = abilityList
+    .filter((entry) => !entry.is_hidden)
+    .sort((a, b) => a.slot - b.slot)
+    .map((entry) => entry.ability?.name)
+    .filter(Boolean);
+
+  return {
+    ability1: normal[0] || null,
+    ability2: normal[1] || null,
+    ability_hidden: null, // Hidden abilities did not exist in Gen 3
+  };
+}
+
+async function fetchPokemon(id) {
+  try {
+    const [pokeRes, speciesRes] = await Promise.all([
+      fetch(`${BASE_URL}/${id}`),
+      fetch(`${SPECIES_URL}/${id}`),
+    ]);
+
+    if (!pokeRes.ok) throw new Error(`Pokemon HTTP ${pokeRes.status}`);
+    if (!speciesRes.ok) throw new Error(`Species HTTP ${speciesRes.status}`);
+
+    const [data, species] = await Promise.all([pokeRes.json(), speciesRes.json()]);
+
+    // Resolve stats via past_values
+    const pastStats = data.past_stats || [];
+    const hp         = resolveGen3Stat(pastStats, "hp",              data.stats[0].base_stat);
+    const attack     = resolveGen3Stat(pastStats, "attack",          data.stats[1].base_stat);
+    const defense    = resolveGen3Stat(pastStats, "defense",         data.stats[2].base_stat);
+    const sp_attack  = resolveGen3Stat(pastStats, "special-attack",  data.stats[3].base_stat);
+    const sp_defense = resolveGen3Stat(pastStats, "special-defense", data.stats[4].base_stat);
+    const speed      = resolveGen3Stat(pastStats, "speed",           data.stats[5].base_stat);
+
+    // Resolve types via past_types on the pokemon endpoint
+    const currentTypes = (data.types || [])
+      .sort((a, b) => a.slot - b.slot)
+      .map((entry) => entry.type?.name)
+      .filter(Boolean);
+    const types = resolveGen3Types(data.past_types || [], currentTypes);
+
+    // Resolve abilities via past_abilities on the species endpoint
+    const { ability1, ability2, ability_hidden } = resolveGen3Abilities(
+      species.past_abilities || [],
+      data.abilities || []
+    );
 
     return {
       id: data.id,
       name: data.name,
-      hp: data.stats[0].base_stat,
-      attack: data.stats[1].base_stat,
-      defense: data.stats[2].base_stat,
-      sp_attack: data.stats[3].base_stat,
-      sp_defense: data.stats[4].base_stat,
-      speed: data.stats[5].base_stat,
+      hp,
+      attack,
+      defense,
+      sp_attack,
+      sp_defense,
+      speed,
       type1: types[0] || null,
       type2: types[1] || null,
-      ability1: normalAbilities[0] || null,
-      ability2: normalAbilities[1] || null,
-      ability_hidden: hiddenAbility
+      ability1,
+      ability2,
+      ability_hidden,
     };
   } catch (err) {
     console.error(`Error fetching Pokemon ${id}:`, err.message);
