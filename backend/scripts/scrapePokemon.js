@@ -5,22 +5,6 @@ const path = require("path");
 
 const OUTPUT_PATH = path.join(__dirname, "../data/pokemon.json");
 
-const VERSION_GROUP_ORDER = [
-  "red-blue", "yellow", "gold-silver", "crystal",
-  "ruby-sapphire", "emerald", "firered-leafgreen", "colosseum", "xd",
-  // Gen 4+ below — anything from here on is "after Gen 3"
-  "diamond-pearl", "platinum", "heartgold-soulsilver", "black-white",
-  "black-2-white-2", "x-y", "omega-ruby-alpha-sapphire", "sun-moon",
-  "ultra-sun-ultra-moon", "sword-shield", "scarlet-violet",
-];
-
-const GEN3_LAST_INDEX = VERSION_GROUP_ORDER.indexOf("xd"); // index 8
-
-function versionGroupIndex(name) {
-  const idx = VERSION_GROUP_ORDER.indexOf(name);
-  return idx === -1 ? 999 : idx;
-}
-
 // Generation order for past_types / past_abilities resolution
 const GENERATION_ORDER = [
   "generation-i", "generation-ii", "generation-iii",
