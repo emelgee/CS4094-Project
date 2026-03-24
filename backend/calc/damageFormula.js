@@ -32,10 +32,13 @@ function calculateDamage(attacker, defender, move, conditions)
     // weather mod
     const weather = getWeatherModifier(move.type.toLowerCase(), conditions.weather);
 
+    //crit mod
     const crit = conditions.isCrit ? 2 : 1;
 
+    //burn mod
     const burn = (conditions.isBurned && isPhysical) ? 0.5 : 1;
 
+    //item mod
     const item = getItemModifier(attacker.item, move.type.toLowerCase(), isPhysical);
 
     //min damage(0.85 multiplier)
