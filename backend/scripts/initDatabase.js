@@ -2,6 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const { pool, closePool } = require("../db/connection");
 const { waitForDatabase } = require("../db/waitForDatabase");
+const { insertUser } = require("./users");
 
 const schemaPath = path.join(__dirname, "../db/schema.sql");
 
@@ -28,6 +29,7 @@ async function initDatabase() {
 async function run() {
   try {
     await initDatabase();
+    await insertUser("admin", "admin", "admin");
     console.log("Database schema initialized successfully.");
   } catch (error) {
     console.error("Failed to initialize database schema:", error.message);
