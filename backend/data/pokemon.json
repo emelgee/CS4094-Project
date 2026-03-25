@@ -12,7 +12,7 @@
     "type2": "poison",
     "ability1": "overgrow",
     "ability2": null,
-    "ability_hidden": "chlorophyll"
+    "ability_hidden": null
   },
   {
     "id": 2,
@@ -27,7 +27,7 @@
     "type2": "poison",
     "ability1": "overgrow",
     "ability2": null,
-    "ability_hidden": "chlorophyll"
+    "ability_hidden": null
   },
   {
     "id": 3,
@@ -42,7 +42,7 @@
     "type2": "poison",
     "ability1": "overgrow",
     "ability2": null,
-    "ability_hidden": "chlorophyll"
+    "ability_hidden": null
   },
   {
     "id": 4,
@@ -57,7 +57,7 @@
     "type2": null,
     "ability1": "blaze",
     "ability2": null,
-    "ability_hidden": "solar-power"
+    "ability_hidden": null
   },
   {
     "id": 5,
@@ -72,7 +72,7 @@
     "type2": null,
     "ability1": "blaze",
     "ability2": null,
-    "ability_hidden": "solar-power"
+    "ability_hidden": null
   },
   {
     "id": 6,
@@ -87,7 +87,7 @@
     "type2": "flying",
     "ability1": "blaze",
     "ability2": null,
-    "ability_hidden": "solar-power"
+    "ability_hidden": null
   },
   {
     "id": 7,
@@ -102,7 +102,7 @@
     "type2": null,
     "ability1": "torrent",
     "ability2": null,
-    "ability_hidden": "rain-dish"
+    "ability_hidden": null
   },
   {
     "id": 8,
@@ -117,7 +117,7 @@
     "type2": null,
     "ability1": "torrent",
     "ability2": null,
-    "ability_hidden": "rain-dish"
+    "ability_hidden": null
   },
   {
     "id": 9,
@@ -132,7 +132,7 @@
     "type2": null,
     "ability1": "torrent",
     "ability2": null,
-    "ability_hidden": "rain-dish"
+    "ability_hidden": null
   },
   {
     "id": 10,
@@ -147,7 +147,7 @@
     "type2": null,
     "ability1": "shield-dust",
     "ability2": null,
-    "ability_hidden": "run-away"
+    "ability_hidden": null
   },
   {
     "id": 11,
@@ -170,14 +170,14 @@
     "hp": 60,
     "attack": 45,
     "defense": 50,
-    "sp_attack": 90,
+    "sp_attack": 80,
     "sp_defense": 80,
     "speed": 70,
     "type1": "bug",
     "type2": "flying",
     "ability1": "compound-eyes",
     "ability2": null,
-    "ability_hidden": "tinted-lens"
+    "ability_hidden": null
   },
   {
     "id": 13,
@@ -192,7 +192,7 @@
     "type2": "poison",
     "ability1": "shield-dust",
     "ability2": null,
-    "ability_hidden": "run-away"
+    "ability_hidden": null
   },
   {
     "id": 14,
@@ -213,7 +213,7 @@
     "id": 15,
     "name": "beedrill",
     "hp": 65,
-    "attack": 90,
+    "attack": 80,
     "defense": 40,
     "sp_attack": 45,
     "sp_defense": 80,
@@ -222,7 +222,7 @@
     "type2": "poison",
     "ability1": "swarm",
     "ability2": null,
-    "ability_hidden": "sniper"
+    "ability_hidden": null
   },
   {
     "id": 16,
@@ -237,7 +237,7 @@
     "type2": "flying",
     "ability1": "keen-eye",
     "ability2": "tangled-feet",
-    "ability_hidden": "big-pecks"
+    "ability_hidden": null
   },
   {
     "id": 17,
@@ -252,7 +252,7 @@
     "type2": "flying",
     "ability1": "keen-eye",
     "ability2": "tangled-feet",
-    "ability_hidden": "big-pecks"
+    "ability_hidden": null
   },
   {
     "id": 18,
@@ -262,12 +262,12 @@
     "defense": 75,
     "sp_attack": 70,
     "sp_defense": 70,
-    "speed": 101,
+    "speed": 91,
     "type1": "normal",
     "type2": "flying",
     "ability1": "keen-eye",
     "ability2": "tangled-feet",
-    "ability_hidden": "big-pecks"
+    "ability_hidden": null
   },
   {
     "id": 19,
@@ -282,7 +282,7 @@
     "type2": null,
     "ability1": "run-away",
     "ability2": "guts",
-    "ability_hidden": "hustle"
+    "ability_hidden": null
   },
   {
     "id": 20,
@@ -297,7 +297,7 @@
     "type2": null,
     "ability1": "run-away",
     "ability2": "guts",
-    "ability_hidden": "hustle"
+    "ability_hidden": null
   },
   {
     "id": 21,
@@ -312,7 +312,7 @@
     "type2": "flying",
     "ability1": "keen-eye",
     "ability2": null,
-    "ability_hidden": "sniper"
+    "ability_hidden": null
   },
   {
     "id": 22,
@@ -327,7 +327,7 @@
     "type2": "flying",
     "ability1": "keen-eye",
     "ability2": null,
-    "ability_hidden": "sniper"
+    "ability_hidden": null
   },
   {
     "id": 23,
@@ -342,13 +342,13 @@
     "type2": null,
     "ability1": "intimidate",
     "ability2": "shed-skin",
-    "ability_hidden": "unnerve"
+    "ability_hidden": null
   },
   {
     "id": 24,
     "name": "arbok",
     "hp": 60,
-    "attack": 95,
+    "attack": 85,
     "defense": 69,
     "sp_attack": 65,
     "sp_defense": 79,
@@ -357,22 +357,22 @@
     "type2": null,
     "ability1": "intimidate",
     "ability2": "shed-skin",
-    "ability_hidden": "unnerve"
+    "ability_hidden": null
   },
   {
     "id": 25,
     "name": "pikachu",
     "hp": 35,
     "attack": 55,
-    "defense": 40,
+    "defense": 30,
     "sp_attack": 50,
-    "sp_defense": 50,
+    "sp_defense": 40,
     "speed": 90,
     "type1": "electric",
     "type2": null,
     "ability1": "static",
     "ability2": null,
-    "ability_hidden": "lightning-rod"
+    "ability_hidden": null
   },
   {
     "id": 26,
@@ -382,12 +382,12 @@
     "defense": 55,
     "sp_attack": 90,
     "sp_defense": 80,
-    "speed": 110,
+    "speed": 100,
     "type1": "electric",
     "type2": null,
     "ability1": "static",
     "ability2": null,
-    "ability_hidden": "lightning-rod"
+    "ability_hidden": null
   },
   {
     "id": 27,
@@ -402,7 +402,7 @@
     "type2": null,
     "ability1": "sand-veil",
     "ability2": null,
-    "ability_hidden": "sand-rush"
+    "ability_hidden": null
   },
   {
     "id": 28,
@@ -417,7 +417,7 @@
     "type2": null,
     "ability1": "sand-veil",
     "ability2": null,
-    "ability_hidden": "sand-rush"
+    "ability_hidden": null
   },
   {
     "id": 29,
@@ -432,7 +432,7 @@
     "type2": null,
     "ability1": "poison-point",
     "ability2": "rivalry",
-    "ability_hidden": "hustle"
+    "ability_hidden": null
   },
   {
     "id": 30,
@@ -447,13 +447,13 @@
     "type2": null,
     "ability1": "poison-point",
     "ability2": "rivalry",
-    "ability_hidden": "hustle"
+    "ability_hidden": null
   },
   {
     "id": 31,
     "name": "nidoqueen",
     "hp": 90,
-    "attack": 92,
+    "attack": 82,
     "defense": 87,
     "sp_attack": 75,
     "sp_defense": 85,
@@ -462,7 +462,7 @@
     "type2": "ground",
     "ability1": "poison-point",
     "ability2": "rivalry",
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 32,
@@ -477,7 +477,7 @@
     "type2": null,
     "ability1": "poison-point",
     "ability2": "rivalry",
-    "ability_hidden": "hustle"
+    "ability_hidden": null
   },
   {
     "id": 33,
@@ -492,13 +492,13 @@
     "type2": null,
     "ability1": "poison-point",
     "ability2": "rivalry",
-    "ability_hidden": "hustle"
+    "ability_hidden": null
   },
   {
     "id": 34,
     "name": "nidoking",
     "hp": 81,
-    "attack": 102,
+    "attack": 92,
     "defense": 77,
     "sp_attack": 85,
     "sp_defense": 75,
@@ -507,7 +507,7 @@
     "type2": "ground",
     "ability1": "poison-point",
     "ability2": "rivalry",
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 35,
@@ -518,11 +518,11 @@
     "sp_attack": 60,
     "sp_defense": 65,
     "speed": 35,
-    "type1": "fairy",
+    "type1": "normal",
     "type2": null,
     "ability1": "cute-charm",
     "ability2": "magic-guard",
-    "ability_hidden": "friend-guard"
+    "ability_hidden": null
   },
   {
     "id": 36,
@@ -530,14 +530,14 @@
     "hp": 95,
     "attack": 70,
     "defense": 73,
-    "sp_attack": 95,
+    "sp_attack": 85,
     "sp_defense": 90,
     "speed": 60,
-    "type1": "fairy",
+    "type1": "normal",
     "type2": null,
     "ability1": "cute-charm",
     "ability2": "magic-guard",
-    "ability_hidden": "unaware"
+    "ability_hidden": null
   },
   {
     "id": 37,
@@ -552,7 +552,7 @@
     "type2": null,
     "ability1": "flash-fire",
     "ability2": null,
-    "ability_hidden": "drought"
+    "ability_hidden": null
   },
   {
     "id": 38,
@@ -567,7 +567,7 @@
     "type2": null,
     "ability1": "flash-fire",
     "ability2": null,
-    "ability_hidden": "drought"
+    "ability_hidden": null
   },
   {
     "id": 39,
@@ -579,10 +579,10 @@
     "sp_defense": 25,
     "speed": 20,
     "type1": "normal",
-    "type2": "fairy",
+    "type2": null,
     "ability1": "cute-charm",
     "ability2": "competitive",
-    "ability_hidden": "friend-guard"
+    "ability_hidden": null
   },
   {
     "id": 40,
@@ -590,14 +590,14 @@
     "hp": 140,
     "attack": 70,
     "defense": 45,
-    "sp_attack": 85,
+    "sp_attack": 75,
     "sp_defense": 50,
     "speed": 45,
     "type1": "normal",
-    "type2": "fairy",
+    "type2": null,
     "ability1": "cute-charm",
     "ability2": "competitive",
-    "ability_hidden": "frisk"
+    "ability_hidden": null
   },
   {
     "id": 41,
@@ -612,7 +612,7 @@
     "type2": "flying",
     "ability1": "inner-focus",
     "ability2": null,
-    "ability_hidden": "infiltrator"
+    "ability_hidden": null
   },
   {
     "id": 42,
@@ -627,7 +627,7 @@
     "type2": "flying",
     "ability1": "inner-focus",
     "ability2": null,
-    "ability_hidden": "infiltrator"
+    "ability_hidden": null
   },
   {
     "id": 43,
@@ -642,7 +642,7 @@
     "type2": "poison",
     "ability1": "chlorophyll",
     "ability2": null,
-    "ability_hidden": "run-away"
+    "ability_hidden": null
   },
   {
     "id": 44,
@@ -657,7 +657,7 @@
     "type2": "poison",
     "ability1": "chlorophyll",
     "ability2": null,
-    "ability_hidden": "stench"
+    "ability_hidden": null
   },
   {
     "id": 45,
@@ -665,14 +665,14 @@
     "hp": 75,
     "attack": 80,
     "defense": 85,
-    "sp_attack": 110,
+    "sp_attack": 100,
     "sp_defense": 90,
     "speed": 50,
     "type1": "grass",
     "type2": "poison",
     "ability1": "chlorophyll",
     "ability2": null,
-    "ability_hidden": "effect-spore"
+    "ability_hidden": null
   },
   {
     "id": 46,
@@ -687,7 +687,7 @@
     "type2": "grass",
     "ability1": "effect-spore",
     "ability2": "dry-skin",
-    "ability_hidden": "damp"
+    "ability_hidden": null
   },
   {
     "id": 47,
@@ -702,7 +702,7 @@
     "type2": "grass",
     "ability1": "effect-spore",
     "ability2": "dry-skin",
-    "ability_hidden": "damp"
+    "ability_hidden": null
   },
   {
     "id": 48,
@@ -717,7 +717,7 @@
     "type2": "poison",
     "ability1": "compound-eyes",
     "ability2": "tinted-lens",
-    "ability_hidden": "run-away"
+    "ability_hidden": null
   },
   {
     "id": 49,
@@ -732,7 +732,7 @@
     "type2": "poison",
     "ability1": "shield-dust",
     "ability2": "tinted-lens",
-    "ability_hidden": "wonder-skin"
+    "ability_hidden": null
   },
   {
     "id": 50,
@@ -747,13 +747,13 @@
     "type2": null,
     "ability1": "sand-veil",
     "ability2": "arena-trap",
-    "ability_hidden": "sand-force"
+    "ability_hidden": null
   },
   {
     "id": 51,
     "name": "dugtrio",
     "hp": 35,
-    "attack": 100,
+    "attack": 80,
     "defense": 50,
     "sp_attack": 50,
     "sp_defense": 70,
@@ -762,7 +762,7 @@
     "type2": null,
     "ability1": "sand-veil",
     "ability2": "arena-trap",
-    "ability_hidden": "sand-force"
+    "ability_hidden": null
   },
   {
     "id": 52,
@@ -777,7 +777,7 @@
     "type2": null,
     "ability1": "pickup",
     "ability2": "technician",
-    "ability_hidden": "unnerve"
+    "ability_hidden": null
   },
   {
     "id": 53,
@@ -792,7 +792,7 @@
     "type2": null,
     "ability1": "limber",
     "ability2": "technician",
-    "ability_hidden": "unnerve"
+    "ability_hidden": null
   },
   {
     "id": 54,
@@ -807,7 +807,7 @@
     "type2": null,
     "ability1": "damp",
     "ability2": "cloud-nine",
-    "ability_hidden": "swift-swim"
+    "ability_hidden": null
   },
   {
     "id": 55,
@@ -822,7 +822,7 @@
     "type2": null,
     "ability1": "damp",
     "ability2": "cloud-nine",
-    "ability_hidden": "swift-swim"
+    "ability_hidden": null
   },
   {
     "id": 56,
@@ -837,7 +837,7 @@
     "type2": null,
     "ability1": "vital-spirit",
     "ability2": "anger-point",
-    "ability_hidden": "defiant"
+    "ability_hidden": null
   },
   {
     "id": 57,
@@ -852,7 +852,7 @@
     "type2": null,
     "ability1": "vital-spirit",
     "ability2": "anger-point",
-    "ability_hidden": "defiant"
+    "ability_hidden": null
   },
   {
     "id": 58,
@@ -867,7 +867,7 @@
     "type2": null,
     "ability1": "intimidate",
     "ability2": "flash-fire",
-    "ability_hidden": "justified"
+    "ability_hidden": null
   },
   {
     "id": 59,
@@ -882,7 +882,7 @@
     "type2": null,
     "ability1": "intimidate",
     "ability2": "flash-fire",
-    "ability_hidden": "justified"
+    "ability_hidden": null
   },
   {
     "id": 60,
@@ -897,7 +897,7 @@
     "type2": null,
     "ability1": "water-absorb",
     "ability2": "damp",
-    "ability_hidden": "swift-swim"
+    "ability_hidden": null
   },
   {
     "id": 61,
@@ -912,13 +912,13 @@
     "type2": null,
     "ability1": "water-absorb",
     "ability2": "damp",
-    "ability_hidden": "swift-swim"
+    "ability_hidden": null
   },
   {
     "id": 62,
     "name": "poliwrath",
     "hp": 90,
-    "attack": 95,
+    "attack": 85,
     "defense": 95,
     "sp_attack": 70,
     "sp_defense": 90,
@@ -927,7 +927,7 @@
     "type2": "fighting",
     "ability1": "water-absorb",
     "ability2": "damp",
-    "ability_hidden": "swift-swim"
+    "ability_hidden": null
   },
   {
     "id": 63,
@@ -942,7 +942,7 @@
     "type2": null,
     "ability1": "synchronize",
     "ability2": "inner-focus",
-    "ability_hidden": "magic-guard"
+    "ability_hidden": null
   },
   {
     "id": 64,
@@ -957,7 +957,7 @@
     "type2": null,
     "ability1": "synchronize",
     "ability2": "inner-focus",
-    "ability_hidden": "magic-guard"
+    "ability_hidden": null
   },
   {
     "id": 65,
@@ -966,13 +966,13 @@
     "attack": 50,
     "defense": 45,
     "sp_attack": 135,
-    "sp_defense": 95,
+    "sp_defense": 85,
     "speed": 120,
     "type1": "psychic",
     "type2": null,
     "ability1": "synchronize",
     "ability2": "inner-focus",
-    "ability_hidden": "magic-guard"
+    "ability_hidden": null
   },
   {
     "id": 66,
@@ -987,7 +987,7 @@
     "type2": null,
     "ability1": "guts",
     "ability2": "no-guard",
-    "ability_hidden": "steadfast"
+    "ability_hidden": null
   },
   {
     "id": 67,
@@ -1002,7 +1002,7 @@
     "type2": null,
     "ability1": "guts",
     "ability2": "no-guard",
-    "ability_hidden": "steadfast"
+    "ability_hidden": null
   },
   {
     "id": 68,
@@ -1017,7 +1017,7 @@
     "type2": null,
     "ability1": "guts",
     "ability2": "no-guard",
-    "ability_hidden": "steadfast"
+    "ability_hidden": null
   },
   {
     "id": 69,
@@ -1032,7 +1032,7 @@
     "type2": "poison",
     "ability1": "chlorophyll",
     "ability2": null,
-    "ability_hidden": "gluttony"
+    "ability_hidden": null
   },
   {
     "id": 70,
@@ -1047,7 +1047,7 @@
     "type2": "poison",
     "ability1": "chlorophyll",
     "ability2": null,
-    "ability_hidden": "gluttony"
+    "ability_hidden": null
   },
   {
     "id": 71,
@@ -1056,13 +1056,13 @@
     "attack": 105,
     "defense": 65,
     "sp_attack": 100,
-    "sp_defense": 70,
+    "sp_defense": 60,
     "speed": 70,
     "type1": "grass",
     "type2": "poison",
     "ability1": "chlorophyll",
     "ability2": null,
-    "ability_hidden": "gluttony"
+    "ability_hidden": null
   },
   {
     "id": 72,
@@ -1077,7 +1077,7 @@
     "type2": "poison",
     "ability1": "clear-body",
     "ability2": "liquid-ooze",
-    "ability_hidden": "rain-dish"
+    "ability_hidden": null
   },
   {
     "id": 73,
@@ -1092,7 +1092,7 @@
     "type2": "poison",
     "ability1": "clear-body",
     "ability2": "liquid-ooze",
-    "ability_hidden": "rain-dish"
+    "ability_hidden": null
   },
   {
     "id": 74,
@@ -1107,7 +1107,7 @@
     "type2": "ground",
     "ability1": "rock-head",
     "ability2": "sturdy",
-    "ability_hidden": "sand-veil"
+    "ability_hidden": null
   },
   {
     "id": 75,
@@ -1122,13 +1122,13 @@
     "type2": "ground",
     "ability1": "rock-head",
     "ability2": "sturdy",
-    "ability_hidden": "sand-veil"
+    "ability_hidden": null
   },
   {
     "id": 76,
     "name": "golem",
     "hp": 80,
-    "attack": 120,
+    "attack": 110,
     "defense": 130,
     "sp_attack": 55,
     "sp_defense": 65,
@@ -1137,7 +1137,7 @@
     "type2": "ground",
     "ability1": "rock-head",
     "ability2": "sturdy",
-    "ability_hidden": "sand-veil"
+    "ability_hidden": null
   },
   {
     "id": 77,
@@ -1152,7 +1152,7 @@
     "type2": null,
     "ability1": "run-away",
     "ability2": "flash-fire",
-    "ability_hidden": "flame-body"
+    "ability_hidden": null
   },
   {
     "id": 78,
@@ -1167,7 +1167,7 @@
     "type2": null,
     "ability1": "run-away",
     "ability2": "flash-fire",
-    "ability_hidden": "flame-body"
+    "ability_hidden": null
   },
   {
     "id": 79,
@@ -1182,7 +1182,7 @@
     "type2": "psychic",
     "ability1": "oblivious",
     "ability2": "own-tempo",
-    "ability_hidden": "regenerator"
+    "ability_hidden": null
   },
   {
     "id": 80,
@@ -1197,7 +1197,7 @@
     "type2": "psychic",
     "ability1": "oblivious",
     "ability2": "own-tempo",
-    "ability_hidden": "regenerator"
+    "ability_hidden": null
   },
   {
     "id": 81,
@@ -1212,7 +1212,7 @@
     "type2": "steel",
     "ability1": "magnet-pull",
     "ability2": "sturdy",
-    "ability_hidden": "analytic"
+    "ability_hidden": null
   },
   {
     "id": 82,
@@ -1227,13 +1227,13 @@
     "type2": "steel",
     "ability1": "magnet-pull",
     "ability2": "sturdy",
-    "ability_hidden": "analytic"
+    "ability_hidden": null
   },
   {
     "id": 83,
     "name": "farfetchd",
     "hp": 52,
-    "attack": 90,
+    "attack": 65,
     "defense": 55,
     "sp_attack": 58,
     "sp_defense": 62,
@@ -1242,7 +1242,7 @@
     "type2": "flying",
     "ability1": "keen-eye",
     "ability2": "inner-focus",
-    "ability_hidden": "defiant"
+    "ability_hidden": null
   },
   {
     "id": 84,
@@ -1257,7 +1257,7 @@
     "type2": "flying",
     "ability1": "run-away",
     "ability2": "early-bird",
-    "ability_hidden": "tangled-feet"
+    "ability_hidden": null
   },
   {
     "id": 85,
@@ -1267,12 +1267,12 @@
     "defense": 70,
     "sp_attack": 60,
     "sp_defense": 60,
-    "speed": 110,
+    "speed": 100,
     "type1": "normal",
     "type2": "flying",
     "ability1": "run-away",
     "ability2": "early-bird",
-    "ability_hidden": "tangled-feet"
+    "ability_hidden": null
   },
   {
     "id": 86,
@@ -1287,7 +1287,7 @@
     "type2": null,
     "ability1": "thick-fat",
     "ability2": "hydration",
-    "ability_hidden": "ice-body"
+    "ability_hidden": null
   },
   {
     "id": 87,
@@ -1302,7 +1302,7 @@
     "type2": "ice",
     "ability1": "thick-fat",
     "ability2": "hydration",
-    "ability_hidden": "ice-body"
+    "ability_hidden": null
   },
   {
     "id": 88,
@@ -1317,7 +1317,7 @@
     "type2": null,
     "ability1": "stench",
     "ability2": "sticky-hold",
-    "ability_hidden": "poison-touch"
+    "ability_hidden": null
   },
   {
     "id": 89,
@@ -1332,7 +1332,7 @@
     "type2": null,
     "ability1": "stench",
     "ability2": "sticky-hold",
-    "ability_hidden": "poison-touch"
+    "ability_hidden": null
   },
   {
     "id": 90,
@@ -1347,7 +1347,7 @@
     "type2": null,
     "ability1": "shell-armor",
     "ability2": "skill-link",
-    "ability_hidden": "overcoat"
+    "ability_hidden": null
   },
   {
     "id": 91,
@@ -1362,7 +1362,7 @@
     "type2": "ice",
     "ability1": "shell-armor",
     "ability2": "skill-link",
-    "ability_hidden": "overcoat"
+    "ability_hidden": null
   },
   {
     "id": 92,
@@ -1422,7 +1422,7 @@
     "type2": "ground",
     "ability1": "rock-head",
     "ability2": "sturdy",
-    "ability_hidden": "weak-armor"
+    "ability_hidden": null
   },
   {
     "id": 96,
@@ -1437,7 +1437,7 @@
     "type2": null,
     "ability1": "insomnia",
     "ability2": "forewarn",
-    "ability_hidden": "inner-focus"
+    "ability_hidden": null
   },
   {
     "id": 97,
@@ -1452,7 +1452,7 @@
     "type2": null,
     "ability1": "insomnia",
     "ability2": "forewarn",
-    "ability_hidden": "inner-focus"
+    "ability_hidden": null
   },
   {
     "id": 98,
@@ -1467,7 +1467,7 @@
     "type2": null,
     "ability1": "hyper-cutter",
     "ability2": "shell-armor",
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 99,
@@ -1482,7 +1482,7 @@
     "type2": null,
     "ability1": "hyper-cutter",
     "ability2": "shell-armor",
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 100,
@@ -1497,7 +1497,7 @@
     "type2": null,
     "ability1": "soundproof",
     "ability2": "static",
-    "ability_hidden": "aftermath"
+    "ability_hidden": null
   },
   {
     "id": 101,
@@ -1507,12 +1507,12 @@
     "defense": 70,
     "sp_attack": 80,
     "sp_defense": 80,
-    "speed": 150,
+    "speed": 140,
     "type1": "electric",
     "type2": null,
     "ability1": "soundproof",
     "ability2": "static",
-    "ability_hidden": "aftermath"
+    "ability_hidden": null
   },
   {
     "id": 102,
@@ -1527,7 +1527,7 @@
     "type2": "psychic",
     "ability1": "chlorophyll",
     "ability2": null,
-    "ability_hidden": "harvest"
+    "ability_hidden": null
   },
   {
     "id": 103,
@@ -1536,13 +1536,13 @@
     "attack": 95,
     "defense": 85,
     "sp_attack": 125,
-    "sp_defense": 75,
+    "sp_defense": 65,
     "speed": 55,
     "type1": "grass",
     "type2": "psychic",
     "ability1": "chlorophyll",
     "ability2": null,
-    "ability_hidden": "harvest"
+    "ability_hidden": null
   },
   {
     "id": 104,
@@ -1557,7 +1557,7 @@
     "type2": null,
     "ability1": "rock-head",
     "ability2": "lightning-rod",
-    "ability_hidden": "battle-armor"
+    "ability_hidden": null
   },
   {
     "id": 105,
@@ -1572,7 +1572,7 @@
     "type2": null,
     "ability1": "rock-head",
     "ability2": "lightning-rod",
-    "ability_hidden": "battle-armor"
+    "ability_hidden": null
   },
   {
     "id": 106,
@@ -1587,7 +1587,7 @@
     "type2": null,
     "ability1": "limber",
     "ability2": "reckless",
-    "ability_hidden": "unburden"
+    "ability_hidden": null
   },
   {
     "id": 107,
@@ -1602,7 +1602,7 @@
     "type2": null,
     "ability1": "keen-eye",
     "ability2": "iron-fist",
-    "ability_hidden": "inner-focus"
+    "ability_hidden": null
   },
   {
     "id": 108,
@@ -1617,7 +1617,7 @@
     "type2": null,
     "ability1": "own-tempo",
     "ability2": "oblivious",
-    "ability_hidden": "cloud-nine"
+    "ability_hidden": null
   },
   {
     "id": 109,
@@ -1632,7 +1632,7 @@
     "type2": null,
     "ability1": "levitate",
     "ability2": "neutralizing-gas",
-    "ability_hidden": "stench"
+    "ability_hidden": null
   },
   {
     "id": 110,
@@ -1647,7 +1647,7 @@
     "type2": null,
     "ability1": "levitate",
     "ability2": "neutralizing-gas",
-    "ability_hidden": "stench"
+    "ability_hidden": null
   },
   {
     "id": 111,
@@ -1662,7 +1662,7 @@
     "type2": "rock",
     "ability1": "lightning-rod",
     "ability2": "rock-head",
-    "ability_hidden": "reckless"
+    "ability_hidden": null
   },
   {
     "id": 112,
@@ -1677,7 +1677,7 @@
     "type2": "rock",
     "ability1": "lightning-rod",
     "ability2": "rock-head",
-    "ability_hidden": "reckless"
+    "ability_hidden": null
   },
   {
     "id": 113,
@@ -1692,7 +1692,7 @@
     "type2": null,
     "ability1": "natural-cure",
     "ability2": "serene-grace",
-    "ability_hidden": "healer"
+    "ability_hidden": null
   },
   {
     "id": 114,
@@ -1707,7 +1707,7 @@
     "type2": null,
     "ability1": "chlorophyll",
     "ability2": "leaf-guard",
-    "ability_hidden": "regenerator"
+    "ability_hidden": null
   },
   {
     "id": 115,
@@ -1722,7 +1722,7 @@
     "type2": null,
     "ability1": "early-bird",
     "ability2": "scrappy",
-    "ability_hidden": "inner-focus"
+    "ability_hidden": null
   },
   {
     "id": 116,
@@ -1737,7 +1737,7 @@
     "type2": null,
     "ability1": "swift-swim",
     "ability2": "sniper",
-    "ability_hidden": "damp"
+    "ability_hidden": null
   },
   {
     "id": 117,
@@ -1752,7 +1752,7 @@
     "type2": null,
     "ability1": "poison-point",
     "ability2": "sniper",
-    "ability_hidden": "damp"
+    "ability_hidden": null
   },
   {
     "id": 118,
@@ -1767,7 +1767,7 @@
     "type2": null,
     "ability1": "swift-swim",
     "ability2": "water-veil",
-    "ability_hidden": "lightning-rod"
+    "ability_hidden": null
   },
   {
     "id": 119,
@@ -1782,7 +1782,7 @@
     "type2": null,
     "ability1": "swift-swim",
     "ability2": "water-veil",
-    "ability_hidden": "lightning-rod"
+    "ability_hidden": null
   },
   {
     "id": 120,
@@ -1797,7 +1797,7 @@
     "type2": null,
     "ability1": "illuminate",
     "ability2": "natural-cure",
-    "ability_hidden": "analytic"
+    "ability_hidden": null
   },
   {
     "id": 121,
@@ -1812,7 +1812,7 @@
     "type2": "psychic",
     "ability1": "illuminate",
     "ability2": "natural-cure",
-    "ability_hidden": "analytic"
+    "ability_hidden": null
   },
   {
     "id": 122,
@@ -1824,10 +1824,10 @@
     "sp_defense": 120,
     "speed": 90,
     "type1": "psychic",
-    "type2": "fairy",
+    "type2": null,
     "ability1": "soundproof",
     "ability2": "filter",
-    "ability_hidden": "technician"
+    "ability_hidden": null
   },
   {
     "id": 123,
@@ -1842,7 +1842,7 @@
     "type2": "flying",
     "ability1": "swarm",
     "ability2": "technician",
-    "ability_hidden": "steadfast"
+    "ability_hidden": null
   },
   {
     "id": 124,
@@ -1857,7 +1857,7 @@
     "type2": "psychic",
     "ability1": "oblivious",
     "ability2": "forewarn",
-    "ability_hidden": "dry-skin"
+    "ability_hidden": null
   },
   {
     "id": 125,
@@ -1872,7 +1872,7 @@
     "type2": null,
     "ability1": "static",
     "ability2": null,
-    "ability_hidden": "vital-spirit"
+    "ability_hidden": null
   },
   {
     "id": 126,
@@ -1887,7 +1887,7 @@
     "type2": null,
     "ability1": "flame-body",
     "ability2": null,
-    "ability_hidden": "vital-spirit"
+    "ability_hidden": null
   },
   {
     "id": 127,
@@ -1902,7 +1902,7 @@
     "type2": null,
     "ability1": "hyper-cutter",
     "ability2": "mold-breaker",
-    "ability_hidden": "moxie"
+    "ability_hidden": null
   },
   {
     "id": 128,
@@ -1917,7 +1917,7 @@
     "type2": null,
     "ability1": "intimidate",
     "ability2": "anger-point",
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 129,
@@ -1932,7 +1932,7 @@
     "type2": null,
     "ability1": "swift-swim",
     "ability2": null,
-    "ability_hidden": "rattled"
+    "ability_hidden": null
   },
   {
     "id": 130,
@@ -1947,7 +1947,7 @@
     "type2": "flying",
     "ability1": "intimidate",
     "ability2": null,
-    "ability_hidden": "moxie"
+    "ability_hidden": null
   },
   {
     "id": 131,
@@ -1962,7 +1962,7 @@
     "type2": "ice",
     "ability1": "water-absorb",
     "ability2": "shell-armor",
-    "ability_hidden": "hydration"
+    "ability_hidden": null
   },
   {
     "id": 132,
@@ -1977,7 +1977,7 @@
     "type2": null,
     "ability1": "limber",
     "ability2": null,
-    "ability_hidden": "imposter"
+    "ability_hidden": null
   },
   {
     "id": 133,
@@ -1992,7 +1992,7 @@
     "type2": null,
     "ability1": "run-away",
     "ability2": "adaptability",
-    "ability_hidden": "anticipation"
+    "ability_hidden": null
   },
   {
     "id": 134,
@@ -2007,7 +2007,7 @@
     "type2": null,
     "ability1": "water-absorb",
     "ability2": null,
-    "ability_hidden": "hydration"
+    "ability_hidden": null
   },
   {
     "id": 135,
@@ -2022,7 +2022,7 @@
     "type2": null,
     "ability1": "volt-absorb",
     "ability2": null,
-    "ability_hidden": "quick-feet"
+    "ability_hidden": null
   },
   {
     "id": 136,
@@ -2037,7 +2037,7 @@
     "type2": null,
     "ability1": "flash-fire",
     "ability2": null,
-    "ability_hidden": "guts"
+    "ability_hidden": null
   },
   {
     "id": 137,
@@ -2052,7 +2052,7 @@
     "type2": null,
     "ability1": "trace",
     "ability2": "download",
-    "ability_hidden": "analytic"
+    "ability_hidden": null
   },
   {
     "id": 138,
@@ -2067,7 +2067,7 @@
     "type2": "water",
     "ability1": "swift-swim",
     "ability2": "shell-armor",
-    "ability_hidden": "weak-armor"
+    "ability_hidden": null
   },
   {
     "id": 139,
@@ -2082,7 +2082,7 @@
     "type2": "water",
     "ability1": "swift-swim",
     "ability2": "shell-armor",
-    "ability_hidden": "weak-armor"
+    "ability_hidden": null
   },
   {
     "id": 140,
@@ -2097,7 +2097,7 @@
     "type2": "water",
     "ability1": "swift-swim",
     "ability2": "battle-armor",
-    "ability_hidden": "weak-armor"
+    "ability_hidden": null
   },
   {
     "id": 141,
@@ -2112,7 +2112,7 @@
     "type2": "water",
     "ability1": "swift-swim",
     "ability2": "battle-armor",
-    "ability_hidden": "weak-armor"
+    "ability_hidden": null
   },
   {
     "id": 142,
@@ -2127,7 +2127,7 @@
     "type2": "flying",
     "ability1": "rock-head",
     "ability2": "pressure",
-    "ability_hidden": "unnerve"
+    "ability_hidden": null
   },
   {
     "id": 143,
@@ -2142,7 +2142,7 @@
     "type2": null,
     "ability1": "immunity",
     "ability2": "thick-fat",
-    "ability_hidden": "gluttony"
+    "ability_hidden": null
   },
   {
     "id": 144,
@@ -2157,7 +2157,7 @@
     "type2": "flying",
     "ability1": "pressure",
     "ability2": null,
-    "ability_hidden": "snow-cloak"
+    "ability_hidden": null
   },
   {
     "id": 145,
@@ -2172,7 +2172,7 @@
     "type2": "flying",
     "ability1": "pressure",
     "ability2": null,
-    "ability_hidden": "static"
+    "ability_hidden": null
   },
   {
     "id": 146,
@@ -2187,7 +2187,7 @@
     "type2": "flying",
     "ability1": "pressure",
     "ability2": null,
-    "ability_hidden": "flame-body"
+    "ability_hidden": null
   },
   {
     "id": 147,
@@ -2202,7 +2202,7 @@
     "type2": null,
     "ability1": "shed-skin",
     "ability2": null,
-    "ability_hidden": "marvel-scale"
+    "ability_hidden": null
   },
   {
     "id": 148,
@@ -2217,7 +2217,7 @@
     "type2": null,
     "ability1": "shed-skin",
     "ability2": null,
-    "ability_hidden": "marvel-scale"
+    "ability_hidden": null
   },
   {
     "id": 149,
@@ -2232,7 +2232,7 @@
     "type2": "flying",
     "ability1": "inner-focus",
     "ability2": null,
-    "ability_hidden": "multiscale"
+    "ability_hidden": null
   },
   {
     "id": 150,
@@ -2247,7 +2247,7 @@
     "type2": null,
     "ability1": "pressure",
     "ability2": null,
-    "ability_hidden": "unnerve"
+    "ability_hidden": null
   },
   {
     "id": 151,
@@ -2277,7 +2277,7 @@
     "type2": null,
     "ability1": "overgrow",
     "ability2": null,
-    "ability_hidden": "leaf-guard"
+    "ability_hidden": null
   },
   {
     "id": 153,
@@ -2292,7 +2292,7 @@
     "type2": null,
     "ability1": "overgrow",
     "ability2": null,
-    "ability_hidden": "leaf-guard"
+    "ability_hidden": null
   },
   {
     "id": 154,
@@ -2307,7 +2307,7 @@
     "type2": null,
     "ability1": "overgrow",
     "ability2": null,
-    "ability_hidden": "leaf-guard"
+    "ability_hidden": null
   },
   {
     "id": 155,
@@ -2322,7 +2322,7 @@
     "type2": null,
     "ability1": "blaze",
     "ability2": null,
-    "ability_hidden": "flash-fire"
+    "ability_hidden": null
   },
   {
     "id": 156,
@@ -2337,7 +2337,7 @@
     "type2": null,
     "ability1": "blaze",
     "ability2": null,
-    "ability_hidden": "flash-fire"
+    "ability_hidden": null
   },
   {
     "id": 157,
@@ -2352,7 +2352,7 @@
     "type2": null,
     "ability1": "blaze",
     "ability2": null,
-    "ability_hidden": "flash-fire"
+    "ability_hidden": null
   },
   {
     "id": 158,
@@ -2367,7 +2367,7 @@
     "type2": null,
     "ability1": "torrent",
     "ability2": null,
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 159,
@@ -2382,7 +2382,7 @@
     "type2": null,
     "ability1": "torrent",
     "ability2": null,
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 160,
@@ -2397,7 +2397,7 @@
     "type2": null,
     "ability1": "torrent",
     "ability2": null,
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 161,
@@ -2412,7 +2412,7 @@
     "type2": null,
     "ability1": "run-away",
     "ability2": "keen-eye",
-    "ability_hidden": "frisk"
+    "ability_hidden": null
   },
   {
     "id": 162,
@@ -2427,7 +2427,7 @@
     "type2": null,
     "ability1": "run-away",
     "ability2": "keen-eye",
-    "ability_hidden": "frisk"
+    "ability_hidden": null
   },
   {
     "id": 163,
@@ -2442,7 +2442,7 @@
     "type2": "flying",
     "ability1": "insomnia",
     "ability2": "keen-eye",
-    "ability_hidden": "tinted-lens"
+    "ability_hidden": null
   },
   {
     "id": 164,
@@ -2450,14 +2450,14 @@
     "hp": 100,
     "attack": 50,
     "defense": 50,
-    "sp_attack": 86,
+    "sp_attack": 76,
     "sp_defense": 96,
     "speed": 70,
     "type1": "normal",
     "type2": "flying",
     "ability1": "insomnia",
     "ability2": "keen-eye",
-    "ability_hidden": "tinted-lens"
+    "ability_hidden": null
   },
   {
     "id": 165,
@@ -2472,7 +2472,7 @@
     "type2": "flying",
     "ability1": "swarm",
     "ability2": "early-bird",
-    "ability_hidden": "rattled"
+    "ability_hidden": null
   },
   {
     "id": 166,
@@ -2487,7 +2487,7 @@
     "type2": "flying",
     "ability1": "swarm",
     "ability2": "early-bird",
-    "ability_hidden": "iron-fist"
+    "ability_hidden": null
   },
   {
     "id": 167,
@@ -2502,7 +2502,7 @@
     "type2": "poison",
     "ability1": "swarm",
     "ability2": "insomnia",
-    "ability_hidden": "sniper"
+    "ability_hidden": null
   },
   {
     "id": 168,
@@ -2511,13 +2511,13 @@
     "attack": 90,
     "defense": 70,
     "sp_attack": 60,
-    "sp_defense": 70,
+    "sp_defense": 60,
     "speed": 40,
     "type1": "bug",
     "type2": "poison",
     "ability1": "swarm",
     "ability2": "insomnia",
-    "ability_hidden": "sniper"
+    "ability_hidden": null
   },
   {
     "id": 169,
@@ -2532,7 +2532,7 @@
     "type2": "flying",
     "ability1": "inner-focus",
     "ability2": null,
-    "ability_hidden": "infiltrator"
+    "ability_hidden": null
   },
   {
     "id": 170,
@@ -2547,7 +2547,7 @@
     "type2": "electric",
     "ability1": "volt-absorb",
     "ability2": "illuminate",
-    "ability_hidden": "water-absorb"
+    "ability_hidden": null
   },
   {
     "id": 171,
@@ -2562,7 +2562,7 @@
     "type2": "electric",
     "ability1": "volt-absorb",
     "ability2": "illuminate",
-    "ability_hidden": "water-absorb"
+    "ability_hidden": null
   },
   {
     "id": 172,
@@ -2577,7 +2577,7 @@
     "type2": null,
     "ability1": "static",
     "ability2": null,
-    "ability_hidden": "lightning-rod"
+    "ability_hidden": null
   },
   {
     "id": 173,
@@ -2588,11 +2588,11 @@
     "sp_attack": 45,
     "sp_defense": 55,
     "speed": 15,
-    "type1": "fairy",
+    "type1": "normal",
     "type2": null,
     "ability1": "cute-charm",
     "ability2": "magic-guard",
-    "ability_hidden": "friend-guard"
+    "ability_hidden": null
   },
   {
     "id": 174,
@@ -2604,10 +2604,10 @@
     "sp_defense": 20,
     "speed": 15,
     "type1": "normal",
-    "type2": "fairy",
+    "type2": null,
     "ability1": "cute-charm",
     "ability2": "competitive",
-    "ability_hidden": "friend-guard"
+    "ability_hidden": null
   },
   {
     "id": 175,
@@ -2618,11 +2618,11 @@
     "sp_attack": 40,
     "sp_defense": 65,
     "speed": 20,
-    "type1": "fairy",
+    "type1": "normal",
     "type2": null,
     "ability1": "hustle",
     "ability2": "serene-grace",
-    "ability_hidden": "super-luck"
+    "ability_hidden": null
   },
   {
     "id": 176,
@@ -2633,11 +2633,11 @@
     "sp_attack": 80,
     "sp_defense": 105,
     "speed": 40,
-    "type1": "fairy",
+    "type1": "normal",
     "type2": "flying",
     "ability1": "hustle",
     "ability2": "serene-grace",
-    "ability_hidden": "super-luck"
+    "ability_hidden": null
   },
   {
     "id": 177,
@@ -2652,7 +2652,7 @@
     "type2": "flying",
     "ability1": "synchronize",
     "ability2": "early-bird",
-    "ability_hidden": "magic-bounce"
+    "ability_hidden": null
   },
   {
     "id": 178,
@@ -2667,7 +2667,7 @@
     "type2": "flying",
     "ability1": "synchronize",
     "ability2": "early-bird",
-    "ability_hidden": "magic-bounce"
+    "ability_hidden": null
   },
   {
     "id": 179,
@@ -2682,7 +2682,7 @@
     "type2": null,
     "ability1": "static",
     "ability2": null,
-    "ability_hidden": "plus"
+    "ability_hidden": null
   },
   {
     "id": 180,
@@ -2697,14 +2697,14 @@
     "type2": null,
     "ability1": "static",
     "ability2": null,
-    "ability_hidden": "plus"
+    "ability_hidden": null
   },
   {
     "id": 181,
     "name": "ampharos",
     "hp": 90,
     "attack": 75,
-    "defense": 85,
+    "defense": 75,
     "sp_attack": 115,
     "sp_defense": 90,
     "speed": 55,
@@ -2712,14 +2712,14 @@
     "type2": null,
     "ability1": "static",
     "ability2": null,
-    "ability_hidden": "plus"
+    "ability_hidden": null
   },
   {
     "id": 182,
     "name": "bellossom",
     "hp": 75,
     "attack": 80,
-    "defense": 95,
+    "defense": 85,
     "sp_attack": 90,
     "sp_defense": 100,
     "speed": 50,
@@ -2727,7 +2727,7 @@
     "type2": null,
     "ability1": "chlorophyll",
     "ability2": null,
-    "ability_hidden": "healer"
+    "ability_hidden": null
   },
   {
     "id": 183,
@@ -2739,10 +2739,10 @@
     "sp_defense": 50,
     "speed": 40,
     "type1": "water",
-    "type2": "fairy",
+    "type2": null,
     "ability1": "thick-fat",
     "ability2": "huge-power",
-    "ability_hidden": "sap-sipper"
+    "ability_hidden": null
   },
   {
     "id": 184,
@@ -2750,14 +2750,14 @@
     "hp": 100,
     "attack": 50,
     "defense": 80,
-    "sp_attack": 60,
+    "sp_attack": 50,
     "sp_defense": 80,
     "speed": 50,
     "type1": "water",
-    "type2": "fairy",
+    "type2": null,
     "ability1": "thick-fat",
     "ability2": "huge-power",
-    "ability_hidden": "sap-sipper"
+    "ability_hidden": null
   },
   {
     "id": 185,
@@ -2772,7 +2772,7 @@
     "type2": null,
     "ability1": "sturdy",
     "ability2": "rock-head",
-    "ability_hidden": "rattled"
+    "ability_hidden": null
   },
   {
     "id": 186,
@@ -2787,7 +2787,7 @@
     "type2": null,
     "ability1": "water-absorb",
     "ability2": "damp",
-    "ability_hidden": "drizzle"
+    "ability_hidden": null
   },
   {
     "id": 187,
@@ -2802,7 +2802,7 @@
     "type2": "flying",
     "ability1": "chlorophyll",
     "ability2": "leaf-guard",
-    "ability_hidden": "infiltrator"
+    "ability_hidden": null
   },
   {
     "id": 188,
@@ -2817,7 +2817,7 @@
     "type2": "flying",
     "ability1": "chlorophyll",
     "ability2": "leaf-guard",
-    "ability_hidden": "infiltrator"
+    "ability_hidden": null
   },
   {
     "id": 189,
@@ -2826,13 +2826,13 @@
     "attack": 55,
     "defense": 70,
     "sp_attack": 55,
-    "sp_defense": 95,
+    "sp_defense": 85,
     "speed": 110,
     "type1": "grass",
     "type2": "flying",
     "ability1": "chlorophyll",
     "ability2": "leaf-guard",
-    "ability_hidden": "infiltrator"
+    "ability_hidden": null
   },
   {
     "id": 190,
@@ -2847,7 +2847,7 @@
     "type2": null,
     "ability1": "run-away",
     "ability2": "pickup",
-    "ability_hidden": "skill-link"
+    "ability_hidden": null
   },
   {
     "id": 191,
@@ -2862,7 +2862,7 @@
     "type2": null,
     "ability1": "chlorophyll",
     "ability2": "solar-power",
-    "ability_hidden": "early-bird"
+    "ability_hidden": null
   },
   {
     "id": 192,
@@ -2877,7 +2877,7 @@
     "type2": null,
     "ability1": "chlorophyll",
     "ability2": "solar-power",
-    "ability_hidden": "early-bird"
+    "ability_hidden": null
   },
   {
     "id": 193,
@@ -2892,7 +2892,7 @@
     "type2": "flying",
     "ability1": "speed-boost",
     "ability2": "compound-eyes",
-    "ability_hidden": "frisk"
+    "ability_hidden": null
   },
   {
     "id": 194,
@@ -2907,7 +2907,7 @@
     "type2": "ground",
     "ability1": "damp",
     "ability2": "water-absorb",
-    "ability_hidden": "unaware"
+    "ability_hidden": null
   },
   {
     "id": 195,
@@ -2922,7 +2922,7 @@
     "type2": "ground",
     "ability1": "damp",
     "ability2": "water-absorb",
-    "ability_hidden": "unaware"
+    "ability_hidden": null
   },
   {
     "id": 196,
@@ -2937,7 +2937,7 @@
     "type2": null,
     "ability1": "synchronize",
     "ability2": null,
-    "ability_hidden": "magic-bounce"
+    "ability_hidden": null
   },
   {
     "id": 197,
@@ -2952,7 +2952,7 @@
     "type2": null,
     "ability1": "synchronize",
     "ability2": null,
-    "ability_hidden": "inner-focus"
+    "ability_hidden": null
   },
   {
     "id": 198,
@@ -2967,7 +2967,7 @@
     "type2": "flying",
     "ability1": "insomnia",
     "ability2": "super-luck",
-    "ability_hidden": "prankster"
+    "ability_hidden": null
   },
   {
     "id": 199,
@@ -2982,7 +2982,7 @@
     "type2": "psychic",
     "ability1": "oblivious",
     "ability2": "own-tempo",
-    "ability_hidden": "regenerator"
+    "ability_hidden": null
   },
   {
     "id": 200,
@@ -3027,7 +3027,7 @@
     "type2": null,
     "ability1": "shadow-tag",
     "ability2": null,
-    "ability_hidden": "telepathy"
+    "ability_hidden": null
   },
   {
     "id": 203,
@@ -3042,7 +3042,7 @@
     "type2": "psychic",
     "ability1": "inner-focus",
     "ability2": "early-bird",
-    "ability_hidden": "sap-sipper"
+    "ability_hidden": null
   },
   {
     "id": 204,
@@ -3057,7 +3057,7 @@
     "type2": null,
     "ability1": "sturdy",
     "ability2": null,
-    "ability_hidden": "overcoat"
+    "ability_hidden": null
   },
   {
     "id": 205,
@@ -3072,7 +3072,7 @@
     "type2": "steel",
     "ability1": "sturdy",
     "ability2": null,
-    "ability_hidden": "overcoat"
+    "ability_hidden": null
   },
   {
     "id": 206,
@@ -3087,7 +3087,7 @@
     "type2": null,
     "ability1": "serene-grace",
     "ability2": "run-away",
-    "ability_hidden": "rattled"
+    "ability_hidden": null
   },
   {
     "id": 207,
@@ -3102,7 +3102,7 @@
     "type2": "flying",
     "ability1": "hyper-cutter",
     "ability2": "sand-veil",
-    "ability_hidden": "immunity"
+    "ability_hidden": null
   },
   {
     "id": 208,
@@ -3117,7 +3117,7 @@
     "type2": "ground",
     "ability1": "rock-head",
     "ability2": "sturdy",
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 209,
@@ -3128,11 +3128,11 @@
     "sp_attack": 40,
     "sp_defense": 40,
     "speed": 30,
-    "type1": "fairy",
+    "type1": "normal",
     "type2": null,
     "ability1": "intimidate",
     "ability2": "run-away",
-    "ability_hidden": "rattled"
+    "ability_hidden": null
   },
   {
     "id": 210,
@@ -3143,18 +3143,18 @@
     "sp_attack": 60,
     "sp_defense": 60,
     "speed": 45,
-    "type1": "fairy",
+    "type1": "normal",
     "type2": null,
     "ability1": "intimidate",
     "ability2": "quick-feet",
-    "ability_hidden": "rattled"
+    "ability_hidden": null
   },
   {
     "id": 211,
     "name": "qwilfish",
     "hp": 65,
     "attack": 95,
-    "defense": 85,
+    "defense": 75,
     "sp_attack": 55,
     "sp_defense": 55,
     "speed": 85,
@@ -3162,7 +3162,7 @@
     "type2": "poison",
     "ability1": "poison-point",
     "ability2": "swift-swim",
-    "ability_hidden": "intimidate"
+    "ability_hidden": null
   },
   {
     "id": 212,
@@ -3177,7 +3177,7 @@
     "type2": "steel",
     "ability1": "swarm",
     "ability2": "technician",
-    "ability_hidden": "light-metal"
+    "ability_hidden": null
   },
   {
     "id": 213,
@@ -3192,7 +3192,7 @@
     "type2": "rock",
     "ability1": "sturdy",
     "ability2": "gluttony",
-    "ability_hidden": "contrary"
+    "ability_hidden": null
   },
   {
     "id": 214,
@@ -3207,7 +3207,7 @@
     "type2": "fighting",
     "ability1": "swarm",
     "ability2": "guts",
-    "ability_hidden": "moxie"
+    "ability_hidden": null
   },
   {
     "id": 215,
@@ -3222,7 +3222,7 @@
     "type2": "ice",
     "ability1": "inner-focus",
     "ability2": "keen-eye",
-    "ability_hidden": "pickpocket"
+    "ability_hidden": null
   },
   {
     "id": 216,
@@ -3237,7 +3237,7 @@
     "type2": null,
     "ability1": "pickup",
     "ability2": "quick-feet",
-    "ability_hidden": "honey-gather"
+    "ability_hidden": null
   },
   {
     "id": 217,
@@ -3252,7 +3252,7 @@
     "type2": null,
     "ability1": "guts",
     "ability2": "quick-feet",
-    "ability_hidden": "unnerve"
+    "ability_hidden": null
   },
   {
     "id": 218,
@@ -3267,22 +3267,22 @@
     "type2": null,
     "ability1": "magma-armor",
     "ability2": "flame-body",
-    "ability_hidden": "weak-armor"
+    "ability_hidden": null
   },
   {
     "id": 219,
     "name": "magcargo",
-    "hp": 60,
+    "hp": 50,
     "attack": 50,
     "defense": 120,
-    "sp_attack": 90,
+    "sp_attack": 80,
     "sp_defense": 80,
     "speed": 30,
     "type1": "fire",
     "type2": "rock",
     "ability1": "magma-armor",
     "ability2": "flame-body",
-    "ability_hidden": "weak-armor"
+    "ability_hidden": null
   },
   {
     "id": 220,
@@ -3297,7 +3297,7 @@
     "type2": "ground",
     "ability1": "oblivious",
     "ability2": "snow-cloak",
-    "ability_hidden": "thick-fat"
+    "ability_hidden": null
   },
   {
     "id": 221,
@@ -3312,22 +3312,22 @@
     "type2": "ground",
     "ability1": "oblivious",
     "ability2": "snow-cloak",
-    "ability_hidden": "thick-fat"
+    "ability_hidden": null
   },
   {
     "id": 222,
     "name": "corsola",
-    "hp": 65,
+    "hp": 55,
     "attack": 55,
-    "defense": 95,
+    "defense": 85,
     "sp_attack": 65,
-    "sp_defense": 95,
+    "sp_defense": 85,
     "speed": 35,
     "type1": "water",
     "type2": "rock",
     "ability1": "hustle",
     "ability2": "natural-cure",
-    "ability_hidden": "regenerator"
+    "ability_hidden": null
   },
   {
     "id": 223,
@@ -3342,7 +3342,7 @@
     "type2": null,
     "ability1": "hustle",
     "ability2": "sniper",
-    "ability_hidden": "moody"
+    "ability_hidden": null
   },
   {
     "id": 224,
@@ -3357,7 +3357,7 @@
     "type2": null,
     "ability1": "suction-cups",
     "ability2": "sniper",
-    "ability_hidden": "moody"
+    "ability_hidden": null
   },
   {
     "id": 225,
@@ -3372,12 +3372,12 @@
     "type2": "flying",
     "ability1": "vital-spirit",
     "ability2": "hustle",
-    "ability_hidden": "insomnia"
+    "ability_hidden": null
   },
   {
     "id": 226,
     "name": "mantine",
-    "hp": 85,
+    "hp": 65,
     "attack": 40,
     "defense": 70,
     "sp_attack": 80,
@@ -3387,7 +3387,7 @@
     "type2": "flying",
     "ability1": "swift-swim",
     "ability2": "water-absorb",
-    "ability_hidden": "water-veil"
+    "ability_hidden": null
   },
   {
     "id": 227,
@@ -3402,7 +3402,7 @@
     "type2": "flying",
     "ability1": "keen-eye",
     "ability2": "sturdy",
-    "ability_hidden": "weak-armor"
+    "ability_hidden": null
   },
   {
     "id": 228,
@@ -3417,7 +3417,7 @@
     "type2": "fire",
     "ability1": "early-bird",
     "ability2": "flash-fire",
-    "ability_hidden": "unnerve"
+    "ability_hidden": null
   },
   {
     "id": 229,
@@ -3432,7 +3432,7 @@
     "type2": "fire",
     "ability1": "early-bird",
     "ability2": "flash-fire",
-    "ability_hidden": "unnerve"
+    "ability_hidden": null
   },
   {
     "id": 230,
@@ -3447,7 +3447,7 @@
     "type2": "dragon",
     "ability1": "swift-swim",
     "ability2": "sniper",
-    "ability_hidden": "damp"
+    "ability_hidden": null
   },
   {
     "id": 231,
@@ -3462,7 +3462,7 @@
     "type2": null,
     "ability1": "pickup",
     "ability2": null,
-    "ability_hidden": "sand-veil"
+    "ability_hidden": null
   },
   {
     "id": 232,
@@ -3477,7 +3477,7 @@
     "type2": null,
     "ability1": "sturdy",
     "ability2": null,
-    "ability_hidden": "sand-veil"
+    "ability_hidden": null
   },
   {
     "id": 233,
@@ -3492,7 +3492,7 @@
     "type2": null,
     "ability1": "trace",
     "ability2": "download",
-    "ability_hidden": "analytic"
+    "ability_hidden": null
   },
   {
     "id": 234,
@@ -3507,7 +3507,7 @@
     "type2": null,
     "ability1": "intimidate",
     "ability2": "frisk",
-    "ability_hidden": "sap-sipper"
+    "ability_hidden": null
   },
   {
     "id": 235,
@@ -3522,7 +3522,7 @@
     "type2": null,
     "ability1": "own-tempo",
     "ability2": "technician",
-    "ability_hidden": "moody"
+    "ability_hidden": null
   },
   {
     "id": 236,
@@ -3537,7 +3537,7 @@
     "type2": null,
     "ability1": "guts",
     "ability2": "steadfast",
-    "ability_hidden": "vital-spirit"
+    "ability_hidden": null
   },
   {
     "id": 237,
@@ -3552,7 +3552,7 @@
     "type2": null,
     "ability1": "intimidate",
     "ability2": "technician",
-    "ability_hidden": "steadfast"
+    "ability_hidden": null
   },
   {
     "id": 238,
@@ -3567,7 +3567,7 @@
     "type2": "psychic",
     "ability1": "oblivious",
     "ability2": "forewarn",
-    "ability_hidden": "hydration"
+    "ability_hidden": null
   },
   {
     "id": 239,
@@ -3582,7 +3582,7 @@
     "type2": null,
     "ability1": "static",
     "ability2": null,
-    "ability_hidden": "vital-spirit"
+    "ability_hidden": null
   },
   {
     "id": 240,
@@ -3597,7 +3597,7 @@
     "type2": null,
     "ability1": "flame-body",
     "ability2": null,
-    "ability_hidden": "vital-spirit"
+    "ability_hidden": null
   },
   {
     "id": 241,
@@ -3612,7 +3612,7 @@
     "type2": null,
     "ability1": "thick-fat",
     "ability2": "scrappy",
-    "ability_hidden": "sap-sipper"
+    "ability_hidden": null
   },
   {
     "id": 242,
@@ -3627,7 +3627,7 @@
     "type2": null,
     "ability1": "natural-cure",
     "ability2": "serene-grace",
-    "ability_hidden": "healer"
+    "ability_hidden": null
   },
   {
     "id": 243,
@@ -3642,7 +3642,7 @@
     "type2": null,
     "ability1": "pressure",
     "ability2": null,
-    "ability_hidden": "inner-focus"
+    "ability_hidden": null
   },
   {
     "id": 244,
@@ -3657,7 +3657,7 @@
     "type2": null,
     "ability1": "pressure",
     "ability2": null,
-    "ability_hidden": "inner-focus"
+    "ability_hidden": null
   },
   {
     "id": 245,
@@ -3672,7 +3672,7 @@
     "type2": null,
     "ability1": "pressure",
     "ability2": null,
-    "ability_hidden": "inner-focus"
+    "ability_hidden": null
   },
   {
     "id": 246,
@@ -3687,7 +3687,7 @@
     "type2": "ground",
     "ability1": "guts",
     "ability2": null,
-    "ability_hidden": "sand-veil"
+    "ability_hidden": null
   },
   {
     "id": 247,
@@ -3717,7 +3717,7 @@
     "type2": "dark",
     "ability1": "sand-stream",
     "ability2": null,
-    "ability_hidden": "unnerve"
+    "ability_hidden": null
   },
   {
     "id": 249,
@@ -3732,7 +3732,7 @@
     "type2": "flying",
     "ability1": "pressure",
     "ability2": null,
-    "ability_hidden": "multiscale"
+    "ability_hidden": null
   },
   {
     "id": 250,
@@ -3747,7 +3747,7 @@
     "type2": "flying",
     "ability1": "pressure",
     "ability2": null,
-    "ability_hidden": "regenerator"
+    "ability_hidden": null
   },
   {
     "id": 251,
@@ -3777,7 +3777,7 @@
     "type2": null,
     "ability1": "overgrow",
     "ability2": null,
-    "ability_hidden": "unburden"
+    "ability_hidden": null
   },
   {
     "id": 253,
@@ -3792,7 +3792,7 @@
     "type2": null,
     "ability1": "overgrow",
     "ability2": null,
-    "ability_hidden": "unburden"
+    "ability_hidden": null
   },
   {
     "id": 254,
@@ -3807,7 +3807,7 @@
     "type2": null,
     "ability1": "overgrow",
     "ability2": null,
-    "ability_hidden": "unburden"
+    "ability_hidden": null
   },
   {
     "id": 255,
@@ -3822,7 +3822,7 @@
     "type2": null,
     "ability1": "blaze",
     "ability2": null,
-    "ability_hidden": "speed-boost"
+    "ability_hidden": null
   },
   {
     "id": 256,
@@ -3837,7 +3837,7 @@
     "type2": "fighting",
     "ability1": "blaze",
     "ability2": null,
-    "ability_hidden": "speed-boost"
+    "ability_hidden": null
   },
   {
     "id": 257,
@@ -3852,7 +3852,7 @@
     "type2": "fighting",
     "ability1": "blaze",
     "ability2": null,
-    "ability_hidden": "speed-boost"
+    "ability_hidden": null
   },
   {
     "id": 258,
@@ -3867,7 +3867,7 @@
     "type2": null,
     "ability1": "torrent",
     "ability2": null,
-    "ability_hidden": "damp"
+    "ability_hidden": null
   },
   {
     "id": 259,
@@ -3882,7 +3882,7 @@
     "type2": "ground",
     "ability1": "torrent",
     "ability2": null,
-    "ability_hidden": "damp"
+    "ability_hidden": null
   },
   {
     "id": 260,
@@ -3897,7 +3897,7 @@
     "type2": "ground",
     "ability1": "torrent",
     "ability2": null,
-    "ability_hidden": "damp"
+    "ability_hidden": null
   },
   {
     "id": 261,
@@ -3912,7 +3912,7 @@
     "type2": null,
     "ability1": "run-away",
     "ability2": "quick-feet",
-    "ability_hidden": "rattled"
+    "ability_hidden": null
   },
   {
     "id": 262,
@@ -3927,7 +3927,7 @@
     "type2": null,
     "ability1": "intimidate",
     "ability2": "quick-feet",
-    "ability_hidden": "moxie"
+    "ability_hidden": null
   },
   {
     "id": 263,
@@ -3942,7 +3942,7 @@
     "type2": null,
     "ability1": "pickup",
     "ability2": "gluttony",
-    "ability_hidden": "quick-feet"
+    "ability_hidden": null
   },
   {
     "id": 264,
@@ -3957,7 +3957,7 @@
     "type2": null,
     "ability1": "pickup",
     "ability2": "gluttony",
-    "ability_hidden": "quick-feet"
+    "ability_hidden": null
   },
   {
     "id": 265,
@@ -3972,7 +3972,7 @@
     "type2": null,
     "ability1": "shield-dust",
     "ability2": null,
-    "ability_hidden": "run-away"
+    "ability_hidden": null
   },
   {
     "id": 266,
@@ -3995,14 +3995,14 @@
     "hp": 60,
     "attack": 70,
     "defense": 50,
-    "sp_attack": 100,
+    "sp_attack": 90,
     "sp_defense": 50,
     "speed": 65,
     "type1": "bug",
     "type2": "flying",
     "ability1": "swarm",
     "ability2": null,
-    "ability_hidden": "rivalry"
+    "ability_hidden": null
   },
   {
     "id": 268,
@@ -4032,7 +4032,7 @@
     "type2": "poison",
     "ability1": "shield-dust",
     "ability2": null,
-    "ability_hidden": "compound-eyes"
+    "ability_hidden": null
   },
   {
     "id": 270,
@@ -4047,7 +4047,7 @@
     "type2": "grass",
     "ability1": "swift-swim",
     "ability2": "rain-dish",
-    "ability_hidden": "own-tempo"
+    "ability_hidden": null
   },
   {
     "id": 271,
@@ -4062,7 +4062,7 @@
     "type2": "grass",
     "ability1": "swift-swim",
     "ability2": "rain-dish",
-    "ability_hidden": "own-tempo"
+    "ability_hidden": null
   },
   {
     "id": 272,
@@ -4077,7 +4077,7 @@
     "type2": "grass",
     "ability1": "swift-swim",
     "ability2": "rain-dish",
-    "ability_hidden": "own-tempo"
+    "ability_hidden": null
   },
   {
     "id": 273,
@@ -4092,7 +4092,7 @@
     "type2": null,
     "ability1": "chlorophyll",
     "ability2": "early-bird",
-    "ability_hidden": "pickpocket"
+    "ability_hidden": null
   },
   {
     "id": 274,
@@ -4107,7 +4107,7 @@
     "type2": "dark",
     "ability1": "chlorophyll",
     "ability2": "early-bird",
-    "ability_hidden": "pickpocket"
+    "ability_hidden": null
   },
   {
     "id": 275,
@@ -4122,7 +4122,7 @@
     "type2": "dark",
     "ability1": "chlorophyll",
     "ability2": "wind-rider",
-    "ability_hidden": "pickpocket"
+    "ability_hidden": null
   },
   {
     "id": 276,
@@ -4137,7 +4137,7 @@
     "type2": "flying",
     "ability1": "guts",
     "ability2": null,
-    "ability_hidden": "scrappy"
+    "ability_hidden": null
   },
   {
     "id": 277,
@@ -4145,14 +4145,14 @@
     "hp": 60,
     "attack": 85,
     "defense": 60,
-    "sp_attack": 75,
+    "sp_attack": 50,
     "sp_defense": 50,
     "speed": 125,
     "type1": "normal",
     "type2": "flying",
     "ability1": "guts",
     "ability2": null,
-    "ability_hidden": "scrappy"
+    "ability_hidden": null
   },
   {
     "id": 278,
@@ -4167,7 +4167,7 @@
     "type2": "flying",
     "ability1": "keen-eye",
     "ability2": "hydration",
-    "ability_hidden": "rain-dish"
+    "ability_hidden": null
   },
   {
     "id": 279,
@@ -4175,14 +4175,14 @@
     "hp": 60,
     "attack": 50,
     "defense": 100,
-    "sp_attack": 95,
+    "sp_attack": 85,
     "sp_defense": 70,
     "speed": 65,
     "type1": "water",
     "type2": "flying",
     "ability1": "keen-eye",
     "ability2": "drizzle",
-    "ability_hidden": "rain-dish"
+    "ability_hidden": null
   },
   {
     "id": 280,
@@ -4194,10 +4194,10 @@
     "sp_defense": 35,
     "speed": 40,
     "type1": "psychic",
-    "type2": "fairy",
+    "type2": null,
     "ability1": "synchronize",
     "ability2": "trace",
-    "ability_hidden": "telepathy"
+    "ability_hidden": null
   },
   {
     "id": 281,
@@ -4209,10 +4209,10 @@
     "sp_defense": 55,
     "speed": 50,
     "type1": "psychic",
-    "type2": "fairy",
+    "type2": null,
     "ability1": "synchronize",
     "ability2": "trace",
-    "ability_hidden": "telepathy"
+    "ability_hidden": null
   },
   {
     "id": 282,
@@ -4224,10 +4224,10 @@
     "sp_defense": 115,
     "speed": 80,
     "type1": "psychic",
-    "type2": "fairy",
+    "type2": null,
     "ability1": "synchronize",
     "ability2": "trace",
-    "ability_hidden": "telepathy"
+    "ability_hidden": null
   },
   {
     "id": 283,
@@ -4242,7 +4242,7 @@
     "type2": "water",
     "ability1": "swift-swim",
     "ability2": null,
-    "ability_hidden": "rain-dish"
+    "ability_hidden": null
   },
   {
     "id": 284,
@@ -4250,14 +4250,14 @@
     "hp": 70,
     "attack": 60,
     "defense": 62,
-    "sp_attack": 100,
+    "sp_attack": 80,
     "sp_defense": 82,
-    "speed": 80,
+    "speed": 60,
     "type1": "bug",
     "type2": "flying",
     "ability1": "intimidate",
     "ability2": null,
-    "ability_hidden": "unnerve"
+    "ability_hidden": null
   },
   {
     "id": 285,
@@ -4272,7 +4272,7 @@
     "type2": null,
     "ability1": "effect-spore",
     "ability2": "poison-heal",
-    "ability_hidden": "quick-feet"
+    "ability_hidden": null
   },
   {
     "id": 286,
@@ -4287,7 +4287,7 @@
     "type2": "fighting",
     "ability1": "effect-spore",
     "ability2": "poison-heal",
-    "ability_hidden": "technician"
+    "ability_hidden": null
   },
   {
     "id": 287,
@@ -4347,7 +4347,7 @@
     "type2": "ground",
     "ability1": "compound-eyes",
     "ability2": null,
-    "ability_hidden": "run-away"
+    "ability_hidden": null
   },
   {
     "id": 291,
@@ -4362,7 +4362,7 @@
     "type2": "flying",
     "ability1": "speed-boost",
     "ability2": null,
-    "ability_hidden": "infiltrator"
+    "ability_hidden": null
   },
   {
     "id": 292,
@@ -4392,7 +4392,7 @@
     "type2": null,
     "ability1": "soundproof",
     "ability2": null,
-    "ability_hidden": "rattled"
+    "ability_hidden": null
   },
   {
     "id": 294,
@@ -4407,7 +4407,7 @@
     "type2": null,
     "ability1": "soundproof",
     "ability2": null,
-    "ability_hidden": "scrappy"
+    "ability_hidden": null
   },
   {
     "id": 295,
@@ -4416,13 +4416,13 @@
     "attack": 91,
     "defense": 63,
     "sp_attack": 91,
-    "sp_defense": 73,
+    "sp_defense": 63,
     "speed": 68,
     "type1": "normal",
     "type2": null,
     "ability1": "soundproof",
     "ability2": null,
-    "ability_hidden": "scrappy"
+    "ability_hidden": null
   },
   {
     "id": 296,
@@ -4437,7 +4437,7 @@
     "type2": null,
     "ability1": "thick-fat",
     "ability2": "guts",
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 297,
@@ -4452,7 +4452,7 @@
     "type2": null,
     "ability1": "thick-fat",
     "ability2": "guts",
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 298,
@@ -4464,10 +4464,10 @@
     "sp_defense": 40,
     "speed": 20,
     "type1": "normal",
-    "type2": "fairy",
+    "type2": null,
     "ability1": "thick-fat",
     "ability2": "huge-power",
-    "ability_hidden": "sap-sipper"
+    "ability_hidden": null
   },
   {
     "id": 299,
@@ -4482,7 +4482,7 @@
     "type2": null,
     "ability1": "sturdy",
     "ability2": "magnet-pull",
-    "ability_hidden": "sand-force"
+    "ability_hidden": null
   },
   {
     "id": 300,
@@ -4497,7 +4497,7 @@
     "type2": null,
     "ability1": "cute-charm",
     "ability2": "normalize",
-    "ability_hidden": "wonder-skin"
+    "ability_hidden": null
   },
   {
     "id": 301,
@@ -4507,12 +4507,12 @@
     "defense": 65,
     "sp_attack": 55,
     "sp_defense": 55,
-    "speed": 90,
+    "speed": 70,
     "type1": "normal",
     "type2": null,
     "ability1": "cute-charm",
     "ability2": "normalize",
-    "ability_hidden": "wonder-skin"
+    "ability_hidden": null
   },
   {
     "id": 302,
@@ -4527,7 +4527,7 @@
     "type2": "ghost",
     "ability1": "keen-eye",
     "ability2": "stall",
-    "ability_hidden": "prankster"
+    "ability_hidden": null
   },
   {
     "id": 303,
@@ -4539,10 +4539,10 @@
     "sp_defense": 55,
     "speed": 50,
     "type1": "steel",
-    "type2": "fairy",
+    "type2": null,
     "ability1": "hyper-cutter",
     "ability2": "intimidate",
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 304,
@@ -4557,7 +4557,7 @@
     "type2": "rock",
     "ability1": "sturdy",
     "ability2": "rock-head",
-    "ability_hidden": "heavy-metal"
+    "ability_hidden": null
   },
   {
     "id": 305,
@@ -4572,7 +4572,7 @@
     "type2": "rock",
     "ability1": "sturdy",
     "ability2": "rock-head",
-    "ability_hidden": "heavy-metal"
+    "ability_hidden": null
   },
   {
     "id": 306,
@@ -4587,7 +4587,7 @@
     "type2": "rock",
     "ability1": "sturdy",
     "ability2": "rock-head",
-    "ability_hidden": "heavy-metal"
+    "ability_hidden": null
   },
   {
     "id": 307,
@@ -4602,7 +4602,7 @@
     "type2": "psychic",
     "ability1": "pure-power",
     "ability2": null,
-    "ability_hidden": "telepathy"
+    "ability_hidden": null
   },
   {
     "id": 308,
@@ -4617,7 +4617,7 @@
     "type2": "psychic",
     "ability1": "pure-power",
     "ability2": null,
-    "ability_hidden": "telepathy"
+    "ability_hidden": null
   },
   {
     "id": 309,
@@ -4632,7 +4632,7 @@
     "type2": null,
     "ability1": "static",
     "ability2": "lightning-rod",
-    "ability_hidden": "minus"
+    "ability_hidden": null
   },
   {
     "id": 310,
@@ -4647,7 +4647,7 @@
     "type2": null,
     "ability1": "static",
     "ability2": "lightning-rod",
-    "ability_hidden": "minus"
+    "ability_hidden": null
   },
   {
     "id": 311,
@@ -4662,7 +4662,7 @@
     "type2": null,
     "ability1": "plus",
     "ability2": null,
-    "ability_hidden": "lightning-rod"
+    "ability_hidden": null
   },
   {
     "id": 312,
@@ -4677,37 +4677,37 @@
     "type2": null,
     "ability1": "minus",
     "ability2": null,
-    "ability_hidden": "volt-absorb"
+    "ability_hidden": null
   },
   {
     "id": 313,
     "name": "volbeat",
     "hp": 65,
     "attack": 73,
-    "defense": 75,
+    "defense": 55,
     "sp_attack": 47,
-    "sp_defense": 85,
+    "sp_defense": 75,
     "speed": 85,
     "type1": "bug",
     "type2": null,
     "ability1": "illuminate",
     "ability2": "swarm",
-    "ability_hidden": "prankster"
+    "ability_hidden": null
   },
   {
     "id": 314,
     "name": "illumise",
     "hp": 65,
     "attack": 47,
-    "defense": 75,
+    "defense": 55,
     "sp_attack": 73,
-    "sp_defense": 85,
+    "sp_defense": 75,
     "speed": 85,
     "type1": "bug",
     "type2": null,
     "ability1": "oblivious",
     "ability2": "tinted-lens",
-    "ability_hidden": "prankster"
+    "ability_hidden": null
   },
   {
     "id": 315,
@@ -4722,7 +4722,7 @@
     "type2": "poison",
     "ability1": "natural-cure",
     "ability2": "poison-point",
-    "ability_hidden": "leaf-guard"
+    "ability_hidden": null
   },
   {
     "id": 316,
@@ -4737,7 +4737,7 @@
     "type2": null,
     "ability1": "liquid-ooze",
     "ability2": "sticky-hold",
-    "ability_hidden": "gluttony"
+    "ability_hidden": null
   },
   {
     "id": 317,
@@ -4752,7 +4752,7 @@
     "type2": null,
     "ability1": "liquid-ooze",
     "ability2": "sticky-hold",
-    "ability_hidden": "gluttony"
+    "ability_hidden": null
   },
   {
     "id": 318,
@@ -4767,7 +4767,7 @@
     "type2": "dark",
     "ability1": "rough-skin",
     "ability2": null,
-    "ability_hidden": "speed-boost"
+    "ability_hidden": null
   },
   {
     "id": 319,
@@ -4782,7 +4782,7 @@
     "type2": "dark",
     "ability1": "rough-skin",
     "ability2": null,
-    "ability_hidden": "speed-boost"
+    "ability_hidden": null
   },
   {
     "id": 320,
@@ -4797,7 +4797,7 @@
     "type2": null,
     "ability1": "water-veil",
     "ability2": "oblivious",
-    "ability_hidden": "pressure"
+    "ability_hidden": null
   },
   {
     "id": 321,
@@ -4812,7 +4812,7 @@
     "type2": null,
     "ability1": "water-veil",
     "ability2": "oblivious",
-    "ability_hidden": "pressure"
+    "ability_hidden": null
   },
   {
     "id": 322,
@@ -4827,7 +4827,7 @@
     "type2": "ground",
     "ability1": "oblivious",
     "ability2": "simple",
-    "ability_hidden": "own-tempo"
+    "ability_hidden": null
   },
   {
     "id": 323,
@@ -4842,7 +4842,7 @@
     "type2": "ground",
     "ability1": "magma-armor",
     "ability2": "solid-rock",
-    "ability_hidden": "anger-point"
+    "ability_hidden": null
   },
   {
     "id": 324,
@@ -4857,7 +4857,7 @@
     "type2": null,
     "ability1": "white-smoke",
     "ability2": "drought",
-    "ability_hidden": "shell-armor"
+    "ability_hidden": null
   },
   {
     "id": 325,
@@ -4872,7 +4872,7 @@
     "type2": null,
     "ability1": "thick-fat",
     "ability2": "own-tempo",
-    "ability_hidden": "gluttony"
+    "ability_hidden": null
   },
   {
     "id": 326,
@@ -4887,7 +4887,7 @@
     "type2": null,
     "ability1": "thick-fat",
     "ability2": "own-tempo",
-    "ability_hidden": "gluttony"
+    "ability_hidden": null
   },
   {
     "id": 327,
@@ -4902,7 +4902,7 @@
     "type2": null,
     "ability1": "own-tempo",
     "ability2": "tangled-feet",
-    "ability_hidden": "contrary"
+    "ability_hidden": null
   },
   {
     "id": 328,
@@ -4917,7 +4917,7 @@
     "type2": null,
     "ability1": "hyper-cutter",
     "ability2": "arena-trap",
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 329,
@@ -4962,7 +4962,7 @@
     "type2": null,
     "ability1": "sand-veil",
     "ability2": null,
-    "ability_hidden": "water-absorb"
+    "ability_hidden": null
   },
   {
     "id": 332,
@@ -4977,7 +4977,7 @@
     "type2": "dark",
     "ability1": "sand-veil",
     "ability2": null,
-    "ability_hidden": "water-absorb"
+    "ability_hidden": null
   },
   {
     "id": 333,
@@ -4992,7 +4992,7 @@
     "type2": "flying",
     "ability1": "natural-cure",
     "ability2": null,
-    "ability_hidden": "cloud-nine"
+    "ability_hidden": null
   },
   {
     "id": 334,
@@ -5007,7 +5007,7 @@
     "type2": "flying",
     "ability1": "natural-cure",
     "ability2": null,
-    "ability_hidden": "cloud-nine"
+    "ability_hidden": null
   },
   {
     "id": 335,
@@ -5022,7 +5022,7 @@
     "type2": null,
     "ability1": "immunity",
     "ability2": null,
-    "ability_hidden": "toxic-boost"
+    "ability_hidden": null
   },
   {
     "id": 336,
@@ -5037,12 +5037,12 @@
     "type2": null,
     "ability1": "shed-skin",
     "ability2": null,
-    "ability_hidden": "infiltrator"
+    "ability_hidden": null
   },
   {
     "id": 337,
     "name": "lunatone",
-    "hp": 90,
+    "hp": 70,
     "attack": 55,
     "defense": 65,
     "sp_attack": 95,
@@ -5057,7 +5057,7 @@
   {
     "id": 338,
     "name": "solrock",
-    "hp": 90,
+    "hp": 70,
     "attack": 95,
     "defense": 85,
     "sp_attack": 55,
@@ -5082,7 +5082,7 @@
     "type2": "ground",
     "ability1": "oblivious",
     "ability2": "anticipation",
-    "ability_hidden": "hydration"
+    "ability_hidden": null
   },
   {
     "id": 340,
@@ -5097,7 +5097,7 @@
     "type2": "ground",
     "ability1": "oblivious",
     "ability2": "anticipation",
-    "ability_hidden": "hydration"
+    "ability_hidden": null
   },
   {
     "id": 341,
@@ -5112,7 +5112,7 @@
     "type2": null,
     "ability1": "hyper-cutter",
     "ability2": "shell-armor",
-    "ability_hidden": "adaptability"
+    "ability_hidden": null
   },
   {
     "id": 342,
@@ -5127,7 +5127,7 @@
     "type2": "dark",
     "ability1": "hyper-cutter",
     "ability2": "shell-armor",
-    "ability_hidden": "adaptability"
+    "ability_hidden": null
   },
   {
     "id": 343,
@@ -5172,7 +5172,7 @@
     "type2": "grass",
     "ability1": "suction-cups",
     "ability2": null,
-    "ability_hidden": "storm-drain"
+    "ability_hidden": null
   },
   {
     "id": 346,
@@ -5187,7 +5187,7 @@
     "type2": "grass",
     "ability1": "suction-cups",
     "ability2": null,
-    "ability_hidden": "storm-drain"
+    "ability_hidden": null
   },
   {
     "id": 347,
@@ -5202,7 +5202,7 @@
     "type2": "bug",
     "ability1": "battle-armor",
     "ability2": null,
-    "ability_hidden": "swift-swim"
+    "ability_hidden": null
   },
   {
     "id": 348,
@@ -5217,7 +5217,7 @@
     "type2": "bug",
     "ability1": "battle-armor",
     "ability2": null,
-    "ability_hidden": "swift-swim"
+    "ability_hidden": null
   },
   {
     "id": 349,
@@ -5232,7 +5232,7 @@
     "type2": null,
     "ability1": "swift-swim",
     "ability2": "oblivious",
-    "ability_hidden": "adaptability"
+    "ability_hidden": null
   },
   {
     "id": 350,
@@ -5247,7 +5247,7 @@
     "type2": null,
     "ability1": "marvel-scale",
     "ability2": "competitive",
-    "ability_hidden": "cute-charm"
+    "ability_hidden": null
   },
   {
     "id": 351,
@@ -5277,7 +5277,7 @@
     "type2": null,
     "ability1": "color-change",
     "ability2": null,
-    "ability_hidden": "protean"
+    "ability_hidden": null
   },
   {
     "id": 353,
@@ -5292,7 +5292,7 @@
     "type2": null,
     "ability1": "insomnia",
     "ability2": "frisk",
-    "ability_hidden": "cursed-body"
+    "ability_hidden": null
   },
   {
     "id": 354,
@@ -5307,7 +5307,7 @@
     "type2": null,
     "ability1": "insomnia",
     "ability2": "frisk",
-    "ability_hidden": "cursed-body"
+    "ability_hidden": null
   },
   {
     "id": 355,
@@ -5322,7 +5322,7 @@
     "type2": null,
     "ability1": "levitate",
     "ability2": null,
-    "ability_hidden": "frisk"
+    "ability_hidden": null
   },
   {
     "id": 356,
@@ -5337,7 +5337,7 @@
     "type2": null,
     "ability1": "pressure",
     "ability2": null,
-    "ability_hidden": "frisk"
+    "ability_hidden": null
   },
   {
     "id": 357,
@@ -5352,16 +5352,16 @@
     "type2": "flying",
     "ability1": "chlorophyll",
     "ability2": "solar-power",
-    "ability_hidden": "harvest"
+    "ability_hidden": null
   },
   {
     "id": 358,
     "name": "chimecho",
-    "hp": 75,
+    "hp": 65,
     "attack": 50,
-    "defense": 80,
+    "defense": 70,
     "sp_attack": 95,
-    "sp_defense": 90,
+    "sp_defense": 80,
     "speed": 65,
     "type1": "psychic",
     "type2": null,
@@ -5382,7 +5382,7 @@
     "type2": null,
     "ability1": "pressure",
     "ability2": "super-luck",
-    "ability_hidden": "justified"
+    "ability_hidden": null
   },
   {
     "id": 360,
@@ -5397,7 +5397,7 @@
     "type2": null,
     "ability1": "shadow-tag",
     "ability2": null,
-    "ability_hidden": "telepathy"
+    "ability_hidden": null
   },
   {
     "id": 361,
@@ -5412,7 +5412,7 @@
     "type2": null,
     "ability1": "inner-focus",
     "ability2": "ice-body",
-    "ability_hidden": "moody"
+    "ability_hidden": null
   },
   {
     "id": 362,
@@ -5427,7 +5427,7 @@
     "type2": null,
     "ability1": "inner-focus",
     "ability2": "ice-body",
-    "ability_hidden": "moody"
+    "ability_hidden": null
   },
   {
     "id": 363,
@@ -5442,7 +5442,7 @@
     "type2": "water",
     "ability1": "thick-fat",
     "ability2": "ice-body",
-    "ability_hidden": "oblivious"
+    "ability_hidden": null
   },
   {
     "id": 364,
@@ -5457,7 +5457,7 @@
     "type2": "water",
     "ability1": "thick-fat",
     "ability2": "ice-body",
-    "ability_hidden": "oblivious"
+    "ability_hidden": null
   },
   {
     "id": 365,
@@ -5472,7 +5472,7 @@
     "type2": "water",
     "ability1": "thick-fat",
     "ability2": "ice-body",
-    "ability_hidden": "oblivious"
+    "ability_hidden": null
   },
   {
     "id": 366,
@@ -5487,7 +5487,7 @@
     "type2": null,
     "ability1": "shell-armor",
     "ability2": null,
-    "ability_hidden": "rattled"
+    "ability_hidden": null
   },
   {
     "id": 367,
@@ -5502,7 +5502,7 @@
     "type2": null,
     "ability1": "swift-swim",
     "ability2": null,
-    "ability_hidden": "water-veil"
+    "ability_hidden": null
   },
   {
     "id": 368,
@@ -5517,7 +5517,7 @@
     "type2": null,
     "ability1": "swift-swim",
     "ability2": null,
-    "ability_hidden": "hydration"
+    "ability_hidden": null
   },
   {
     "id": 369,
@@ -5532,7 +5532,7 @@
     "type2": "rock",
     "ability1": "swift-swim",
     "ability2": "rock-head",
-    "ability_hidden": "sturdy"
+    "ability_hidden": null
   },
   {
     "id": 370,
@@ -5547,7 +5547,7 @@
     "type2": null,
     "ability1": "swift-swim",
     "ability2": null,
-    "ability_hidden": "hydration"
+    "ability_hidden": null
   },
   {
     "id": 371,
@@ -5562,7 +5562,7 @@
     "type2": null,
     "ability1": "rock-head",
     "ability2": null,
-    "ability_hidden": "sheer-force"
+    "ability_hidden": null
   },
   {
     "id": 372,
@@ -5577,7 +5577,7 @@
     "type2": null,
     "ability1": "rock-head",
     "ability2": null,
-    "ability_hidden": "overcoat"
+    "ability_hidden": null
   },
   {
     "id": 373,
@@ -5592,7 +5592,7 @@
     "type2": "flying",
     "ability1": "intimidate",
     "ability2": null,
-    "ability_hidden": "moxie"
+    "ability_hidden": null
   },
   {
     "id": 374,
@@ -5607,7 +5607,7 @@
     "type2": "psychic",
     "ability1": "clear-body",
     "ability2": null,
-    "ability_hidden": "light-metal"
+    "ability_hidden": null
   },
   {
     "id": 375,
@@ -5622,7 +5622,7 @@
     "type2": "psychic",
     "ability1": "clear-body",
     "ability2": null,
-    "ability_hidden": "light-metal"
+    "ability_hidden": null
   },
   {
     "id": 376,
@@ -5637,7 +5637,7 @@
     "type2": "psychic",
     "ability1": "clear-body",
     "ability2": null,
-    "ability_hidden": "light-metal"
+    "ability_hidden": null
   },
   {
     "id": 377,
@@ -5652,7 +5652,7 @@
     "type2": null,
     "ability1": "clear-body",
     "ability2": null,
-    "ability_hidden": "sturdy"
+    "ability_hidden": null
   },
   {
     "id": 378,
@@ -5667,7 +5667,7 @@
     "type2": null,
     "ability1": "clear-body",
     "ability2": null,
-    "ability_hidden": "ice-body"
+    "ability_hidden": null
   },
   {
     "id": 379,
@@ -5682,7 +5682,7 @@
     "type2": null,
     "ability1": "clear-body",
     "ability2": null,
-    "ability_hidden": "light-metal"
+    "ability_hidden": null
   },
   {
     "id": 380,

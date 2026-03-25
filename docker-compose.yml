@@ -23,6 +23,9 @@ services:
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       DB_NAME: ${DB_NAME}
+    volumes:
+    - ./backend:/app     #delete these upon final product, this is for development convenience.
+    - /app/node_modules  # keeps the container's node_modules, doesn't overwrite with host
     depends_on:
       - db
 
