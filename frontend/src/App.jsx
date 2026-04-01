@@ -224,6 +224,15 @@ const defenderDB = {
   crystal:           { label: "Crystal",             routes: { route_29: { label: "Route 29", trainers: { wild: { label: "Wild Pokémon", team: [{ species: "Pidgey", level: 2, type: "Normal/Flying", hp: 40, def: 41, spd: 35, atk: 45, spe: 56, moves: ["Tackle"] },{ species: "Sentret", level: 2, type: "Normal", hp: 35, def: 44, spd: 45, atk: 46, spe: 20, moves: ["Scratch"] }]}}}, violet_gym: { label: "Violet City Gym", trainers: { falkner: { label: "Leader Falkner", team: [{ species: "Pidgey", level: 7, type: "Normal/Flying", hp: 40, def: 41, spd: 35, atk: 45, spe: 56, moves: ["Tackle","Sand Attack","Gust"] },{ species: "Pidgeotto", level: 9, type: "Normal/Flying", hp: 63, def: 55, spd: 50, atk: 60, spe: 71, moves: ["Sand Attack","Gust","Quick Attack"] }]}}} }}
 };
 
+const HOENN_LOCATIONS = [
+  "Littleroot Town", "Route 101", "Oldale Town", "Route 102", "Route 103",
+  "Petalburg City", "Route 104", "Petalburg Woods", "Rustboro City", "Route 115",
+  "Route 116", "Rusturf Tunnel", "Dewford Town", "Route 106", "Granite Cave",
+  "Route 107", "Route 108", "Route 109", "Slateport City", "Route 110",
+  "Mauville City", "Route 111", "Route 112", "Fiery Path", "Route 113",
+  "Fallarbor Town", "Route 114", "Meteor Falls", "Jagged Pass", "Lavaridge Town"
+];
+
 // =====================================================================
 // HELPERS
 // =====================================================================
@@ -413,6 +422,170 @@ function AddPokemonModal({ onClose, onAdd }) {
           <button className="btn" disabled={!selected} onClick={handleAdd}
             style={{ opacity: selected ? 1 : 0.4, cursor: selected ? "pointer" : "default" }}>
             Add to Party
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AddEncounterModal({ onClose, onAdd }) {
+  // Location State
+  const [locSearch, setLocSearch] = useState("");
+  const [locOpen, setLocOpen] = useState(false);
+  const [selectedLoc, setSelectedLoc] = useState(null);
+
+  // Pokemon State
+  const [pokeSearch, setPokeSearch] = useState("");
+  const [pokeResults, setPokeResults] = useState([]);
+  const [pokeLoading, setPokeLoading] = useState(false);
+  const [pokeOpen, setPokeOpen] = useState(false);
+  const [selectedPoke, setSelectedPoke] = useState(null);
+  const debounceRef = useRef(null);
+
+  // Outcome State
+  const [outcome, setOutcome] = useState("Caught");
+
+  // --- Location Handlers ---
+  const filteredLocs = HOENN_LOCATIONS.filter(l => l.toLowerCase().includes(locSearch.toLowerCase()));
+
+  function handleLocSelect(loc) {
+    setSelectedLoc(loc);
+    setLocSearch(loc);
+    setLocOpen(false);
+  }
+
+  // --- Pokemon Handlers (Reused from AddPokemonModal) ---
+  async function fetchPokemon(q) {
+    setPokeLoading(true);
+    try {
+      const url = q.trim()
+        ? `${API_BASE}/api/pokemon?search=${encodeURIComponent(q.trim())}`
+        : `${API_BASE}/api/pokemon`;
+      const res = await fetch(url);
+      const data = await res.json();
+      setPokeResults(Array.isArray(data) ? data : []);
+    } catch {
+      setPokeResults([]);
+    } finally {
+      setPokeLoading(false);
+    }
+  }
+
+  function handlePokeSearchChange(e) {
+    const val = e.target.value;
+    setPokeSearch(val);
+    setSelectedPoke(null);
+    setPokeOpen(true);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchPokemon(val), 250);
+  }
+
+  function handlePokeSelect(poke) {
+    setSelectedPoke(poke);
+    setPokeSearch(capitalize(poke.name));
+    setPokeOpen(false);
+  }
+
+  function handleSave() {
+    if (!selectedLoc || !selectedPoke) return;
+    onAdd({
+      id: Date.now(),
+      location: selectedLoc,
+      pokemon: capitalize(selectedPoke.name),
+      outcome: outcome
+    });
+    onClose();
+  }
+
+  return (
+    <div className="modal-backdrop" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="modal">
+        <div className="rowBetween">
+          <h2>Log Encounter</h2>
+          <button className="ghost small" onClick={onClose}>✕</button>
+        </div>
+
+        {/* 1. Location Lookup */}
+        <label>1. Route / Location
+          <div className="search-wrap" style={{ marginTop: 5 }}>
+            <input
+              className="search-input"
+              placeholder="Search Hoenn locations..."
+              value={locSearch}
+              onChange={e => { setLocSearch(e.target.value); setSelectedLoc(null); setLocOpen(true); }}
+              onFocus={() => setLocOpen(true)}
+            />
+            {locOpen && locSearch && !selectedLoc && (
+              <div className="dropdown">
+                {filteredLocs.length === 0 ? (
+                  <div className="dropdown-empty">No locations found</div>
+                ) : (
+                  filteredLocs.map(loc => (
+                    <div key={loc} className="dropdown-item" onMouseDown={() => handleLocSelect(loc)}>
+                      <strong>{loc}</strong>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+        </label>
+
+        {/* 2. Pokemon Lookup */}
+        <label style={{ opacity: selectedLoc ? 1 : 0.5 }}>2. Pokémon Encountered
+          <div className="search-wrap" style={{ marginTop: 5 }}>
+            <input
+              className="search-input"
+              placeholder="Search Pokémon..."
+              value={pokeSearch}
+              onChange={handlePokeSearchChange}
+              onFocus={() => { if (selectedLoc) setPokeOpen(true); fetchPokemon(pokeSearch); }}
+              disabled={!selectedLoc}
+            />
+            {pokeOpen && (
+              <div className="dropdown">
+                {pokeLoading && <div className="dropdown-empty">Loading…</div>}
+                {!pokeLoading && pokeResults.length === 0 && (
+                  <div className="dropdown-empty">No Pokémon found</div>
+                )}
+                {!pokeLoading && pokeResults.slice(0, 50).map(p => (
+                  <div key={p.id} className="dropdown-item" onMouseDown={() => handlePokeSelect(p)}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <span className="muted small">#{String(p.id).padStart(3,"0")}</span>
+                      <strong>{capitalize(p.name)}</strong>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </label>
+
+        {/* 3. Outcome */}
+        <label style={{ opacity: selectedPoke ? 1 : 0.5 }}>3. Encounter Outcome
+          <select 
+            value={outcome} 
+            onChange={e => setOutcome(e.target.value)} 
+            style={{ marginTop: 5 }}
+            disabled={!selectedPoke}
+          >
+            <option>Caught</option>
+            <option>Missed</option>
+            <option>Fainted</option>
+            <option>Fled</option>
+          </select>
+        </label>
+
+        <div className="modal-actions" style={{ marginTop: 10 }}>
+          <button className="ghost" onClick={onClose}>Cancel</button>
+          <button 
+            className="btn" 
+            disabled={!selectedLoc || !selectedPoke} 
+            onClick={handleSave}
+            style={{ opacity: (selectedLoc && selectedPoke) ? 1 : 0.4, cursor: (selectedLoc && selectedPoke) ? "pointer" : "default" }}
+          >
+            Save Encounter
           </button>
         </div>
       </div>
@@ -648,36 +821,255 @@ function TeamScreen({ party, pcBox, onSendToBox, onRemove, onWithdraw, onRelease
   );
 }
 
-function EncountersScreen({ onNavigate }) {
+function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdate }) {
+  const [activeId, setActiveId] = useState(null);
+  const [formData, setFormData] = useState({});
+
+  // Search States for the Form
+  const [locOpen, setLocOpen] = useState(false);
+  const [pokeOpen, setPokeOpen] = useState(false);
+  const [pokeResults, setPokeResults] = useState([]);
+  const [pokeLoading, setPokeLoading] = useState(false);
+  const debounceRef = useRef(null);
+
+  // 1. Only use useEffect for the initial load, or if the active item gets deleted
+  useEffect(() => {
+    const activeExists = encounters.find(e => e.id === activeId);
+    if (!activeExists && encounters.length > 0) {
+      setActiveId(encounters[0].id);
+      setFormData(encounters[0]);
+    } else if (encounters.length === 0) {
+      setActiveId(null);
+      setFormData({});
+    }
+  }, [encounters, activeId]);
+
+  // 2. Handle selection
+  const handleSelectEncounter = (enc) => {
+    setActiveId(enc.id);
+    setFormData(enc);
+    setLocOpen(false);
+    setPokeOpen(false);
+  };
+
+  // 3. Save details
+  const handleSaveDetails = (e) => {
+    e.preventDefault();
+    if (onUpdate && formData.id) {
+      onUpdate(formData);
+    }
+  };
+
+  // --- Location Search Logic ---
+  const filteredLocs = HOENN_LOCATIONS.filter(l => 
+    l.toLowerCase().includes((formData.location || "").toLowerCase())
+  );
+
+  // --- Pokemon Search Logic ---
+  const fetchPokemon = async (q) => {
+    setPokeLoading(true);
+    try {
+      const url = q.trim()
+        ? `${API_BASE}/api/pokemon?search=${encodeURIComponent(q.trim())}`
+        : `${API_BASE}/api/pokemon`;
+      const res = await fetch(url);
+      const data = await res.json();
+      setPokeResults(Array.isArray(data) ? data : []);
+    } catch {
+      setPokeResults([]);
+    } finally {
+      setPokeLoading(false);
+    }
+  };
+
+  const handlePokeChange = (e) => {
+    const val = e.target.value;
+    setFormData({ ...formData, pokemon: val });
+    setPokeOpen(true);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchPokemon(val), 250);
+  };
+
   return (
     <section>
-      <div className="page-header"><h1>Encounters</h1><p className="muted">Log encounters and damage events per route.</p></div>
+      <header className="page-header">
+        <h1>Encounters</h1>
+        <p className="muted">Log encounters and damage events per route.</p>
+      </header>
+
       <div className="twoCol">
         <div className="col">
-          <div className="rowBetween mb8"><strong>Encounter List</strong><button className="btn small">+ Add</button></div>
-          <div className="list">
-            <div className="listItem active"><div><strong>Route 104</strong><div className="muted">Taillow — Caught</div></div><span className="outcome-tag caught">Caught</span></div>
-            <div className="listItem"><div><strong>Petalburg Woods</strong><div className="muted">Shroomish — Missed</div></div><span className="outcome-tag missed">Missed</span></div>
-            <div className="listItem"><div><strong>Route 116</strong><div className="muted">Whismur — Fainted</div></div><span className="outcome-tag fainted">Fainted</span></div>
+          <div className="rowBetween mb8">
+            <strong>Encounter List</strong>
+            <button className="btn small" aria-label="Add new encounter" onClick={onOpenAdd}>+ Add</button>
           </div>
+          
+          <ul className="list" style={{ listStyle: "none", padding: 0 }}>
+            {encounters.length === 0 ? (
+              <li className="listItem"><div className="muted">No encounters logged yet.</div></li>
+            ) : (
+              encounters.map(enc => (
+                <li 
+                  key={enc.id} 
+                  className={`listItem${activeId === enc.id ? " active" : ""}`}
+                  onClick={() => handleSelectEncounter(enc)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <div>
+                    <strong>{enc.location}</strong>
+                    <div className="muted">{enc.pokemon} — {enc.outcome}</div>
+                  </div>
+                  <div className="row">
+                    <span className={`outcome-tag ${enc.outcome.toLowerCase()}`}>{enc.outcome}</span>
+                    <button 
+                      className="ghost small danger" 
+                      onClick={(e) => { e.stopPropagation(); onDelete(enc.id); }} 
+                      aria-label="Delete encounter"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
         </div>
+
         <div className="col">
           <details open className="panel">
             <summary>Encounter Details</summary>
-            <div className="formGrid">
-              <label>Area<input defaultValue="Route 104" /></label>
-              <label>Opponent<input defaultValue="Taillow" /></label>
-              <label>Opponent Level<input defaultValue="10" type="number" /></label>
-              <label>Outcome<select><option>Caught</option><option>Fainted</option><option>Fled</option><option>Missed</option></select></label>
-            </div>
-            <label>Notes<textarea rows="2" placeholder="Notes..."></textarea></label>
+            <form onSubmit={handleSaveDetails}>
+              <div className="formGrid">
+                
+                {/* UPGRADED: Area Input with Dropdown */}
+                <div className="form-group">
+                  <label htmlFor="area-input">Area</label>
+                  <div className="search-wrap">
+                    <input 
+                      id="area-input" 
+                      value={formData.location || ""} 
+                      onChange={e => {
+                        setFormData({...formData, location: e.target.value});
+                        setLocOpen(true);
+                      }} 
+                      onFocus={() => setLocOpen(true)}
+                      onBlur={() => setTimeout(() => setLocOpen(false), 200)}
+                      disabled={!formData.id} 
+                      autoComplete="off"
+                    />
+                    {locOpen && formData.id && (
+                      <div className="dropdown">
+                        {filteredLocs.length === 0 ? (
+                          <div className="dropdown-empty">No locations found</div>
+                        ) : (
+                          filteredLocs.map(loc => (
+                            <div 
+                              key={loc} 
+                              className="dropdown-item" 
+                              onMouseDown={(e) => {
+                                e.preventDefault(); // Prevents input blur before click registers
+                                setFormData({...formData, location: loc});
+                                setLocOpen(false);
+                              }}
+                            >
+                              <strong>{loc}</strong>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {/* UPGRADED: Opponent Input with Dropdown */}
+                <div className="form-group">
+                  <label htmlFor="opponent-input">Opponent</label>
+                  <div className="search-wrap">
+                    <input 
+                      id="opponent-input" 
+                      value={formData.pokemon || ""} 
+                      onChange={handlePokeChange} 
+                      onFocus={() => {
+                        setPokeOpen(true);
+                        fetchPokemon(formData.pokemon || "");
+                      }}
+                      onBlur={() => setTimeout(() => setPokeOpen(false), 200)}
+                      disabled={!formData.id} 
+                      autoComplete="off"
+                    />
+                    {pokeOpen && formData.id && (
+                      <div className="dropdown">
+                        {pokeLoading && <div className="dropdown-empty">Loading…</div>}
+                        {!pokeLoading && pokeResults.length === 0 && (
+                          <div className="dropdown-empty">No Pokémon found</div>
+                        )}
+                        {!pokeLoading && pokeResults.slice(0, 50).map(p => (
+                          <div 
+                            key={p.id} 
+                            className="dropdown-item" 
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setFormData({...formData, pokemon: capitalize(p.name)});
+                              setPokeOpen(false);
+                            }}
+                          >
+                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                              <span className="muted small">#{String(p.id).padStart(3,"0")}</span>
+                              <strong>{capitalize(p.name)}</strong>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="level-input">Opponent Level</label>
+                  <input id="level-input" type="number" min="1" max="100" value={formData.level || ""} onChange={e => setFormData({...formData, level: parseInt(e.target.value) || ""})} disabled={!formData.id} />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="outcome-select">Outcome</label>
+                  <select id="outcome-select" value={formData.outcome || "Caught"} onChange={e => setFormData({...formData, outcome: e.target.value})} disabled={!formData.id}>
+                    <option value="Caught">Caught</option>
+                    <option value="Fainted">Fainted</option>
+                    <option value="Fled">Fled</option>
+                    <option value="Missed">Missed</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div className="form-group mt8">
+                <label htmlFor="notes-textarea">Notes</label>
+                <textarea id="notes-textarea" rows="2" placeholder="Notes..." value={formData.notes || ""} onChange={e => setFormData({...formData, notes: e.target.value})} disabled={!formData.id}></textarea>
+              </div>
+
+              <div className="row mt8">
+                <button type="submit" className="btn primary small" disabled={!formData.id}>Save Details</button>
+              </div>
+            </form>
           </details>
-          <details open className="panel">
+
+          <details open className="panel mt8">
             <summary>Damage Events</summary>
-            <div className="list">
-              <div className="listItem"><div><strong>Turn 1</strong><div className="muted">Breloom → Taillow | Mach Punch | 12 dmg</div></div><button className="ghost small" onClick={() => onNavigate("calculator")}>Calc</button></div>
-              <div className="listItem"><div><strong>Turn 2</strong><div className="muted">Taillow → Breloom | Peck | 8 dmg</div></div><button className="ghost small" onClick={() => onNavigate("calculator")}>Calc</button></div>
-            </div>
+            <ul className="list" style={{ listStyle: "none", padding: 0 }}>
+              <li className="listItem">
+                <div>
+                  <strong>Turn 1</strong>
+                  <div className="muted">Breloom → Taillow | Mach Punch | 12 dmg</div>
+                </div>
+                <button className="ghost small" onClick={() => onNavigate("calculator")}>Calc</button>
+              </li>
+              <li className="listItem">
+                <div>
+                  <strong>Turn 2</strong>
+                  <div className="muted">Taillow → Breloom | Peck | 8 dmg</div>
+                </div>
+                <button className="ghost small" onClick={() => onNavigate("calculator")}>Calc</button>
+              </li>
+            </ul>
+            
             <div className="row mt8">
               <button className="btn small">+ Add Damage Event</button>
               <button className="ghost small" onClick={() => onNavigate("calculator")}>Open Calculator</button>
@@ -1048,6 +1440,12 @@ export default function App() {
   const [party, setParty]           = useState(initialParty);
   const [pcBox, setPcBox]           = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [encounters, setEncounters] = useState([ // Examples for demo mode TODO: Remove
+    { id: "ex1", location: "Route 104", pokemon: "Taillow", level: 10, outcome: "Caught", notes: "First catch!" },
+    { id: "ex2", location: "Petalburg Woods", pokemon: "Shroomish", level: 6, outcome: "Missed", notes: "Ran away." },
+    { id: "ex3", location: "Route 116", pokemon: "Whismur", level: 8, outcome: "Fainted", notes: "Crit hit accidentally." }
+  ]);
+  const [showEncounterModal, setShowEncounterModal] = useState(false);
 
   const navigate = (s) => setScreen(s);
 
@@ -1093,6 +1491,16 @@ export default function App() {
     }
   };
 
+  const handleDeleteEncounter = (id) => {
+    if (window.confirm("Delete this encounter?")) {
+      setEncounters(prev => prev.filter(e => e.id !== id));
+    }
+  };
+
+  const handleUpdateEncounter = (updatedEnc) => {
+    setEncounters(prev => prev.map(e => e.id === updatedEnc.id ? updatedEnc : e));
+  };
+
   const navItems = [
     {key:"gen",label:"Generation"},{key:"dashboard",label:"Dashboard"},{key:"team",label:"Team"},
     {key:"encounters",label:"Encounters"},{key:"calculator",label:"Calculator"},{key:"ivev",label:"IV / EV"},
@@ -1107,6 +1515,13 @@ export default function App() {
         <AddPokemonModal
           onClose={() => setShowAddModal(false)}
           onAdd={(mon) => { handleAddPokemon(mon); setShowAddModal(false); }}
+        />
+      )}
+
+      {showEncounterModal && (
+        <AddEncounterModal
+          onClose={() => setShowEncounterModal(false)}
+          onAdd={(enc) => { setEncounters(prev => [enc, ...prev]); setShowEncounterModal(false); }}
         />
       )}
 
@@ -1157,7 +1572,7 @@ export default function App() {
           {screen === "gen"        && <GenScreen onSelectGen={handleSelectGen} />}
           {screen === "dashboard"  && <DashboardScreen party={party} onNavigate={navigate} onOpenAdd={handleOpenAdd} />}
           {screen === "team"       && <TeamScreen party={party} pcBox={pcBox} onSendToBox={handleSendToBox} onRemove={handleRemove} onWithdraw={handleWithdraw} onRelease={handleRelease} onOpenAdd={() => setShowAddModal(true)} onNavigate={navigate} />}
-          {screen === "encounters" && <EncountersScreen onNavigate={navigate} />}
+          {screen === "encounters" && <EncountersScreen onNavigate={navigate} onOpenAdd={() => setShowEncounterModal(true)} encounters={encounters} onDelete={handleDeleteEncounter} onUpdate={handleUpdateEncounter} />}
           {screen === "calculator" && <CalculatorScreen onNavigate={navigate} />}
           {screen === "ivev"       && <IvEvScreen />}
           {screen === "trainer"    && <TrainerScreen />}
