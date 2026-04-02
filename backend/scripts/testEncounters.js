@@ -1,5 +1,5 @@
 const { runDirectInsert } = require("./encounters");
-runDirectInsert(1, 2, "pallet-town", null, null, null, null, null, null)
+runDirectInsert(1, 2, "pallet-town", null, null, null, null, null)
   .then(() => console.log("success, added pokemon 1"))
   .catch((e) => console.error(e.message));
 
