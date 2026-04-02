@@ -383,36 +383,578 @@ const defenderDB = {
   emerald: {
     label: "Pokémon Emerald",
     routes: {
-      route_101: { label: "Route 101", trainers: { wild: { label: "Wild Pokémon", team: [
-        { species: "Zigzagoon", level: 2, type: "Normal",  hp: 38, def: 35, spd: 35, atk: 30, spe: 60, moves: ["Tackle", "Growl"] },
-        { species: "Wurmple",   level: 2, type: "Bug",     hp: 45, def: 35, spd: 30, atk: 35, spe: 20, moves: ["Tackle", "String Shot"] }
-      ]}}},
-      route_104: { label: "Route 104", trainers: {
-        youngster_billy: { label: "Youngster Billy", team: [{ species: "Zigzagoon", level: 5, type: "Normal", hp: 38, def: 35, spd: 35, atk: 30, spe: 60, moves: ["Tackle","Growl","Tail Whip"] }]},
-        lass_haley:      { label: "Lass Haley",      team: [{ species: "Shroomish",  level: 6, type: "Grass",  hp: 60, def: 40, spd: 60, atk: 40, spe: 35, moves: ["Absorb","Tackle"] }]}
-      }},
-      rustboro_gym: { label: "Rustboro City Gym", trainers: {
-        hiker_devin: { label: "Hiker Devin",    team: [{ species: "Geodude", level: 9,  type: "Rock/Ground", hp: 40, def: 100, spd: 55, atk: 80, spe: 20, moves: ["Tackle"] },{ species: "Geodude", level: 9, type: "Rock/Ground", hp: 40, def: 100, spd: 55, atk: 80, spe: 20, moves: ["Tackle"] }]},
-        roxanne:     { label: "Leader Roxanne", team: [{ species: "Geodude",  level: 14, type: "Rock/Ground", hp: 40, def: 100, spd: 55, atk: 80, spe: 20, moves: ["Tackle","Defense Curl","Mud Sport"] },{ species: "Nosepass", level: 15, type: "Rock", hp: 30, def: 115, spd: 70, atk: 45, spe: 30, moves: ["Tackle","Harden","Rock Throw"] }]}
-      }},
-      dewford_gym:  { label: "Dewford Town Gym",   trainers: { brawly:  { label: "Leader Brawly",  team: [{ species: "Machop",   level: 17, type: "Fighting", hp: 70, def: 50, spd: 35, atk: 80, spe: 35, moves: ["Karate Chop","Low Kick"] },{ species: "Makuhita", level: 18, type: "Fighting", hp: 72, def: 30, spd: 25, atk: 60, spe: 25, moves: ["Arm Thrust","Fake Out","Vital Throw"] }]}}},
-      mauville_gym: { label: "Mauville City Gym",  trainers: { wattson: { label: "Leader Wattson", team: [{ species: "Magnemite", level: 22, type: "Electric/Steel", hp: 25, def: 115, spd: 55, atk: 35, spe: 45, moves: ["SonicBoom","Thunder Wave","Thundershock"] },{ species: "Voltorb", level: 20, type: "Electric", hp: 40, def: 30, spd: 55, atk: 30, spe: 100, moves: ["Rollout","Shock Wave"] },{ species: "Magneton", level: 24, type: "Electric/Steel", hp: 25, def: 115, spd: 70, atk: 60, spe: 70, moves: ["Thunder Wave","Supersonic","Shock Wave"] }]}}}
-    }
+      route_101: {
+        label: "Route 101",
+        trainers: {
+          wild: {
+            label: "Wild Pokémon",
+            team: [
+              {
+                species: "Zigzagoon",
+                level: 2,
+                type: "Normal",
+                hp: 38,
+                def: 35,
+                spd: 35,
+                atk: 30,
+                spe: 60,
+                moves: ["Tackle", "Growl"],
+              },
+              {
+                species: "Wurmple",
+                level: 2,
+                type: "Bug",
+                hp: 45,
+                def: 35,
+                spd: 30,
+                atk: 35,
+                spe: 20,
+                moves: ["Tackle", "String Shot"],
+              },
+            ],
+          },
+        },
+      },
+      route_104: {
+        label: "Route 104",
+        trainers: {
+          youngster_billy: {
+            label: "Youngster Billy",
+            team: [
+              {
+                species: "Zigzagoon",
+                level: 5,
+                type: "Normal",
+                hp: 38,
+                def: 35,
+                spd: 35,
+                atk: 30,
+                spe: 60,
+                moves: ["Tackle", "Growl", "Tail Whip"],
+              },
+            ],
+          },
+          lass_haley: {
+            label: "Lass Haley",
+            team: [
+              {
+                species: "Shroomish",
+                level: 6,
+                type: "Grass",
+                hp: 60,
+                def: 40,
+                spd: 60,
+                atk: 40,
+                spe: 35,
+                moves: ["Absorb", "Tackle"],
+              },
+            ],
+          },
+        },
+      },
+      rustboro_gym: {
+        label: "Rustboro City Gym",
+        trainers: {
+          hiker_devin: {
+            label: "Hiker Devin",
+            team: [
+              {
+                species: "Geodude",
+                level: 9,
+                type: "Rock/Ground",
+                hp: 40,
+                def: 100,
+                spd: 55,
+                atk: 80,
+                spe: 20,
+                moves: ["Tackle"],
+              },
+              {
+                species: "Geodude",
+                level: 9,
+                type: "Rock/Ground",
+                hp: 40,
+                def: 100,
+                spd: 55,
+                atk: 80,
+                spe: 20,
+                moves: ["Tackle"],
+              },
+            ],
+          },
+          roxanne: {
+            label: "Leader Roxanne",
+            team: [
+              {
+                species: "Geodude",
+                level: 14,
+                type: "Rock/Ground",
+                hp: 40,
+                def: 100,
+                spd: 55,
+                atk: 80,
+                spe: 20,
+                moves: ["Tackle", "Defense Curl", "Mud Sport"],
+              },
+              {
+                species: "Nosepass",
+                level: 15,
+                type: "Rock",
+                hp: 30,
+                def: 115,
+                spd: 70,
+                atk: 45,
+                spe: 30,
+                moves: ["Tackle", "Harden", "Rock Throw"],
+              },
+            ],
+          },
+        },
+      },
+      dewford_gym: {
+        label: "Dewford Town Gym",
+        trainers: {
+          brawly: {
+            label: "Leader Brawly",
+            team: [
+              {
+                species: "Machop",
+                level: 17,
+                type: "Fighting",
+                hp: 70,
+                def: 50,
+                spd: 35,
+                atk: 80,
+                spe: 35,
+                moves: ["Karate Chop", "Low Kick"],
+              },
+              {
+                species: "Makuhita",
+                level: 18,
+                type: "Fighting",
+                hp: 72,
+                def: 30,
+                spd: 25,
+                atk: 60,
+                spe: 25,
+                moves: ["Arm Thrust", "Fake Out", "Vital Throw"],
+              },
+            ],
+          },
+        },
+      },
+      mauville_gym: {
+        label: "Mauville City Gym",
+        trainers: {
+          wattson: {
+            label: "Leader Wattson",
+            team: [
+              {
+                species: "Magnemite",
+                level: 22,
+                type: "Electric/Steel",
+                hp: 25,
+                def: 115,
+                spd: 55,
+                atk: 35,
+                spe: 45,
+                moves: ["SonicBoom", "Thunder Wave", "Thundershock"],
+              },
+              {
+                species: "Voltorb",
+                level: 20,
+                type: "Electric",
+                hp: 40,
+                def: 30,
+                spd: 55,
+                atk: 30,
+                spe: 100,
+                moves: ["Rollout", "Shock Wave"],
+              },
+              {
+                species: "Magneton",
+                level: 24,
+                type: "Electric/Steel",
+                hp: 25,
+                def: 115,
+                spd: 70,
+                atk: 60,
+                spe: 70,
+                moves: ["Thunder Wave", "Supersonic", "Shock Wave"],
+              },
+            ],
+          },
+        },
+      },
+    },
   },
-  ruby_sapphire:     { label: "Ruby / Sapphire",    routes: { route_101: { label: "Route 101", trainers: { wild: { label: "Wild Pokémon", team: [{ species: "Zigzagoon", level: 2, type: "Normal", hp: 38, def: 35, spd: 35, atk: 30, spe: 60, moves: ["Tackle"] }]}}}, rustboro_gym: { label: "Rustboro City Gym", trainers: { roxanne: { label: "Leader Roxanne", team: [{ species: "Geodude", level: 12, type: "Rock/Ground", hp: 40, def: 100, spd: 55, atk: 80, spe: 20, moves: ["Tackle","Defense Curl"] },{ species: "Nosepass", level: 14, type: "Rock", hp: 30, def: 115, spd: 70, atk: 45, spe: 30, moves: ["Tackle","Harden","Rock Throw"] }]}}} }},
-  firered_leafgreen: { label: "FireRed / LeafGreen", routes: { route_1: { label: "Route 1", trainers: { wild: { label: "Wild Pokémon", team: [{ species: "Pidgey", level: 3, type: "Normal/Flying", hp: 40, def: 41, spd: 35, atk: 45, spe: 56, moves: ["Tackle","Sand Attack"] },{ species: "Rattata", level: 2, type: "Normal", hp: 30, def: 35, spd: 40, atk: 56, spe: 72, moves: ["Tackle","Tail Whip"] }]}}}, pewter_gym: { label: "Pewter City Gym", trainers: { brock: { label: "Leader Brock", team: [{ species: "Geodude", level: 12, type: "Rock/Ground", hp: 40, def: 100, spd: 55, atk: 80, spe: 20, moves: ["Tackle","Defense Curl"] },{ species: "Onix", level: 14, type: "Rock/Ground", hp: 35, def: 160, spd: 30, atk: 45, spe: 70, moves: ["Tackle","Screech","Bide"] }]}}} }},
-  red_blue:          { label: "Red / Blue",          routes: { route_1: { label: "Route 1", trainers: { wild: { label: "Wild Pokémon", team: [{ species: "Pidgey", level: 3, type: "Normal/Flying", hp: 40, def: 41, spd: 35, atk: 45, spe: 56, moves: ["Tackle"] },{ species: "Rattata", level: 2, type: "Normal", hp: 30, def: 35, spd: 40, atk: 56, spe: 72, moves: ["Tackle"] }]}}}, pewter_gym: { label: "Pewter City Gym", trainers: { brock: { label: "Leader Brock", team: [{ species: "Geodude", level: 12, type: "Rock/Ground", hp: 40, def: 100, spd: 55, atk: 80, spe: 20, moves: ["Tackle"] },{ species: "Onix", level: 14, type: "Rock/Ground", hp: 35, def: 160, spd: 30, atk: 45, spe: 70, moves: ["Tackle","Screech"] }]}}} }},
-  gold_silver:       { label: "Gold / Silver",       routes: { route_29: { label: "Route 29", trainers: { wild: { label: "Wild Pokémon", team: [{ species: "Pidgey", level: 2, type: "Normal/Flying", hp: 40, def: 41, spd: 35, atk: 45, spe: 56, moves: ["Tackle"] },{ species: "Sentret", level: 2, type: "Normal", hp: 35, def: 44, spd: 45, atk: 46, spe: 20, moves: ["Scratch"] }]}}}, violet_gym: { label: "Violet City Gym", trainers: { falkner: { label: "Leader Falkner", team: [{ species: "Pidgey", level: 7, type: "Normal/Flying", hp: 40, def: 41, spd: 35, atk: 45, spe: 56, moves: ["Tackle","Sand Attack"] },{ species: "Pidgeotto", level: 9, type: "Normal/Flying", hp: 63, def: 55, spd: 50, atk: 60, spe: 71, moves: ["Tackle","Sand Attack","Gust"] }]}}} }},
-  crystal:           { label: "Crystal",             routes: { route_29: { label: "Route 29", trainers: { wild: { label: "Wild Pokémon", team: [{ species: "Pidgey", level: 2, type: "Normal/Flying", hp: 40, def: 41, spd: 35, atk: 45, spe: 56, moves: ["Tackle"] },{ species: "Sentret", level: 2, type: "Normal", hp: 35, def: 44, spd: 45, atk: 46, spe: 20, moves: ["Scratch"] }]}}}, violet_gym: { label: "Violet City Gym", trainers: { falkner: { label: "Leader Falkner", team: [{ species: "Pidgey", level: 7, type: "Normal/Flying", hp: 40, def: 41, spd: 35, atk: 45, spe: 56, moves: ["Tackle","Sand Attack","Gust"] },{ species: "Pidgeotto", level: 9, type: "Normal/Flying", hp: 63, def: 55, spd: 50, atk: 60, spe: 71, moves: ["Sand Attack","Gust","Quick Attack"] }]}}} }}
+  ruby_sapphire: {
+    label: "Ruby / Sapphire",
+    routes: {
+      route_101: {
+        label: "Route 101",
+        trainers: {
+          wild: {
+            label: "Wild Pokémon",
+            team: [
+              {
+                species: "Zigzagoon",
+                level: 2,
+                type: "Normal",
+                hp: 38,
+                def: 35,
+                spd: 35,
+                atk: 30,
+                spe: 60,
+                moves: ["Tackle"],
+              },
+            ],
+          },
+        },
+      },
+      rustboro_gym: {
+        label: "Rustboro City Gym",
+        trainers: {
+          roxanne: {
+            label: "Leader Roxanne",
+            team: [
+              {
+                species: "Geodude",
+                level: 12,
+                type: "Rock/Ground",
+                hp: 40,
+                def: 100,
+                spd: 55,
+                atk: 80,
+                spe: 20,
+                moves: ["Tackle", "Defense Curl"],
+              },
+              {
+                species: "Nosepass",
+                level: 14,
+                type: "Rock",
+                hp: 30,
+                def: 115,
+                spd: 70,
+                atk: 45,
+                spe: 30,
+                moves: ["Tackle", "Harden", "Rock Throw"],
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  firered_leafgreen: {
+    label: "FireRed / LeafGreen",
+    routes: {
+      route_1: {
+        label: "Route 1",
+        trainers: {
+          wild: {
+            label: "Wild Pokémon",
+            team: [
+              {
+                species: "Pidgey",
+                level: 3,
+                type: "Normal/Flying",
+                hp: 40,
+                def: 41,
+                spd: 35,
+                atk: 45,
+                spe: 56,
+                moves: ["Tackle", "Sand Attack"],
+              },
+              {
+                species: "Rattata",
+                level: 2,
+                type: "Normal",
+                hp: 30,
+                def: 35,
+                spd: 40,
+                atk: 56,
+                spe: 72,
+                moves: ["Tackle", "Tail Whip"],
+              },
+            ],
+          },
+        },
+      },
+      pewter_gym: {
+        label: "Pewter City Gym",
+        trainers: {
+          brock: {
+            label: "Leader Brock",
+            team: [
+              {
+                species: "Geodude",
+                level: 12,
+                type: "Rock/Ground",
+                hp: 40,
+                def: 100,
+                spd: 55,
+                atk: 80,
+                spe: 20,
+                moves: ["Tackle", "Defense Curl"],
+              },
+              {
+                species: "Onix",
+                level: 14,
+                type: "Rock/Ground",
+                hp: 35,
+                def: 160,
+                spd: 30,
+                atk: 45,
+                spe: 70,
+                moves: ["Tackle", "Screech", "Bide"],
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  red_blue: {
+    label: "Red / Blue",
+    routes: {
+      route_1: {
+        label: "Route 1",
+        trainers: {
+          wild: {
+            label: "Wild Pokémon",
+            team: [
+              {
+                species: "Pidgey",
+                level: 3,
+                type: "Normal/Flying",
+                hp: 40,
+                def: 41,
+                spd: 35,
+                atk: 45,
+                spe: 56,
+                moves: ["Tackle"],
+              },
+              {
+                species: "Rattata",
+                level: 2,
+                type: "Normal",
+                hp: 30,
+                def: 35,
+                spd: 40,
+                atk: 56,
+                spe: 72,
+                moves: ["Tackle"],
+              },
+            ],
+          },
+        },
+      },
+      pewter_gym: {
+        label: "Pewter City Gym",
+        trainers: {
+          brock: {
+            label: "Leader Brock",
+            team: [
+              {
+                species: "Geodude",
+                level: 12,
+                type: "Rock/Ground",
+                hp: 40,
+                def: 100,
+                spd: 55,
+                atk: 80,
+                spe: 20,
+                moves: ["Tackle"],
+              },
+              {
+                species: "Onix",
+                level: 14,
+                type: "Rock/Ground",
+                hp: 35,
+                def: 160,
+                spd: 30,
+                atk: 45,
+                spe: 70,
+                moves: ["Tackle", "Screech"],
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  gold_silver: {
+    label: "Gold / Silver",
+    routes: {
+      route_29: {
+        label: "Route 29",
+        trainers: {
+          wild: {
+            label: "Wild Pokémon",
+            team: [
+              {
+                species: "Pidgey",
+                level: 2,
+                type: "Normal/Flying",
+                hp: 40,
+                def: 41,
+                spd: 35,
+                atk: 45,
+                spe: 56,
+                moves: ["Tackle"],
+              },
+              {
+                species: "Sentret",
+                level: 2,
+                type: "Normal",
+                hp: 35,
+                def: 44,
+                spd: 45,
+                atk: 46,
+                spe: 20,
+                moves: ["Scratch"],
+              },
+            ],
+          },
+        },
+      },
+      violet_gym: {
+        label: "Violet City Gym",
+        trainers: {
+          falkner: {
+            label: "Leader Falkner",
+            team: [
+              {
+                species: "Pidgey",
+                level: 7,
+                type: "Normal/Flying",
+                hp: 40,
+                def: 41,
+                spd: 35,
+                atk: 45,
+                spe: 56,
+                moves: ["Tackle", "Sand Attack"],
+              },
+              {
+                species: "Pidgeotto",
+                level: 9,
+                type: "Normal/Flying",
+                hp: 63,
+                def: 55,
+                spd: 50,
+                atk: 60,
+                spe: 71,
+                moves: ["Tackle", "Sand Attack", "Gust"],
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  crystal: {
+    label: "Crystal",
+    routes: {
+      route_29: {
+        label: "Route 29",
+        trainers: {
+          wild: {
+            label: "Wild Pokémon",
+            team: [
+              {
+                species: "Pidgey",
+                level: 2,
+                type: "Normal/Flying",
+                hp: 40,
+                def: 41,
+                spd: 35,
+                atk: 45,
+                spe: 56,
+                moves: ["Tackle"],
+              },
+              {
+                species: "Sentret",
+                level: 2,
+                type: "Normal",
+                hp: 35,
+                def: 44,
+                spd: 45,
+                atk: 46,
+                spe: 20,
+                moves: ["Scratch"],
+              },
+            ],
+          },
+        },
+      },
+      violet_gym: {
+        label: "Violet City Gym",
+        trainers: {
+          falkner: {
+            label: "Leader Falkner",
+            team: [
+              {
+                species: "Pidgey",
+                level: 7,
+                type: "Normal/Flying",
+                hp: 40,
+                def: 41,
+                spd: 35,
+                atk: 45,
+                spe: 56,
+                moves: ["Tackle", "Sand Attack", "Gust"],
+              },
+              {
+                species: "Pidgeotto",
+                level: 9,
+                type: "Normal/Flying",
+                hp: 63,
+                def: 55,
+                spd: 50,
+                atk: 60,
+                spe: 71,
+                moves: ["Sand Attack", "Gust", "Quick Attack"],
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
 };
 
 const HOENN_LOCATIONS = [
-  "Littleroot Town", "Route 101", "Oldale Town", "Route 102", "Route 103",
-  "Petalburg City", "Route 104", "Petalburg Woods", "Rustboro City", "Route 115",
-  "Route 116", "Rusturf Tunnel", "Dewford Town", "Route 106", "Granite Cave",
-  "Route 107", "Route 108", "Route 109", "Slateport City", "Route 110",
-  "Mauville City", "Route 111", "Route 112", "Fiery Path", "Route 113",
-  "Fallarbor Town", "Route 114", "Meteor Falls", "Jagged Pass", "Lavaridge Town"
+  "Littleroot Town",
+  "Route 101",
+  "Oldale Town",
+  "Route 102",
+  "Route 103",
+  "Petalburg City",
+  "Route 104",
+  "Petalburg Woods",
+  "Rustboro City",
+  "Route 115",
+  "Route 116",
+  "Rusturf Tunnel",
+  "Dewford Town",
+  "Route 106",
+  "Granite Cave",
+  "Route 107",
+  "Route 108",
+  "Route 109",
+  "Slateport City",
+  "Route 110",
+  "Mauville City",
+  "Route 111",
+  "Route 112",
+  "Fiery Path",
+  "Route 113",
+  "Fallarbor Town",
+  "Route 114",
+  "Meteor Falls",
+  "Jagged Pass",
+  "Lavaridge Town",
 ];
 
 // =====================================================================
@@ -423,20 +965,227 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+const SIMPLE_PHYSICAL_TYPES = new Set([
+  "normal",
+  "fighting",
+  "flying",
+  "poison",
+  "ground",
+  "rock",
+  "bug",
+  "ghost",
+  "steel",
+]);
+
+const SIMPLE_TYPE_CHART = {
+  normal: { rock: 0.5, ghost: 0, steel: 0.5 },
+  fire: {
+    fire: 0.5,
+    water: 0.5,
+    grass: 2,
+    ice: 2,
+    bug: 2,
+    rock: 0.5,
+    dragon: 0.5,
+    steel: 2,
+  },
+  water: {
+    fire: 2,
+    water: 0.5,
+    grass: 0.5,
+    ground: 2,
+    rock: 2,
+    dragon: 0.5,
+  },
+  electric: {
+    water: 2,
+    electric: 0.5,
+    grass: 0.5,
+    ground: 0,
+    flying: 2,
+    dragon: 0.5,
+  },
+  grass: {
+    fire: 0.5,
+    water: 2,
+    grass: 0.5,
+    poison: 0.5,
+    ground: 2,
+    flying: 0.5,
+    bug: 0.5,
+    rock: 2,
+    dragon: 0.5,
+    steel: 0.5,
+  },
+  ice: {
+    fire: 0.5,
+    water: 0.5,
+    grass: 2,
+    ice: 0.5,
+    ground: 2,
+    flying: 2,
+    dragon: 2,
+    steel: 0.5,
+  },
+  fighting: {
+    normal: 2,
+    ice: 2,
+    rock: 2,
+    dark: 2,
+    steel: 2,
+    poison: 0.5,
+    flying: 0.5,
+    psychic: 0.5,
+    bug: 0.5,
+    ghost: 0,
+  },
+  poison: {
+    grass: 2,
+    poison: 0.5,
+    ground: 0.5,
+    rock: 0.5,
+    ghost: 0.5,
+    steel: 0,
+  },
+  ground: {
+    fire: 2,
+    electric: 2,
+    grass: 0.5,
+    poison: 2,
+    flying: 0,
+    bug: 0.5,
+    rock: 2,
+    steel: 2,
+  },
+  flying: {
+    electric: 0.5,
+    grass: 2,
+    fighting: 2,
+    bug: 2,
+    rock: 0.5,
+    steel: 0.5,
+  },
+  psychic: {
+    fighting: 2,
+    poison: 2,
+    psychic: 0.5,
+    dark: 0,
+    steel: 0.5,
+  },
+  bug: {
+    fire: 0.5,
+    grass: 2,
+    fighting: 0.5,
+    poison: 0.5,
+    flying: 0.5,
+    psychic: 2,
+    ghost: 0.5,
+    dark: 2,
+    steel: 0.5,
+  },
+  rock: {
+    fire: 2,
+    ice: 2,
+    fighting: 0.5,
+    ground: 0.5,
+    flying: 2,
+    bug: 2,
+    steel: 0.5,
+  },
+  ghost: { normal: 0, psychic: 2, ghost: 2, dark: 0.5, steel: 0.5 },
+  dragon: { dragon: 2, steel: 0.5 },
+  dark: { fighting: 0.5, psychic: 2, ghost: 2, dark: 0.5, steel: 0.5 },
+  steel: {
+    fire: 0.5,
+    water: 0.5,
+    electric: 0.5,
+    ice: 2,
+    rock: 2,
+    steel: 0.5,
+  },
+};
+
+function simpleTypeRowMult(row, t) {
+  if (!row || !t) return 1;
+  return Object.prototype.hasOwnProperty.call(row, t) ? row[t] : 1;
+}
+
+function simpleTypeEffectiveness(moveType, defType1, defType2) {
+  const mt = moveType.toLowerCase();
+  const d1 = (defType1 || "normal").toLowerCase();
+  const d2 = defType2 ? String(defType2).toLowerCase() : null;
+  const row = SIMPLE_TYPE_CHART[mt];
+  if (!row) return 1;
+  const m1 = simpleTypeRowMult(row, d1);
+  const m2 = d2 ? simpleTypeRowMult(row, d2) : 1;
+  return m1 * m2;
+}
+
+function simpleWeatherMod(moveType, weather) {
+  if (!weather) return 1;
+  const t = moveType.toLowerCase();
+  if (weather === "sun") {
+    if (t === "fire") return 1.5;
+    if (t === "water") return 0.5;
+  }
+  if (weather === "rain") {
+    if (t === "fire") return 0.5;
+    if (t === "water") return 1.5;
+  }
+  return 1;
+}
+
+function gen3CombatStat(base, iv, ev, level) {
+  const b = Number(base) || 0;
+  const lv = Number(level) || 1;
+  return Math.floor(((2 * b + iv + Math.floor(ev / 4)) * lv) / 100 + 5);
+}
+
+/** Gen 3 damage (simplified client-side): team offensive stats vs defender def/spD, STAB, chart, weather, crit, burn. */
+function computeSimpleBattleDamage(attacker, defender, move, conditions) {
+  const moveType = (move.type || "normal").toLowerCase();
+  const isPhysical = SIMPLE_PHYSICAL_TYPES.has(moveType);
+  const atk = isPhysical ? attacker.atk : attacker.spa;
+  const def = isPhysical ? defender.def : defender.spd;
+  const level = Number(attacker.level) || 1;
+  const power = Number(move.power) || 0;
+  if (!atk || power <= 0 || !def || def <= 0) return { min: 0, max: 0 };
+
+  const baseDamage = Math.floor(
+    (((2 * level) / 5 + 2) * power * atk) / def / 50 + 2
+  );
+
+  const mt = moveType;
+  const atkTypes = attacker.types || [];
+  const stab = atkTypes.some((t) => t === mt) ? 1.5 : 1;
+
+  const d1 = (defender.type1 || "normal").toLowerCase();
+  const d2 = defender.type2 ? String(defender.type2).toLowerCase() : null;
+  const eff = simpleTypeEffectiveness(moveType, d1, d2);
+
+  const weather = simpleWeatherMod(moveType, conditions.weather || "");
+  const crit = conditions.isCrit ? 2 : 1;
+  const burn = conditions.isBurned && isPhysical ? 0.5 : 1;
+
+  const min = Math.floor(baseDamage * stab * eff * weather * crit * burn * 0.85);
+  const max = Math.floor(baseDamage * stab * eff * weather * crit * burn * 1.0);
+  return { min, max };
+}
+
 let nextId = 3;
 
 // =====================================================================
 // ADD POKÉMON MODAL
 // =====================================================================
 function AddPokemonModal({ onClose, onAdd }) {
-  const [search, setSearch]       = useState("");
-  const [results, setResults]     = useState([]);
-  const [selected, setSelected]   = useState(null);
-  const [level, setLevel]         = useState(5);
-  const [loading, setLoading]     = useState(false);
-  const [open, setOpen]           = useState(false);
-  const debounceRef               = useRef(null);
-  const inputRef                  = useRef(null);
+  const [search, setSearch] = useState("");
+  const [results, setResults] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [level, setLevel] = useState(5);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const debounceRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Fetch all on mount so dropdown is populated from the start
   useEffect(() => {
@@ -450,7 +1199,7 @@ function AddPokemonModal({ onClose, onAdd }) {
       const url = q.trim()
         ? `${API_BASE}/api/pokemon?search=${encodeURIComponent(q.trim())}`
         : `${API_BASE}/api/pokemon`;
-      const res  = await fetch(url);
+      const res = await fetch(url);
       const data = await res.json();
       setResults(Array.isArray(data) ? data : []);
     } catch {
@@ -486,7 +1235,7 @@ function AddPokemonModal({ onClose, onAdd }) {
       types: types.map(capitalize),
       primaryType: selected.type1,
       stats: {
-        hp:  selected.hp,
+        hp: selected.hp,
         atk: selected.attack,
         def: selected.defense,
         spa: selected.sp_attack,
@@ -504,16 +1253,24 @@ function AddPokemonModal({ onClose, onAdd }) {
   const filtered = results.slice(0, 80); // cap dropdown at 80 items
 
   return (
-    <div className="modal-backdrop" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+    <div
+      className="modal-backdrop"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
       <div className="modal">
         <div className="rowBetween">
           <h2>Add Pokémon to Party</h2>
-          <button className="ghost small" onClick={onClose}>✕</button>
+          <button className="ghost small" onClick={onClose}>
+            ✕
+          </button>
         </div>
 
         {/* Search input + dropdown */}
         <div>
-          <label>Search Pokémon (Gen 1–3)
+          <label>
+            Search Pokémon (Gen 1–3)
             <div className="search-wrap" style={{ marginTop: 5 }}>
               <input
                 ref={inputRef}
@@ -529,26 +1286,39 @@ function AddPokemonModal({ onClose, onAdd }) {
                   {!loading && filtered.length === 0 && (
                     <div className="dropdown-empty">No Pokémon found</div>
                   )}
-                  {!loading && filtered.map(p => {
-                    const types = [p.type1, p.type2].filter(Boolean);
-                    return (
-                      <div
-                        key={p.id}
-                        className={`dropdown-item${selected?.id === p.id ? " selected" : ""}`}
-                        onMouseDown={() => handleSelect(p)}
-                      >
-                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <span className="muted small">#{String(p.id).padStart(3,"0")}</span>
-                          <strong>{capitalize(p.name)}</strong>
+                  {!loading &&
+                    filtered.map((p) => {
+                      const types = [p.type1, p.type2].filter(Boolean);
+                      return (
+                        <div
+                          key={p.id}
+                          className={`dropdown-item${
+                            selected?.id === p.id ? " selected" : ""
+                          }`}
+                          onMouseDown={() => handleSelect(p)}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
+                            }}
+                          >
+                            <span className="muted small">
+                              #{String(p.id).padStart(3, "0")}
+                            </span>
+                            <strong>{capitalize(p.name)}</strong>
+                          </div>
+                          <div style={{ display: "flex", gap: 4 }}>
+                            {types.map((t) => (
+                              <span key={t} className={`type-chip type-${t}`}>
+                                {capitalize(t)}
+                              </span>
+                            ))}
+                          </div>
                         </div>
-                        <div style={{ display: "flex", gap: 4 }}>
-                          {types.map(t => (
-                            <span key={t} className={`type-chip type-${t}`}>{capitalize(t)}</span>
-                          ))}
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
               )}
             </div>
@@ -556,9 +1326,16 @@ function AddPokemonModal({ onClose, onAdd }) {
         </div>
 
         {/* Level input */}
-        <label>Starting Level
-          <input type="number" min="1" max="100" value={level}
-            onChange={e => setLevel(e.target.value)} style={{ marginTop: 5 }} />
+        <label>
+          Starting Level
+          <input
+            type="number"
+            min="1"
+            max="100"
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+            style={{ marginTop: 5 }}
+          />
         </label>
 
         {/* Selected Pokémon preview */}
@@ -566,19 +1343,31 @@ function AddPokemonModal({ onClose, onAdd }) {
           <div className="preview-card">
             <div className="preview-header">
               <div>
-                <strong style={{ fontSize: 16 }}>{capitalize(selected.name)}</strong>
-                <span className="muted small" style={{ marginLeft: 8 }}>#{String(selected.id).padStart(3,"0")}</span>
+                <strong style={{ fontSize: 16 }}>
+                  {capitalize(selected.name)}
+                </strong>
+                <span className="muted small" style={{ marginLeft: 8 }}>
+                  #{String(selected.id).padStart(3, "0")}
+                </span>
               </div>
               <div style={{ display: "flex", gap: 4 }}>
-                {[selected.type1, selected.type2].filter(Boolean).map(t => (
-                  <span key={t} className={`type-chip type-${t}`}>{capitalize(t)}</span>
+                {[selected.type1, selected.type2].filter(Boolean).map((t) => (
+                  <span key={t} className={`type-chip type-${t}`}>
+                    {capitalize(t)}
+                  </span>
                 ))}
               </div>
             </div>
 
             <div className="preview-stats">
-              {[["HP", selected.hp],["Atk", selected.attack],["Def", selected.defense],
-                ["SpA", selected.sp_attack],["SpD", selected.sp_defense],["Spe", selected.speed]].map(([lbl, val]) => (
+              {[
+                ["HP", selected.hp],
+                ["Atk", selected.attack],
+                ["Def", selected.defense],
+                ["SpA", selected.sp_attack],
+                ["SpD", selected.sp_defense],
+                ["Spe", selected.speed],
+              ].map(([lbl, val]) => (
                 <div key={lbl} className="preview-stat">
                   <span>{lbl}</span>
                   <strong>{val}</strong>
@@ -586,12 +1375,18 @@ function AddPokemonModal({ onClose, onAdd }) {
               ))}
             </div>
 
-            {(selected.ability1 || selected.ability2 || selected.ability_hidden) && (
+            {(selected.ability1 ||
+              selected.ability2 ||
+              selected.ability_hidden) && (
               <div style={{ fontSize: 12, color: "#7a82a0", marginTop: 2 }}>
-                {[selected.ability1, selected.ability2].filter(Boolean).map(capitalize).join(" / ")}
+                {[selected.ability1, selected.ability2]
+                  .filter(Boolean)
+                  .map(capitalize)
+                  .join(" / ")}
                 {selected.ability_hidden && (
                   <span style={{ marginLeft: 6, color: "#5a6380" }}>
-                    · {capitalize(selected.ability_hidden)} <span style={{ fontSize: 10 }}>(Hidden)</span>
+                    · {capitalize(selected.ability_hidden)}{" "}
+                    <span style={{ fontSize: 10 }}>(Hidden)</span>
                   </span>
                 )}
               </div>
@@ -600,9 +1395,18 @@ function AddPokemonModal({ onClose, onAdd }) {
         )}
 
         <div className="modal-actions">
-          <button className="ghost" onClick={onClose}>Cancel</button>
-          <button className="btn" disabled={!selected} onClick={handleAdd}
-            style={{ opacity: selected ? 1 : 0.4, cursor: selected ? "pointer" : "default" }}>
+          <button className="ghost" onClick={onClose}>
+            Cancel
+          </button>
+          <button
+            className="btn"
+            disabled={!selected}
+            onClick={handleAdd}
+            style={{
+              opacity: selected ? 1 : 0.4,
+              cursor: selected ? "pointer" : "default",
+            }}
+          >
             Add to Party
           </button>
         </div>
@@ -629,7 +1433,9 @@ function AddEncounterModal({ onClose, onAdd }) {
   const [outcome, setOutcome] = useState("Caught");
 
   // --- Location Handlers ---
-  const filteredLocs = HOENN_LOCATIONS.filter(l => l.toLowerCase().includes(locSearch.toLowerCase()));
+  const filteredLocs = HOENN_LOCATIONS.filter((l) =>
+    l.toLowerCase().includes(locSearch.toLowerCase())
+  );
 
   function handleLocSelect(loc) {
     setSelectedLoc(loc);
@@ -671,40 +1477,63 @@ function AddEncounterModal({ onClose, onAdd }) {
 
   function handleSave() {
     if (!selectedLoc || !selectedPoke) return;
+
     onAdd({
-      id: Date.now(),
       location: selectedLoc,
       pokemon: capitalize(selectedPoke.name),
-      outcome: outcome
+      pokemon_id: selectedPoke.id,
+      nickname: capitalize(selectedPoke.name),
+      ability: selectedPoke.ability1 || null,
+      outcome: outcome,
     });
-    onClose();
   }
 
   return (
-    <div className="modal-backdrop" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+    <div
+      className="modal-backdrop"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
       <div className="modal">
         <div className="rowBetween">
           <h2>Log Encounter</h2>
-          <button className="ghost small" onClick={onClose}>✕</button>
+          <button className="ghost small" onClick={onClose}>
+            ✕
+          </button>
         </div>
 
         {/* 1. Location Lookup */}
-        <label>1. Route / Location
+        <label>
+          1. Route / Location
           <div className="search-wrap" style={{ marginTop: 5 }}>
             <input
               className="search-input"
               placeholder="Search Hoenn locations..."
               value={locSearch}
-              onChange={e => { setLocSearch(e.target.value); setSelectedLoc(null); setLocOpen(true); }}
+              onChange={(e) => {
+                setLocSearch(e.target.value);
+                setSelectedLoc(null);
+                setLocOpen(true);
+              }}
               onFocus={() => setLocOpen(true)}
+              onBlur={() => setTimeout(() => setLocOpen(false), 200)}
             />
-            {locOpen && locSearch && !selectedLoc && (
+
+            {locOpen && !selectedLoc && (
               <div className="dropdown">
                 {filteredLocs.length === 0 ? (
                   <div className="dropdown-empty">No locations found</div>
                 ) : (
-                  filteredLocs.map(loc => (
-                    <div key={loc} className="dropdown-item" onMouseDown={() => handleLocSelect(loc)}>
+                  filteredLocs.map((loc) => (
+                    <div
+                      key={loc}
+                      className="dropdown-item"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        handleLocSelect(loc);
+                      }}
+                    >
                       <strong>{loc}</strong>
                     </div>
                   ))
@@ -715,14 +1544,18 @@ function AddEncounterModal({ onClose, onAdd }) {
         </label>
 
         {/* 2. Pokemon Lookup */}
-        <label style={{ opacity: selectedLoc ? 1 : 0.5 }}>2. Pokémon Encountered
+        <label style={{ opacity: selectedLoc ? 1 : 0.5 }}>
+          2. Pokémon Encountered
           <div className="search-wrap" style={{ marginTop: 5 }}>
             <input
               className="search-input"
               placeholder="Search Pokémon..."
               value={pokeSearch}
               onChange={handlePokeSearchChange}
-              onFocus={() => { if (selectedLoc) setPokeOpen(true); fetchPokemon(pokeSearch); }}
+              onFocus={() => {
+                if (selectedLoc) setPokeOpen(true);
+                fetchPokemon(pokeSearch);
+              }}
               disabled={!selectedLoc}
             />
             {pokeOpen && (
@@ -731,24 +1564,52 @@ function AddEncounterModal({ onClose, onAdd }) {
                 {!pokeLoading && pokeResults.length === 0 && (
                   <div className="dropdown-empty">No Pokémon found</div>
                 )}
-                {!pokeLoading && pokeResults.slice(0, 50).map(p => (
-                  <div key={p.id} className="dropdown-item" onMouseDown={() => handlePokeSelect(p)}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span className="muted small">#{String(p.id).padStart(3,"0")}</span>
-                      <strong>{capitalize(p.name)}</strong>
-                    </div>
-                  </div>
-                ))}
+                {!pokeLoading &&
+                  pokeResults.slice(0, 50).map((p) => {
+                    const types = [p.type1, p.type2].filter(Boolean);
+
+                    return (
+                      <div
+                        key={p.id}
+                        className={`dropdown-item${
+                          selectedPoke?.id === p.id ? " selected" : ""
+                        }`}
+                        onMouseDown={() => handlePokeSelect(p)}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 8,
+                          }}
+                        >
+                          <span className="muted small">
+                            #{String(p.id).padStart(3, "0")}
+                          </span>
+                          <strong>{capitalize(p.name)}</strong>
+                        </div>
+
+                        <div style={{ display: "flex", gap: 4 }}>
+                          {types.map((t) => (
+                            <span key={t} className={`type-chip type-${t}`}>
+                              {capitalize(t)}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             )}
           </div>
         </label>
 
         {/* 3. Outcome */}
-        <label style={{ opacity: selectedPoke ? 1 : 0.5 }}>3. Encounter Outcome
-          <select 
-            value={outcome} 
-            onChange={e => setOutcome(e.target.value)} 
+        <label style={{ opacity: selectedPoke ? 1 : 0.5 }}>
+          3. Encounter Outcome
+          <select
+            value={outcome}
+            onChange={(e) => setOutcome(e.target.value)}
             style={{ marginTop: 5 }}
             disabled={!selectedPoke}
           >
@@ -760,12 +1621,17 @@ function AddEncounterModal({ onClose, onAdd }) {
         </label>
 
         <div className="modal-actions" style={{ marginTop: 10 }}>
-          <button className="ghost" onClick={onClose}>Cancel</button>
-          <button 
-            className="btn" 
-            disabled={!selectedLoc || !selectedPoke} 
+          <button className="ghost" onClick={onClose}>
+            Cancel
+          </button>
+          <button
+            className="btn"
+            disabled={!selectedLoc || !selectedPoke}
             onClick={handleSave}
-            style={{ opacity: (selectedLoc && selectedPoke) ? 1 : 0.4, cursor: (selectedLoc && selectedPoke) ? "pointer" : "default" }}
+            style={{
+              opacity: selectedLoc && selectedPoke ? 1 : 0.4,
+              cursor: selectedLoc && selectedPoke ? "pointer" : "default",
+            }}
           >
             Save Encounter
           </button>
@@ -790,10 +1656,14 @@ function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) {
           </div>
           <div className="poke-meta">
             <select className="mini-select" defaultValue={mon.gender}>
-              <option>♂ Male</option><option>♀ Female</option><option>— Genderless</option>
+              <option>♂ Male</option>
+              <option>♀ Female</option>
+              <option>— Genderless</option>
             </select>
-            {mon.types.map(t => (
-              <span key={t} className={`type-chip type-${t.toLowerCase()}`}>{t}</span>
+            {mon.types.map((t) => (
+              <span key={t} className={`type-chip type-${t.toLowerCase()}`}>
+                {t}
+              </span>
             ))}
           </div>
         </div>
@@ -802,21 +1672,46 @@ function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) {
         <details open>
           <summary>Core Stats</summary>
           <div className="formGrid tight">
-            {[["HP","hp"],["Atk","atk"],["Def","def"],["SpA","spa"],["SpD","spd"],["Spe","spe"]].map(([lbl,key]) => (
-              <label key={key}>{lbl}<input defaultValue={mon.stats[key]} type="number" /></label>
+            {[
+              ["HP", "hp"],
+              ["Atk", "atk"],
+              ["Def", "def"],
+              ["SpA", "spa"],
+              ["SpD", "spd"],
+              ["Spe", "spe"],
+            ].map(([lbl, key]) => (
+              <label key={key}>
+                {lbl}
+                <input defaultValue={mon.stats[key]} type="number" />
+              </label>
             ))}
           </div>
         </details>
         <details>
           <summary>Nature &amp; Ability</summary>
           <div className="formGrid tight">
-            <label>Nature<select defaultValue={mon.nature}><option>{mon.nature}</option><option>Adamant (+Atk, -SpA)</option><option>Jolly (+Spe, -SpA)</option><option>Modest (+SpA, -Atk)</option><option>Timid (+Spe, -Atk)</option><option>Bold (+Def, -Atk)</option></select></label>
-            <label>Ability
+            <label>
+              Nature
+              <select defaultValue={mon.nature}>
+                <option>{mon.nature}</option>
+                <option>Adamant (+Atk, -SpA)</option>
+                <option>Jolly (+Spe, -SpA)</option>
+                <option>Modest (+SpA, -Atk)</option>
+                <option>Timid (+Spe, -Atk)</option>
+                <option>Bold (+Def, -Atk)</option>
+              </select>
+            </label>
+            <label>
+              Ability
               <select defaultValue={mon.ability}>
                 {mon.dbData ? (
-                  [mon.dbData.ability1, mon.dbData.ability2, mon.dbData.ability_hidden]
+                  [
+                    mon.dbData.ability1,
+                    mon.dbData.ability2,
+                    mon.dbData.ability_hidden,
+                  ]
                     .filter(Boolean)
-                    .map(a => <option key={a}>{capitalize(a)}</option>)
+                    .map((a) => <option key={a}>{capitalize(a)}</option>)
                 ) : (
                   <option>{mon.ability}</option>
                 )}
@@ -827,17 +1722,26 @@ function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) {
         <details>
           <summary>Moves (4)</summary>
           <div className="formGrid tight">
-            {[0,1,2,3].map(i => (
-              <label key={i}>Move {i+1}<input defaultValue={mon.moves[i]} placeholder="—" /></label>
+            {[0, 1, 2, 3].map((i) => (
+              <label key={i}>
+                Move {i + 1}
+                <input defaultValue={mon.moves[i]} placeholder="—" />
+              </label>
             ))}
           </div>
         </details>
       </div>
       <div className="row">
         <button className="btn small">Save</button>
-        <button className="ghost small" onClick={() => onNavigate("ivev")}>IV/EV</button>
-        <button className="ghost small" onClick={() => onSendToBox(mon.id)}>📦 To Box</button>
-        <button className="ghost small danger" onClick={() => onRemove(mon.id)}>Remove</button>
+        <button className="ghost small" onClick={() => onNavigate("ivev")}>
+          IV/EV
+        </button>
+        <button className="ghost small" onClick={() => onSendToBox(mon.id)}>
+          📦 To Box
+        </button>
+        <button className="ghost small danger" onClick={() => onRemove(mon.id)}>
+          Remove
+        </button>
       </div>
     </div>
   );
@@ -859,15 +1763,25 @@ function GenScreen({ onSelectGen }) {
     <section>
       <div className="page-header">
         <h1>Choose Generation</h1>
-        <p className="muted">This affects mechanics, stats, and lookups. Gen 1–3 fully supported.</p>
+        <p className="muted">
+          This affects mechanics, stats, and lookups. Gen 1–3 fully supported.
+        </p>
       </div>
       <div className="gen-grid">
-        {gens.map(g => (
-          <button key={g.n} className={`card gen ${g.supported ? "supported" : "future"}`}
-            disabled={!g.supported} onClick={() => g.supported && onSelectGen(g.n)}>
+        {gens.map((g) => (
+          <button
+            key={g.n}
+            className={`card gen ${g.supported ? "supported" : "future"}`}
+            disabled={!g.supported}
+            onClick={() => g.supported && onSelectGen(g.n)}
+          >
             <span className="gen-num">Gen {g.n}</span>
             <span className="gen-label">{g.label}</span>
-            <span className={`gen-badge ${g.supported ? "supported-badge" : "future-badge"}`}>
+            <span
+              className={`gen-badge ${
+                g.supported ? "supported-badge" : "future-badge"
+              }`}
+            >
               {g.supported ? "✓ Supported" : "Stretch Goal"}
             </span>
           </button>
@@ -889,28 +1803,50 @@ function DashboardScreen({ party, onNavigate, onOpenAdd }) {
           <details open className="panel">
             <summary>Team Preview</summary>
             <div className="grid">
-              {party.map(mon => (
-                <div key={mon.id} className="card pokemon-mini" style={{ cursor: "pointer" }}
-                  onClick={() => onNavigate("team")}>
-                  <div className={`poke-type-pip type-${mon.primaryType}`}></div>
+              {party.map((mon) => (
+                <div
+                  key={mon.id}
+                  className="card pokemon-mini"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => onNavigate("team")}
+                >
+                  <div
+                    className={`poke-type-pip type-${mon.primaryType}`}
+                  ></div>
                   <strong>{mon.name}</strong>
-                  <div className="muted">Lv {mon.level} · {mon.types.join("/")}</div>
+                  <div className="muted">
+                    Lv {mon.level} · {mon.types.join("/")}
+                  </div>
                 </div>
               ))}
               {/* Fill remaining empty slots up to 6 */}
-              {Array.from({ length: Math.max(0, 6 - party.length) }).map((_, i) => (
-                <div key={i} className="card empty" onClick={onOpenAdd}>+ Add</div>
-              ))}
+              {Array.from({ length: Math.max(0, 6 - party.length) }).map(
+                (_, i) => (
+                  <div key={i} className="card empty" onClick={onOpenAdd}>
+                    + Add
+                  </div>
+                )
+              )}
             </div>
           </details>
           <details open className="panel">
             <summary>Quick Actions</summary>
             <div className="btn-group">
-              <button className="btn" onClick={() => onNavigate("team")}>Manage Team</button>
-              <button className="btn" onClick={() => onNavigate("encounters")}>Go to Encounters</button>
-              <button className="btn" onClick={() => onNavigate("calculator")}>Open Calculator</button>
-              <button className="btn" onClick={() => onNavigate("boss")}>Boss Quick Load</button>
-              <button className="btn" onClick={() => onNavigate("ivev")}>IV / EV Tracker</button>
+              <button className="btn" onClick={() => onNavigate("team")}>
+                Manage Team
+              </button>
+              <button className="btn" onClick={() => onNavigate("encounters")}>
+                Go to Encounters
+              </button>
+              <button className="btn" onClick={() => onNavigate("calculator")}>
+                Open Calculator
+              </button>
+              <button className="btn" onClick={() => onNavigate("boss")}>
+                Boss Quick Load
+              </button>
+              <button className="btn" onClick={() => onNavigate("ivev")}>
+                IV / EV Tracker
+              </button>
             </div>
           </details>
         </div>
@@ -918,13 +1854,28 @@ function DashboardScreen({ party, onNavigate, onOpenAdd }) {
           <details open className="panel">
             <summary>Recent Encounters</summary>
             <div className="list">
-              <div className="listItem"><div><strong>Route 104</strong><div className="muted">Taillow — Caught</div></div><span className="outcome-tag caught">Caught</span></div>
-              <div className="listItem"><div><strong>Petalburg Woods</strong><div className="muted">Shroomish — Missed</div></div><span className="outcome-tag missed">Missed</span></div>
+              <div className="listItem">
+                <div>
+                  <strong>Route 104</strong>
+                  <div className="muted">Taillow — Caught</div>
+                </div>
+                <span className="outcome-tag caught">Caught</span>
+              </div>
+              <div className="listItem">
+                <div>
+                  <strong>Petalburg Woods</strong>
+                  <div className="muted">Shroomish — Missed</div>
+                </div>
+                <span className="outcome-tag missed">Missed</span>
+              </div>
             </div>
           </details>
           <details open className="panel">
             <summary>Run Notes</summary>
-            <textarea rows="5" placeholder="Strategy notes, reminders..."></textarea>
+            <textarea
+              rows="5"
+              placeholder="Strategy notes, reminders..."
+            ></textarea>
           </details>
         </div>
       </div>
@@ -932,32 +1883,62 @@ function DashboardScreen({ party, onNavigate, onOpenAdd }) {
   );
 }
 
-function TeamScreen({ party, pcBox, onSendToBox, onRemove, onWithdraw, onRelease, onOpenAdd, onNavigate }) {
+function TeamScreen({
+  party,
+  pcBox,
+  onSendToBox,
+  onRemove,
+  onWithdraw,
+  onRelease,
+  onOpenAdd,
+  onNavigate,
+}) {
   const emptySlots = Math.max(0, 6 - party.length);
   return (
     <section>
       <div className="page-header rowBetween">
         <div>
           <h1>Your Team</h1>
-          <p className="muted">Active party (max 6) · Manage stats, moves, and nature. Overflow goes to PC Box.</p>
+          <p className="muted">
+            Active party (max 6) · Manage stats, moves, and nature. Overflow
+            goes to PC Box.
+          </p>
         </div>
-        <button className="btn" onClick={() => document.getElementById("pcBoxAnchor")?.scrollIntoView({ behavior: "smooth" })}>
+        <button
+          className="btn"
+          onClick={() =>
+            document
+              .getElementById("pcBoxAnchor")
+              ?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
           💾 PC Box ↓
         </button>
       </div>
 
       <div className="rowBetween mb8">
-        <strong>Active Party <span className="muted small">({party.length} / 6)</span></strong>
-        <button className="btn small" onClick={onOpenAdd}>+ Add Pokémon</button>
+        <strong>
+          Active Party <span className="muted small">({party.length} / 6)</span>
+        </strong>
+        <button className="btn small" onClick={onOpenAdd}>
+          + Add Pokémon
+        </button>
       </div>
 
       <div className="grid">
-        {party.map(mon => (
-          <PokemonCard key={mon.id} mon={mon}
-            onSendToBox={onSendToBox} onRemove={onRemove} onNavigate={onNavigate} />
+        {party.map((mon) => (
+          <PokemonCard
+            key={mon.id}
+            mon={mon}
+            onSendToBox={onSendToBox}
+            onRemove={onRemove}
+            onNavigate={onNavigate}
+          />
         ))}
         {Array.from({ length: emptySlots }).map((_, i) => (
-          <div key={i} className="card empty big" onClick={onOpenAdd}>+ Add Pokémon</div>
+          <div key={i} className="card empty big" onClick={onOpenAdd}>
+            + Add Pokémon
+          </div>
         ))}
       </div>
 
@@ -966,9 +1947,13 @@ function TeamScreen({ party, pcBox, onSendToBox, onRemove, onWithdraw, onRelease
         <div className="rowBetween mb8">
           <div>
             <strong>💾 PC Box</strong>
-            <span className="muted small" style={{ marginLeft: 8 }}>({pcBox.length} stored)</span>
+            <span className="muted small" style={{ marginLeft: 8 }}>
+              ({pcBox.length} stored)
+            </span>
           </div>
-          <span className="muted small">Pokémon here can be withdrawn back to party</span>
+          <span className="muted small">
+            Pokémon here can be withdrawn back to party
+          </span>
         </div>
         <div className="grid">
           {pcBox.length === 0 ? (
@@ -983,16 +1968,32 @@ function TeamScreen({ party, pcBox, onSendToBox, onRemove, onWithdraw, onRelease
                   <span className="badge">Lv {mon.level}</span>
                 </div>
                 <div className="pc-mon-meta" style={{ margin: "4px 0" }}>
-                  {mon.types.map(t => (
-                    <span key={t} className={`type-chip type-${t.toLowerCase().split("/")[0]}`}>{t}</span>
+                  {mon.types.map((t) => (
+                    <span
+                      key={t}
+                      className={`type-chip type-${
+                        t.toLowerCase().split("/")[0]
+                      }`}
+                    >
+                      {t}
+                    </span>
                   ))}
                 </div>
                 {mon.moves.filter(Boolean).length > 0 && (
-                  <div className="pc-mon-meta">{mon.moves.filter(Boolean).slice(0,4).join(" · ")}</div>
+                  <div className="pc-mon-meta">
+                    {mon.moves.filter(Boolean).slice(0, 4).join(" · ")}
+                  </div>
                 )}
                 <div className="pc-box-actions">
-                  <button className="btn small" onClick={() => onWithdraw(idx)}>⬆ Withdraw</button>
-                  <button className="ghost small danger" onClick={() => onRelease(idx)}>Release</button>
+                  <button className="btn small" onClick={() => onWithdraw(idx)}>
+                    ⬆ Withdraw
+                  </button>
+                  <button
+                    className="ghost small danger"
+                    onClick={() => onRelease(idx)}
+                  >
+                    Release
+                  </button>
                 </div>
               </div>
             ))
@@ -1003,7 +2004,13 @@ function TeamScreen({ party, pcBox, onSendToBox, onRemove, onWithdraw, onRelease
   );
 }
 
-function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdate }) {
+function EncountersScreen({
+  onNavigate,
+  onOpenAdd,
+  encounters,
+  onDelete,
+  onUpdate,
+}) {
   const [activeId, setActiveId] = useState(null);
   const [formData, setFormData] = useState({});
 
@@ -1016,7 +2023,7 @@ function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdat
 
   // 1. Only use useEffect for the initial load, or if the active item gets deleted
   useEffect(() => {
-    const activeExists = encounters.find(e => e.id === activeId);
+    const activeExists = encounters.find((e) => e.id === activeId);
     if (!activeExists && encounters.length > 0) {
       setActiveId(encounters[0].id);
       setFormData(encounters[0]);
@@ -1043,7 +2050,7 @@ function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdat
   };
 
   // --- Location Search Logic ---
-  const filteredLocs = HOENN_LOCATIONS.filter(l => 
+  const filteredLocs = HOENN_LOCATIONS.filter((l) =>
     l.toLowerCase().includes((formData.location || "").toLowerCase())
   );
 
@@ -1083,29 +2090,68 @@ function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdat
         <div className="col">
           <div className="rowBetween mb8">
             <strong>Encounter List</strong>
-            <button className="btn small" aria-label="Add new encounter" onClick={onOpenAdd}>+ Add</button>
+            <button
+              className="btn small"
+              aria-label="Add new encounter"
+              onClick={onOpenAdd}
+            >
+              + Add
+            </button>
           </div>
-          
+
           <ul className="list" style={{ listStyle: "none", padding: 0 }}>
             {encounters.length === 0 ? (
-              <li className="listItem"><div className="muted">No encounters logged yet.</div></li>
+              <li className="listItem">
+                <div className="muted">No encounters logged yet.</div>
+              </li>
             ) : (
-              encounters.map(enc => (
-                <li 
-                  key={enc.id} 
+              encounters.map((enc) => (
+                <li
+                  key={enc.id}
                   className={`listItem${activeId === enc.id ? " active" : ""}`}
                   onClick={() => handleSelectEncounter(enc)}
                   style={{ cursor: "pointer" }}
                 >
                   <div>
                     <strong>{enc.location}</strong>
-                    <div className="muted">{enc.pokemon} — {enc.outcome}</div>
+                    <div
+                      className="muted"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <span>#{String(enc.pokemon_id).padStart(3, "0")}</span>
+
+                      <span>
+                        {enc.nickname ||
+                          capitalize(enc.pokemon_name) ||
+                          `Pokemon #${enc.pokemon_id}`}
+                      </span>
+
+                      {[enc.type1, enc.type2].filter(Boolean).map((t) => (
+                        <span key={t} className={`type-chip type-${t}`}>
+                          {capitalize(t)}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                   <div className="row">
-                    <span className={`outcome-tag ${enc.outcome.toLowerCase()}`}>{enc.outcome}</span>
-                    <button 
-                      className="ghost small danger" 
-                      onClick={(e) => { e.stopPropagation(); onDelete(enc.id); }} 
+                    <span
+                      className={`outcome-tag ${(
+                        enc.status || "unknown"
+                      ).toLowerCase()}`}
+                    >
+                      {enc.status || "unknown"}
+                    </span>
+                    <button
+                      className="ghost small danger"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(enc.id);
+                      }}
                       aria-label="Delete encounter"
                     >
                       ✕
@@ -1122,35 +2168,36 @@ function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdat
             <summary>Encounter Details</summary>
             <form onSubmit={handleSaveDetails}>
               <div className="formGrid">
-                
                 {/* UPGRADED: Area Input with Dropdown */}
                 <div className="form-group">
                   <label htmlFor="area-input">Area</label>
                   <div className="search-wrap">
-                    <input 
-                      id="area-input" 
-                      value={formData.location || ""} 
-                      onChange={e => {
-                        setFormData({...formData, location: e.target.value});
+                    <input
+                      id="area-input"
+                      value={formData.location || ""}
+                      onChange={(e) => {
+                        setFormData({ ...formData, location: e.target.value });
                         setLocOpen(true);
-                      }} 
+                      }}
                       onFocus={() => setLocOpen(true)}
                       onBlur={() => setTimeout(() => setLocOpen(false), 200)}
-                      disabled={!formData.id} 
+                      disabled={!formData.id}
                       autoComplete="off"
                     />
                     {locOpen && formData.id && (
                       <div className="dropdown">
                         {filteredLocs.length === 0 ? (
-                          <div className="dropdown-empty">No locations found</div>
+                          <div className="dropdown-empty">
+                            No locations found
+                          </div>
                         ) : (
-                          filteredLocs.map(loc => (
-                            <div 
-                              key={loc} 
-                              className="dropdown-item" 
+                          filteredLocs.map((loc) => (
+                            <div
+                              key={loc}
+                              className="dropdown-item"
                               onMouseDown={(e) => {
                                 e.preventDefault(); // Prevents input blur before click registers
-                                setFormData({...formData, location: loc});
+                                setFormData({ ...formData, location: loc });
                                 setLocOpen(false);
                               }}
                             >
@@ -1162,58 +2209,92 @@ function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdat
                     )}
                   </div>
                 </div>
-                
+
                 {/* UPGRADED: Opponent Input with Dropdown */}
                 <div className="form-group">
                   <label htmlFor="opponent-input">Opponent</label>
                   <div className="search-wrap">
-                    <input 
-                      id="opponent-input" 
-                      value={formData.pokemon || ""} 
-                      onChange={handlePokeChange} 
+                    <input
+                      id="opponent-input"
+                      value={formData.pokemon || ""}
+                      onChange={handlePokeChange}
                       onFocus={() => {
                         setPokeOpen(true);
                         fetchPokemon(formData.pokemon || "");
                       }}
                       onBlur={() => setTimeout(() => setPokeOpen(false), 200)}
-                      disabled={!formData.id} 
+                      disabled={!formData.id}
                       autoComplete="off"
                     />
                     {pokeOpen && formData.id && (
                       <div className="dropdown">
-                        {pokeLoading && <div className="dropdown-empty">Loading…</div>}
+                        {pokeLoading && (
+                          <div className="dropdown-empty">Loading…</div>
+                        )}
                         {!pokeLoading && pokeResults.length === 0 && (
                           <div className="dropdown-empty">No Pokémon found</div>
                         )}
-                        {!pokeLoading && pokeResults.slice(0, 50).map(p => (
-                          <div 
-                            key={p.id} 
-                            className="dropdown-item" 
-                            onMouseDown={(e) => {
-                              e.preventDefault();
-                              setFormData({...formData, pokemon: capitalize(p.name)});
-                              setPokeOpen(false);
-                            }}
-                          >
-                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                              <span className="muted small">#{String(p.id).padStart(3,"0")}</span>
-                              <strong>{capitalize(p.name)}</strong>
+                        {!pokeLoading &&
+                          pokeResults.slice(0, 50).map((p) => (
+                            <div
+                              key={p.id}
+                              className="dropdown-item"
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setFormData({
+                                  ...formData,
+                                  pokemon: capitalize(p.name),
+                                });
+                                setPokeOpen(false);
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 8,
+                                }}
+                              >
+                                <span className="muted small">
+                                  #{String(p.id).padStart(3, "0")}
+                                </span>
+                                <strong>{capitalize(p.name)}</strong>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
                       </div>
                     )}
                   </div>
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="level-input">Opponent Level</label>
-                  <input id="level-input" type="number" min="1" max="100" value={formData.level || ""} onChange={e => setFormData({...formData, level: parseInt(e.target.value) || ""})} disabled={!formData.id} />
+                  <input
+                    id="level-input"
+                    type="number"
+                    min="1"
+                    max="100"
+                    value={formData.level || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        level: parseInt(e.target.value) || "",
+                      })
+                    }
+                    disabled={!formData.id}
+                  />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="outcome-select">Outcome</label>
-                  <select id="outcome-select" value={formData.outcome || "Caught"} onChange={e => setFormData({...formData, outcome: e.target.value})} disabled={!formData.id}>
+                  <select
+                    id="outcome-select"
+                    value={formData.outcome || "Caught"}
+                    onChange={(e) =>
+                      setFormData({ ...formData, outcome: e.target.value })
+                    }
+                    disabled={!formData.id}
+                  >
                     <option value="Caught">Caught</option>
                     <option value="Fainted">Fainted</option>
                     <option value="Fled">Fled</option>
@@ -1221,14 +2302,29 @@ function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdat
                   </select>
                 </div>
               </div>
-              
+
               <div className="form-group mt8">
                 <label htmlFor="notes-textarea">Notes</label>
-                <textarea id="notes-textarea" rows="2" placeholder="Notes..." value={formData.notes || ""} onChange={e => setFormData({...formData, notes: e.target.value})} disabled={!formData.id}></textarea>
+                <textarea
+                  id="notes-textarea"
+                  rows="2"
+                  placeholder="Notes..."
+                  value={formData.notes || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, notes: e.target.value })
+                  }
+                  disabled={!formData.id}
+                ></textarea>
               </div>
 
               <div className="row mt8">
-                <button type="submit" className="btn primary small" disabled={!formData.id}>Save Details</button>
+                <button
+                  type="submit"
+                  className="btn primary small"
+                  disabled={!formData.id}
+                >
+                  Save Details
+                </button>
               </div>
             </form>
           </details>
@@ -1239,22 +2335,39 @@ function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdat
               <li className="listItem">
                 <div>
                   <strong>Turn 1</strong>
-                  <div className="muted">Breloom → Taillow | Mach Punch | 12 dmg</div>
+                  <div className="muted">
+                    Breloom → Taillow | Mach Punch | 12 dmg
+                  </div>
                 </div>
-                <button className="ghost small" onClick={() => onNavigate("calculator")}>Calc</button>
+                <button
+                  className="ghost small"
+                  onClick={() => onNavigate("calculator")}
+                >
+                  Calc
+                </button>
               </li>
               <li className="listItem">
                 <div>
                   <strong>Turn 2</strong>
                   <div className="muted">Taillow → Breloom | Peck | 8 dmg</div>
                 </div>
-                <button className="ghost small" onClick={() => onNavigate("calculator")}>Calc</button>
+                <button
+                  className="ghost small"
+                  onClick={() => onNavigate("calculator")}
+                >
+                  Calc
+                </button>
               </li>
             </ul>
-            
+
             <div className="row mt8">
               <button className="btn small">+ Add Damage Event</button>
-              <button className="ghost small" onClick={() => onNavigate("calculator")}>Open Calculator</button>
+              <button
+                className="ghost small"
+                onClick={() => onNavigate("calculator")}
+              >
+                Open Calculator
+              </button>
             </div>
           </details>
         </div>
@@ -1263,114 +2376,403 @@ function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdat
   );
 }
 
-function CalculatorScreen({ onNavigate }) {
+function CalculatorScreen({
+  onNavigate,
+  encounters = [],
+  party = [],
+  onRefreshEncounters,
+}) {
   const [defMode, setDefMode] = useState("lookup");
-  const [trainerRows, setTrainerRows] = useState([]);
-  const [pokemonIndex, setPokemonIndex] = useState({});
-  const [selectedRoute, setSelectedRoute] = useState("");
-  const [selectedTrainerId, setSelectedTrainerId] = useState("");
-  const [selectedPokemonIndex, setSelectedPokemonIndex] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [gameKey, setGameKey] = useState("");
+  const [routeKey, setRouteKey] = useState("");
+  const [trainerKey, setTrainerKey] = useState("");
+  const [pokeIdx, setPokeIdx] = useState("");
+  const [preview, setPreview] = useState(null);
+
+  const [moves, setMoves] = useState([]);
+  const [attackerPartyMonId, setAttackerPartyMonId] = useState("");
+  const [defenderId, setDefenderId] = useState("");
+  const [moveId, setMoveId] = useState("");
+  const [calcLoading, setCalcLoading] = useState(false);
+  const [calcError, setCalcError] = useState(null);
+  const [damageResult, setDamageResult] = useState(null);
+  const [crit, setCrit] = useState(false);
+  const [burned, setBurned] = useState(false);
+  const [weather, setWeather] = useState("");
+  const [lookupAddBusy, setLookupAddBusy] = useState(false);
+  const [lookupAddError, setLookupAddError] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
-
-    async function loadTrainerData() {
-      setLoading(true);
-      setError("");
-
+    (async () => {
       try {
-        const [trainerRes, pokemonRes] = await Promise.all([
-          fetch(`${API_BASE}/api/trainers`),
-          fetch(`${API_BASE}/api/pokemon`)
-        ]);
-
-        if (!trainerRes.ok) throw new Error("Failed to load trainer data.");
-        if (!pokemonRes.ok) throw new Error("Failed to load Pokémon data.");
-
-        const [trainerData, pokemonData] = await Promise.all([
-          trainerRes.json(),
-          pokemonRes.json()
-        ]);
-
-        if (cancelled) return;
-
-        const index = {};
-        for (const pokemon of Array.isArray(pokemonData) ? pokemonData : []) {
-          index[String(pokemon.name || "").toLowerCase()] = pokemon;
-        }
-
-        const rows = Array.isArray(trainerData) ? trainerData : [];
-        setPokemonIndex(index);
-        setTrainerRows(rows);
-        setSelectedRoute((current) => current || (formatTrainerRoute(rows[0]) || ""));
-        setSelectedTrainerId((current) => current || (rows[0]?.id || ""));
-      } catch (loadError) {
+        const res = await fetch(
+          `${API_BASE}/api/pokemon/moves?orderBy=power`
+        );
+        if (!res.ok) throw new Error("Failed to load moves");
+        const data = await res.json();
         if (!cancelled) {
-          setError(loadError.message || "Failed to load calculator data.");
-          setTrainerRows([]);
-          setPokemonIndex({});
+          setMoves(
+            data.filter((m) => m.power != null && Number(m.power) > 0)
+          );
         }
-      } finally {
-        if (!cancelled) setLoading(false);
+      } catch {
+        if (!cancelled) setMoves([]);
       }
-    }
-
-    loadTrainerData();
-
+    })();
     return () => {
       cancelled = true;
     };
   }, []);
 
-  const groupedTrainers = groupTrainersByRoute(trainerRows);
-  const routeEntries = Object.entries(groupedTrainers).sort(([left], [right]) => left.localeCompare(right));
-  const trainerEntries = selectedRoute && groupedTrainers[selectedRoute] ? groupedTrainers[selectedRoute] : [];
-  const selectedTrainer = trainerEntries.find((trainer) => trainer.id === selectedTrainerId) || trainerEntries[0] || null;
-  const selectedTeam = Array.isArray(selectedTrainer?.pokemon) ? selectedTrainer.pokemon : [];
-  const selectedPokemon = selectedPokemonIndex !== "" ? selectedTeam[Number(selectedPokemonIndex)] || null : null;
-  const preview = selectedPokemon ? buildTrainerPokemonView(selectedPokemon, pokemonIndex) : null;
-  const activeTrainerMaps = selectedTrainer ? formatTrainerMaps(selectedTrainer) : [];
-  const trainerRouteLabel = selectedTrainer ? formatTrainerRoute(selectedTrainer) : "Unassigned";
+  const routes =
+    gameKey && defenderDB[gameKey]
+      ? Object.entries(defenderDB[gameKey].routes)
+      : [];
+  const trainers =
+    gameKey && routeKey && defenderDB[gameKey]?.routes[routeKey]
+      ? Object.entries(defenderDB[gameKey].routes[routeKey].trainers)
+      : [];
+  const team =
+    gameKey && routeKey && trainerKey
+      ? defenderDB[gameKey].routes[routeKey].trainers[trainerKey]?.team || []
+      : [];
+  const handlePokeChange = (idx) => {
+    setPokeIdx(idx);
+    setPreview(idx !== "" ? team[parseInt(idx)] : null);
+  };
 
-  function handleRouteChange(routeLabel) {
-    setSelectedRoute(routeLabel);
-    const firstTrainer = groupedTrainers[routeLabel]?.[0] || null;
-    setSelectedTrainerId(firstTrainer?.id || "");
-    setSelectedPokemonIndex("");
-  }
+  const encounterOptionLabel = (e) =>
+    `${e.nickname || e.pokemon_name || "Pokémon"} · Lv.${e.level} · #${
+      e.id
+    }`;
 
-  function handleTrainerChange(trainerId) {
-    setSelectedTrainerId(trainerId);
-    setSelectedPokemonIndex("");
-  }
+  const handleDamageCalculate = async () => {
+    setCalcError(null);
+    setDamageResult(null);
+    if (!attackerPartyMonId) {
+      setCalcError("Choose a party attacker.");
+      return;
+    }
+    const atkMon = party.find((m) => String(m.id) === attackerPartyMonId);
+    if (!atkMon || !atkMon.stats) {
+      setCalcError("Party Pokémon is missing stats.");
+      return;
+    }
+    if (!moveId) {
+      setCalcError("Choose a move.");
+      return;
+    }
+    const moveRow = moves.find((m) => String(m.id) === String(moveId));
+    if (!moveRow) {
+      setCalcError("Move list not loaded.");
+      return;
+    }
 
-  function handlePokeChange(index) {
-    setSelectedPokemonIndex(index);
-  }
+    const usePreviewDef =
+      !defenderId && defMode === "lookup" && preview;
+
+    if (!defenderId && !usePreviewDef) {
+      setCalcError(
+        "Choose a defender encounter, or pick a Pokémon in route / trainer lookup."
+      );
+      return;
+    }
+
+    setCalcLoading(true);
+    try {
+      let defStat;
+      let spdStat;
+      let type1;
+      let type2;
+
+      if (defenderId) {
+        const enc = encounters.find((e) => String(e.id) === String(defenderId));
+        if (!enc || enc.pokemon_id == null) {
+          setCalcError("Defender encounter not found.");
+          return;
+        }
+        const pres = await fetch(`${API_BASE}/api/pokemon/${enc.pokemon_id}`);
+        if (!pres.ok) {
+          setCalcError("Could not load defender species.");
+          return;
+        }
+        const p = await pres.json();
+        const lv = Number(enc.level);
+        defStat = gen3CombatStat(
+          p.defense,
+          enc.defense_iv,
+          enc.defense_ev,
+          lv
+        );
+        spdStat = gen3CombatStat(
+          p.sp_defense,
+          enc.sp_defense_iv,
+          enc.sp_defense_ev,
+          lv
+        );
+        type1 = p.type1;
+        type2 = p.type2;
+      } else {
+        defStat = preview.def;
+        spdStat = preview.spd;
+        const raw = (preview.type || "").split("/");
+        type1 = (raw[0] || "normal").trim().toLowerCase();
+        type2 = raw[1] ? raw[1].trim().toLowerCase() : null;
+      }
+
+      const atkTypes = (atkMon.types || []).map((t) =>
+        String(t).toLowerCase()
+      );
+      const conditions = { isCrit: crit, isBurned: burned };
+      if (weather) conditions.weather = weather;
+
+      const out = computeSimpleBattleDamage(
+        {
+          level: atkMon.level,
+          atk: atkMon.stats.atk,
+          spa: atkMon.stats.spa,
+          types: atkTypes,
+        },
+        { def: defStat, spd: spdStat, type1, type2 },
+        { type: moveRow.type, power: moveRow.power },
+        conditions
+      );
+      setDamageResult(out);
+    } catch (err) {
+      setCalcError(err.message || "Calculation failed");
+    } finally {
+      setCalcLoading(false);
+    }
+  };
+
+  const resultMain =
+    damageResult &&
+    typeof damageResult.min === "number" &&
+    typeof damageResult.max === "number"
+      ? `${damageResult.min} – ${damageResult.max}`
+      : "—";
+
+  const canCalculate = Boolean(
+    attackerPartyMonId &&
+      moveId &&
+      moves.length &&
+      (defenderId || (defMode === "lookup" && preview))
+  );
+
+  const handleAddLookupAsDefender = async () => {
+    if (!preview || defMode !== "lookup" || !gameKey || !routeKey || !trainerKey)
+      return;
+    setLookupAddError(null);
+    setLookupAddBusy(true);
+    try {
+      const search = encodeURIComponent(preview.species.trim());
+      const pres = await fetch(`${API_BASE}/api/pokemon?search=${search}`);
+      const rows = await pres.json();
+      if (!Array.isArray(rows) || rows.length === 0) {
+        setLookupAddError(`No database Pokémon matching “${preview.species}”.`);
+        return;
+      }
+      const needle = preview.species.trim().toLowerCase();
+      const poke =
+        rows.find((r) => (r.name || "").toLowerCase() === needle) || rows[0];
+
+      const routeLabel =
+        routes.find(([k]) => k === routeKey)?.[1]?.label ?? routeKey;
+      const trainerLabel =
+        trainers.find(([k]) => k === trainerKey)?.[1]?.label ?? trainerKey;
+
+      const res = await fetch(`${API_BASE}/api/encounters`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: 1,
+          pokemon_id: poke.id,
+          location: `${routeLabel} · ${trainerLabel}`,
+          nickname: preview.species.slice(0, 20),
+          ability: poke.ability1 || "",
+          nature: "serious",
+          level: preview.level,
+          hp_iv: 31,
+          attack_iv: 31,
+          defense_iv: 31,
+          sp_attack_iv: 31,
+          sp_defense_iv: 31,
+          speed_iv: 31,
+          hp_ev: 0,
+          attack_ev: 0,
+          defense_ev: 0,
+          sp_attack_ev: 0,
+          sp_defense_ev: 0,
+          speed_ev: 0,
+          move1_id: null,
+          move2_id: null,
+          move3_id: null,
+          move4_id: null,
+          item_id: null,
+          status: "caught",
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setLookupAddError(data.error || "Failed to create encounter");
+        return;
+      }
+      if (onRefreshEncounters) await onRefreshEncounters();
+      setDefenderId(String(data.id));
+    } catch (e) {
+      setLookupAddError(e.message || "Could not add defender");
+    } finally {
+      setLookupAddBusy(false);
+    }
+  };
 
   return (
     <section>
-      <div className="page-header"><h1>Damage Calculator</h1><p className="muted">Gen 3 mechanics · parity target with Pokémon Showdown.</p></div>
+      <div className="page-header">
+        <h1>Damage Calculator</h1>
+        <p className="muted">
+          Gen 3 mechanics · parity target with Pokémon Showdown.
+        </p>
+      </div>
       <div className="twoCol">
         <div className="col">
           <details open className="panel">
-            <summary>Attacker</summary>
+            <summary>Damage calc</summary>
+            <p className="muted small" style={{ marginTop: 4 }}>
+              Estimate uses your party&apos;s Attack / Sp. Atk and level, the
+              move&apos;s power and type, plus defender stats (from a logged
+              encounter or the route lookup preview). Crit, burn, and weather
+              are applied; held items and unknown stat stages are ignored.
+            </p>
             <div className="formGrid">
-              <label>Pokémon (team)<select><option>Breloom</option><option>Gyarados</option><option>Manual...</option></select></label>
-              <label>Level<input defaultValue="24" type="number" /></label>
-              <label>Atk / SpA<input defaultValue="90" type="number" /></label>
-              <label>Nature Modifier<select><option value="1">Neutral (1.0×)</option><option value="1.1">+10% (1.1×)</option><option value="0.9">−10% (0.9×)</option></select></label>
+              <label>
+                Attacker (from party)
+                <select
+                  value={attackerPartyMonId}
+                  onChange={(e) => setAttackerPartyMonId(e.target.value)}
+                >
+                  <option value="">
+                    {party.length
+                      ? "Select party Pokémon…"
+                      : "Party is empty — add Pokémon on Team"}
+                  </option>
+                  {party.map((mon) => (
+                    <option key={mon.id} value={String(mon.id)}>
+                      {mon.name} · Lv.{mon.level}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Defender (opponent)
+                <select
+                  value={defenderId}
+                  onChange={(e) => setDefenderId(e.target.value)}
+                >
+                  <option value="">Select encounter…</option>
+                  {encounters.map((e) => (
+                    <option key={e.id} value={e.id}>
+                      {encounterOptionLabel(e)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Move
+                <select
+                  value={moveId}
+                  onChange={(e) => setMoveId(e.target.value)}
+                >
+                  <option value="">Select move…</option>
+                  {moves.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.name} ({m.type}) — power {m.power}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Weather
+                <select
+                  value={weather}
+                  onChange={(e) => setWeather(e.target.value)}
+                >
+                  <option value="">None</option>
+                  <option value="sun">Sun</option>
+                  <option value="rain">Rain</option>
+                </select>
+              </label>
+            </div>
+            <div className="row mt8" style={{ flexWrap: "wrap" }}>
+              <label className="row" style={{ gap: 8 }}>
+                <input
+                  type="checkbox"
+                  checked={crit}
+                  onChange={(e) => setCrit(e.target.checked)}
+                />
+                <span className="muted small">Critical hit</span>
+              </label>
+              <label className="row" style={{ gap: 8 }}>
+                <input
+                  type="checkbox"
+                  checked={burned}
+                  onChange={(e) => setBurned(e.target.checked)}
+                />
+                <span className="muted small">Attacker burned</span>
+              </label>
+            </div>
+            {calcError && (
+              <p className="muted small" style={{ color: "#f87171" }}>
+                {calcError}
+              </p>
+            )}
+            <div className="row mt8">
+              <button
+                type="button"
+                className="btn"
+                disabled={calcLoading || !canCalculate}
+                onClick={handleDamageCalculate}
+              >
+                {calcLoading ? "…" : "Calculate"}
+              </button>
+              <button
+                type="button"
+                className="ghost"
+                onClick={() => onNavigate("team")}
+              >
+                Team
+              </button>
+              <button
+                type="button"
+                className="ghost"
+                onClick={() => onNavigate("encounters")}
+              >
+                Encounters
+              </button>
             </div>
           </details>
-          <details open className="panel">
-            <summary>Defender</summary>
+          <details className="panel">
+            <summary>Route / trainer lookup (reference)</summary>
             <div className="rowBetween mb8" style={{ marginTop: 8 }}>
               <span className="muted small">Input mode:</span>
               <div className="def-mode-toggle">
-                <button className={`def-mode-btn${defMode==="lookup"?" active":""}`} onClick={() => setDefMode("lookup")}>🔍 Game Lookup</button>
-                <button className={`def-mode-btn${defMode==="manual"?" active":""}`} onClick={() => setDefMode("manual")}>⚙ Showdown / Manual</button>
+                <button
+                  className={`def-mode-btn${
+                    defMode === "lookup" ? " active" : ""
+                  }`}
+                  onClick={() => setDefMode("lookup")}
+                >
+                  🔍 Game Lookup
+                </button>
+                <button
+                  className={`def-mode-btn${
+                    defMode === "manual" ? " active" : ""
+                  }`}
+                  onClick={() => setDefMode("manual")}
+                >
+                  ⚙ Showdown / Manual
+                </button>
               </div>
             </div>
             {defMode === "lookup" && (
@@ -1414,45 +2816,78 @@ function CalculatorScreen({ onNavigate }) {
             {defMode === "manual" && (
               <div>
                 <div className="formGrid">
-                  <label>Species / Label<input placeholder="e.g. Nosepass" /></label>
-                  <label>Level<input defaultValue="10" type="number" /></label>
-                  <label>HP<input defaultValue="35" type="number" /></label>
-                  <label>Def / SpD<input defaultValue="20" type="number" /></label>
-                  <label>Atk<input defaultValue="30" type="number" /></label>
-                  <label>Spe<input defaultValue="25" type="number" /></label>
+                  <label>
+                    Species / Label
+                    <input placeholder="e.g. Nosepass" />
+                  </label>
+                  <label>
+                    Level
+                    <input defaultValue="10" type="number" />
+                  </label>
+                  <label>
+                    HP
+                    <input defaultValue="35" type="number" />
+                  </label>
+                  <label>
+                    Def / SpD
+                    <input defaultValue="20" type="number" />
+                  </label>
+                  <label>
+                    Atk
+                    <input defaultValue="30" type="number" />
+                  </label>
+                  <label>
+                    Spe
+                    <input defaultValue="25" type="number" />
+                  </label>
                 </div>
-                <div className="muted small mt8">💡 Paste stats from Pokémon Showdown or enter manually.</div>
+                <div className="muted small mt8">
+                  💡 Paste stats from Pokémon Showdown or enter manually.
+                </div>
               </div>
             )}
           </details>
-          <details open className="panel">
-            <summary>Move</summary>
-            <div className="formGrid">
-              <label>Move Power<input defaultValue="40" type="number" /></label>
-              <label>Category<select><option>Physical</option><option>Special</option></select></label>
-              <label>STAB<select><option>Yes (1.5×)</option><option>No (1.0×)</option></select></label>
-              <label>Effectiveness<select><option>0.25×</option><option>0.5×</option><option>1×</option><option>2×</option><option>4×</option></select></label>
-            </div>
-            <div className="row mt8"><button className="btn">Calculate</button><button className="ghost">Save to Encounter</button></div>
-          </details>
-          <details className="panel"><summary>Advanced (later)</summary><div className="muted small">Crit, held items, weather, stat stages, abilities — Gen 3 parity pass.</div></details>
         </div>
         <div className="col">
           <details open className="panel">
             <summary>Results</summary>
-            <div className="results-block"><div className="result-main">12 – 16</div><div className="muted">damage range</div></div>
+            <div className="results-block">
+              <div className="result-main">{resultMain}</div>
+              <div className="muted">damage range (rolled min–max)</div>
+            </div>
             <div className="stack mt8">
-              <div className="statRow"><span>% of HP</span><strong>35% – 46%</strong></div>
-              <div className="statRow"><span>KO Estimate</span><strong>2HKO</strong></div>
-              <div className="statRow"><span>Crit Damage</span><strong>18 – 24</strong></div>
+              <div className="statRow">
+                <span>% of HP</span>
+                <strong>—</strong>
+              </div>
+              <div className="statRow">
+                <span>KO Estimate</span>
+                <strong>—</strong>
+              </div>
+              <div className="statRow">
+                <span>Crit Damage</span>
+                <strong>—</strong>
+              </div>
             </div>
           </details>
           <details open className="panel">
             <summary>Type Chart Reference</summary>
             <div className="type-chart-mini">
-              <div className="muted small">Quick lookup — Fighting vs common types</div>
-              {[["normal","2×"],["rock","2×"],["ice","2×"],["psychic","0.5×"],["flying","0.5×"],["ghost","0×"]].map(([t,eff])=>(
-                <div key={t} className="type-matchup"><span className={`type-chip type-${t}`}>{capitalize(t)}</span><strong>{eff}</strong></div>
+              <div className="muted small">
+                Quick lookup — Fighting vs common types
+              </div>
+              {[
+                ["normal", "2×"],
+                ["rock", "2×"],
+                ["ice", "2×"],
+                ["psychic", "0.5×"],
+                ["flying", "0.5×"],
+                ["ghost", "0×"],
+              ].map(([t, eff]) => (
+                <div key={t} className="type-matchup">
+                  <span className={`type-chip type-${t}`}>{capitalize(t)}</span>
+                  <strong>{eff}</strong>
+                </div>
               ))}
             </div>
           </details>
@@ -1463,49 +2898,110 @@ function CalculatorScreen({ onNavigate }) {
 }
 
 function IvEvScreen() {
-  const [evs, setEvs] = useState({ hp: 0, atk: 252, def: 0, spa: 0, spd: 4, spe: 252 });
-  const total = Object.values(evs).reduce((s,v) => s + (parseInt(v)||0), 0);
-  const totalColor = total > 510 ? "#f87171" : total === 510 ? "#4ade80" : undefined;
+  const [evs, setEvs] = useState({
+    hp: 0,
+    atk: 252,
+    def: 0,
+    spa: 0,
+    spd: 4,
+    spe: 252,
+  });
+  const total = Object.values(evs).reduce((s, v) => s + (parseInt(v) || 0), 0);
+  const totalColor =
+    total > 510 ? "#f87171" : total === 510 ? "#4ade80" : undefined;
   return (
     <section>
-      <div className="page-header"><h1>IV / EV Tracker</h1><p className="muted">Track Individual Values and Effort Values per Pokémon.</p></div>
+      <div className="page-header">
+        <h1>IV / EV Tracker</h1>
+        <p className="muted">
+          Track Individual Values and Effort Values per Pokémon.
+        </p>
+      </div>
       <div className="twoCol">
         <div className="col">
           <details open className="panel">
             <summary>Select Pokémon</summary>
             <div className="formGrid">
-              <label>Pokémon<select><option>Breloom</option><option>Gyarados</option></select></label>
-              <label>Level<input defaultValue="24" type="number" /></label>
+              <label>
+                Pokémon
+                <select>
+                  <option>Breloom</option>
+                  <option>Gyarados</option>
+                </select>
+              </label>
+              <label>
+                Level
+                <input defaultValue="24" type="number" />
+              </label>
             </div>
           </details>
           <details open className="panel">
-            <summary>Individual Values (IVs) <span className="muted small">0–31 per stat</span></summary>
+            <summary>
+              Individual Values (IVs){" "}
+              <span className="muted small">0–31 per stat</span>
+            </summary>
             <div className="formGrid">
-              {[["HP IV",28],["Atk IV",31],["Def IV",14],["SpA IV",10],["SpD IV",22],["Spe IV",19]].map(([lbl,val])=>(
-                <label key={lbl}>{lbl}<input defaultValue={val} type="number" min="0" max="31" /></label>
+              {[
+                ["HP IV", 28],
+                ["Atk IV", 31],
+                ["Def IV", 14],
+                ["SpA IV", 10],
+                ["SpD IV", 22],
+                ["Spe IV", 19],
+              ].map(([lbl, val]) => (
+                <label key={lbl}>
+                  {lbl}
+                  <input defaultValue={val} type="number" min="0" max="31" />
+                </label>
               ))}
             </div>
-            <div className="iv-note muted small">💡 Gen 1/2: IVs are 0–15 (DVs). Gen 3: 0–31.</div>
+            <div className="iv-note muted small">
+              💡 Gen 1/2: IVs are 0–15 (DVs). Gen 3: 0–31.
+            </div>
           </details>
         </div>
         <div className="col">
           <details open className="panel">
-            <summary>Effort Values (EVs) <span className="muted small">0–255 per stat, 510 total</span></summary>
+            <summary>
+              Effort Values (EVs){" "}
+              <span className="muted small">0–255 per stat, 510 total</span>
+            </summary>
             <div className="formGrid">
-              {Object.entries(evs).map(([stat,val])=>(
-                <label key={stat}>{stat.toUpperCase()} EV<input value={val} type="number" min="0" max="255" onChange={e=>setEvs(p=>({...p,[stat]:e.target.value}))} /></label>
+              {Object.entries(evs).map(([stat, val]) => (
+                <label key={stat}>
+                  {stat.toUpperCase()} EV
+                  <input
+                    value={val}
+                    type="number"
+                    min="0"
+                    max="255"
+                    onChange={(e) =>
+                      setEvs((p) => ({ ...p, [stat]: e.target.value }))
+                    }
+                  />
+                </label>
               ))}
             </div>
-            <div className="ev-total-row"><span>Total EVs Used:</span><strong style={{color:totalColor}}>{total} / 510</strong></div>
+            <div className="ev-total-row">
+              <span>Total EVs Used:</span>
+              <strong style={{ color: totalColor }}>{total} / 510</strong>
+            </div>
           </details>
           <details open className="panel">
             <summary>Calculated Final Stats</summary>
             <div className="stack">
-              {["HP","Attack","Defense","Sp. Atk","Sp. Def","Speed"].map(s=>(
-                <div key={s} className="statRow"><span>{s}</span><strong>—</strong></div>
-              ))}
+              {["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"].map(
+                (s) => (
+                  <div key={s} className="statRow">
+                    <span>{s}</span>
+                    <strong>—</strong>
+                  </div>
+                )
+              )}
             </div>
-            <div className="muted small mt8">Formula calculation coming in main build phase.</div>
+            <div className="muted small mt8">
+              Formula calculation coming in main build phase.
+            </div>
           </details>
         </div>
       </div>
@@ -1515,42 +3011,108 @@ function IvEvScreen() {
 
 function TrainerScreen() {
   const badges = [
-    {icon:"🪨",name:"Stone",earned:true},{icon:"✊",name:"Knuckle",earned:true},
-    {icon:"⚡",name:"Dynamo",earned:false},{icon:"🔥",name:"Heat",earned:false},
-    {icon:"⚖",name:"Balance",earned:false},{icon:"🪶",name:"Feather",earned:false},
-    {icon:"🔮",name:"Mind",earned:false},{icon:"🌊",name:"Rain",earned:false},
+    { icon: "🪨", name: "Stone", earned: true },
+    { icon: "✊", name: "Knuckle", earned: true },
+    { icon: "⚡", name: "Dynamo", earned: false },
+    { icon: "🔥", name: "Heat", earned: false },
+    { icon: "⚖", name: "Balance", earned: false },
+    { icon: "🪶", name: "Feather", earned: false },
+    { icon: "🔮", name: "Mind", earned: false },
+    { icon: "🌊", name: "Rain", earned: false },
   ];
   return (
     <section>
-      <div className="page-header"><h1>Trainer Profile</h1><p className="muted">Your challenge run identity and progress tracker.</p></div>
+      <div className="page-header">
+        <h1>Trainer Profile</h1>
+        <p className="muted">
+          Your challenge run identity and progress tracker.
+        </p>
+      </div>
       <div className="twoCol">
         <div className="col">
           <details open className="panel">
             <summary>Run Info</summary>
             <div className="formGrid">
-              <label>Trainer Name<input defaultValue="Martin" /></label>
-              <label>Game<select><option>Pokémon Emerald</option><option>Pokémon Ruby</option><option>Pokémon Sapphire</option><option>Pokémon FireRed</option><option>Pokémon LeafGreen</option><option>Pokémon Red</option><option>Pokémon Blue</option><option>Pokémon Yellow</option><option>Pokémon Gold</option><option>Pokémon Silver</option><option>Pokémon Crystal</option></select></label>
-              <label>Challenge Type<select><option>Nuzlocke</option><option>Hardcore Nuzlocke</option><option>Wedlocke</option><option>Monotype</option><option>Solo Run</option><option>Custom ROM Hack</option></select></label>
-              <label>Run Status<select><option>Active</option><option>Completed</option><option>Wiped (Failed)</option><option>Paused</option></select></label>
+              <label>
+                Trainer Name
+                <input defaultValue="Martin" />
+              </label>
+              <label>
+                Game
+                <select>
+                  <option>Pokémon Emerald</option>
+                  <option>Pokémon Ruby</option>
+                  <option>Pokémon Sapphire</option>
+                  <option>Pokémon FireRed</option>
+                  <option>Pokémon LeafGreen</option>
+                  <option>Pokémon Red</option>
+                  <option>Pokémon Blue</option>
+                  <option>Pokémon Yellow</option>
+                  <option>Pokémon Gold</option>
+                  <option>Pokémon Silver</option>
+                  <option>Pokémon Crystal</option>
+                </select>
+              </label>
+              <label>
+                Challenge Type
+                <select>
+                  <option>Nuzlocke</option>
+                  <option>Hardcore Nuzlocke</option>
+                  <option>Wedlocke</option>
+                  <option>Monotype</option>
+                  <option>Solo Run</option>
+                  <option>Custom ROM Hack</option>
+                </select>
+              </label>
+              <label>
+                Run Status
+                <select>
+                  <option>Active</option>
+                  <option>Completed</option>
+                  <option>Wiped (Failed)</option>
+                  <option>Paused</option>
+                </select>
+              </label>
             </div>
           </details>
           <details open className="panel">
             <summary>Custom Rules</summary>
             <div className="stack">
-              {[["Fainted Pokémon are dead (permadeath)",true],["Only catch first encounter per route",true],["Species / duplication clause",false],["Nickname all Pokémon",false],["No items in battle",false]].map(([lbl,chk])=>(
-                <label key={lbl} className="checkbox-row"><input type="checkbox" defaultChecked={chk} style={{width:"auto"}} /> {lbl}</label>
+              {[
+                ["Fainted Pokémon are dead (permadeath)", true],
+                ["Only catch first encounter per route", true],
+                ["Species / duplication clause", false],
+                ["Nickname all Pokémon", false],
+                ["No items in battle", false],
+              ].map(([lbl, chk]) => (
+                <label key={lbl} className="checkbox-row">
+                  <input
+                    type="checkbox"
+                    defaultChecked={chk}
+                    style={{ width: "auto" }}
+                  />{" "}
+                  {lbl}
+                </label>
               ))}
             </div>
-            <textarea rows="3" className="mt8" placeholder="Additional custom rules..."></textarea>
+            <textarea
+              rows="3"
+              className="mt8"
+              placeholder="Additional custom rules..."
+            ></textarea>
           </details>
         </div>
         <div className="col">
           <details open className="panel">
             <summary>Badge Progress</summary>
             <div className="badge-grid">
-              {badges.map(b=>(
-                <div key={b.name} className={`badge-item${b.earned?" earned":""}`}>
-                  <div className="badge-icon">{b.icon}</div><span>{b.name}</span>
+              {badges.map((b) => (
+                <div
+                  key={b.name}
+                  className={`badge-item${b.earned ? " earned" : ""}`}
+                >
+                  <div className="badge-icon">{b.icon}</div>
+                  <span>{b.name}</span>
                 </div>
               ))}
             </div>
@@ -1558,15 +3120,30 @@ function TrainerScreen() {
           <details open className="panel">
             <summary>Run Stats</summary>
             <div className="stack">
-              {[["Total Encounters",3],["Pokémon Caught",2],["Deaths",0],["Badges Earned","2 / 8"],["Current Location","Mauville City"]].map(([k,v])=>(
-                <div key={k} className="statRow"><span>{k}</span><strong>{v}</strong></div>
+              {[
+                ["Total Encounters", 3],
+                ["Pokémon Caught", 2],
+                ["Deaths", 0],
+                ["Badges Earned", "2 / 8"],
+                ["Current Location", "Mauville City"],
+              ].map(([k, v]) => (
+                <div key={k} className="statRow">
+                  <span>{k}</span>
+                  <strong>{v}</strong>
+                </div>
               ))}
             </div>
           </details>
           <details className="panel">
             <summary>Graveyard</summary>
-            <div className="muted small">Pokémon lost during this run will appear here.</div>
-            <div className="list mt8"><div className="graveyard-empty muted">— No deaths yet. Keep it that way. —</div></div>
+            <div className="muted small">
+              Pokémon lost during this run will appear here.
+            </div>
+            <div className="list mt8">
+              <div className="graveyard-empty muted">
+                — No deaths yet. Keep it that way. —
+              </div>
+            </div>
           </details>
         </div>
       </div>
@@ -1787,7 +3364,11 @@ function BossScreen({ onNavigate }) {
           </details>
           <details className="panel">
             <summary>Threat Notes</summary>
-            <textarea rows="4" placeholder="Danger moves, recommended types, strategy notes..." defaultValue="Rock Throw can threaten Flying/Bug types. Nosepass high def — use special attackers or Fighting types if available."></textarea>
+            <textarea
+              rows="4"
+              placeholder="Danger moves, recommended types, strategy notes..."
+              defaultValue="Rock Throw can threaten Flying/Bug types. Nosepass high def — use special attackers or Fighting types if available."
+            ></textarea>
           </details>
         </div>
       </div>
@@ -2022,46 +3603,104 @@ function groupBossTrainers(trainers) {
 function LookupScreen({ onNavigate }) {
   return (
     <section>
-      <div className="page-header"><h1>Pokémon Lookup</h1><p className="muted">386 Pokémon · Gens 1–3 · Data via PokéAPI.</p></div>
+      <div className="page-header">
+        <h1>Pokémon Lookup</h1>
+        <p className="muted">386 Pokémon · Gens 1–3 · Data via PokéAPI.</p>
+      </div>
       <div className="twoCol">
         <div className="col">
           <div className="panel">
-            <label>Search Pokémon<input placeholder="e.g., Breloom, Gardevoir, Mewtwo..." /></label>
-            <div className="muted small mt8">National Dex #001–386 supported in MVP.</div>
+            <label>
+              Search Pokémon
+              <input placeholder="e.g., Breloom, Gardevoir, Mewtwo..." />
+            </label>
+            <div className="muted small mt8">
+              National Dex #001–386 supported in MVP.
+            </div>
           </div>
           <div className="card">
             <div className="poke-header">
               <div className="poke-type-pip type-grass"></div>
               <div>
-                <div className="rowBetween"><strong className="poke-name">Breloom</strong><span className="badge">#286</span></div>
-                <div className="poke-meta"><span className="type-chip type-grass">Grass</span><span className="type-chip type-fighting">Fighting</span></div>
+                <div className="rowBetween">
+                  <strong className="poke-name">Breloom</strong>
+                  <span className="badge">#286</span>
+                </div>
+                <div className="poke-meta">
+                  <span className="type-chip type-grass">Grass</span>
+                  <span className="type-chip type-fighting">Fighting</span>
+                </div>
               </div>
             </div>
             <details open>
               <summary>Base Stats</summary>
               <div className="stat-bars">
-                {[["HP",60,24,false],["Atk",130,52,true],["Def",80,32,false],["SpA",60,24,false],["SpD",60,24,false],["Spe",70,28,false]].map(([s,v,w,isAtk])=>(
-                  <div key={s} className="stat-bar-row"><span>{s}</span><div className="bar-track"><div className={`bar-fill${isAtk?" atk":""}`} style={{width:`${w}%`}}></div></div><strong>{v}</strong></div>
+                {[
+                  ["HP", 60, 24, false],
+                  ["Atk", 130, 52, true],
+                  ["Def", 80, 32, false],
+                  ["SpA", 60, 24, false],
+                  ["SpD", 60, 24, false],
+                  ["Spe", 70, 28, false],
+                ].map(([s, v, w, isAtk]) => (
+                  <div key={s} className="stat-bar-row">
+                    <span>{s}</span>
+                    <div className="bar-track">
+                      <div
+                        className={`bar-fill${isAtk ? " atk" : ""}`}
+                        style={{ width: `${w}%` }}
+                      ></div>
+                    </div>
+                    <strong>{v}</strong>
+                  </div>
                 ))}
               </div>
             </details>
             <details>
               <summary>Abilities</summary>
               <div className="stack small-gap mt8">
-                <div className="ability-row"><strong>Effect Spore</strong> <span className="muted">Contact may cause status</span></div>
-                <div className="ability-row"><strong>Poison Heal</strong> <span className="muted small">(Hidden)</span></div>
+                <div className="ability-row">
+                  <strong>Effect Spore</strong>{" "}
+                  <span className="muted">Contact may cause status</span>
+                </div>
+                <div className="ability-row">
+                  <strong>Poison Heal</strong>{" "}
+                  <span className="muted small">(Hidden)</span>
+                </div>
               </div>
             </details>
             <details>
               <summary>Learnset (sample)</summary>
               <div className="move-list mt8">
-                {["Mach Punch","Seed Bomb","Sky Uppercut","Spore","Stun Spore"].map(m=><span key={m} className="move-tag">{m}</span>)}
+                {[
+                  "Mach Punch",
+                  "Seed Bomb",
+                  "Sky Uppercut",
+                  "Spore",
+                  "Stun Spore",
+                ].map((m) => (
+                  <span key={m} className="move-tag">
+                    {m}
+                  </span>
+                ))}
               </div>
             </details>
             <div className="row mt8">
-              <button className="btn small" onClick={()=>onNavigate("team")}>Add to Team</button>
-              <button className="ghost small" onClick={()=>onNavigate("encounters")}>Set as Opponent</button>
-              <button className="ghost small" onClick={()=>onNavigate("calculator")}>Load to Calc</button>
+              <button className="btn small" onClick={() => onNavigate("team")}>
+                Add to Team
+              </button>
+              <button
+                className="ghost small"
+                onClick={() => onNavigate("encounters")}
+              >
+                Set as Opponent
+              </button>
+              <button
+                className="ghost small"
+                onClick={() => onNavigate("calculator")}
+              >
+                Load to Calc
+              </button>
             </div>
           </div>
         </div>
@@ -2069,9 +3708,34 @@ function LookupScreen({ onNavigate }) {
           <details open className="panel">
             <summary>Type Effectiveness (against Breloom)</summary>
             <div className="type-matchup-grid">
-              <div className="matchup-group"><div className="matchup-label weakness">4× Weak</div><div><span className="type-chip type-flying">Flying</span></div></div>
-              <div className="matchup-group"><div className="matchup-label weakness">2× Weak</div><div>{["fire","ice","poison","psychic"].map(t=><span key={t} className={`type-chip type-${t}`}>{capitalize(t)}</span>)}</div></div>
-              <div className="matchup-group"><div className="matchup-label resist">½× Resist</div><div>{["water","grass","electric","ground","rock","dark"].map(t=><span key={t} className={`type-chip type-${t}`}>{capitalize(t)}</span>)}</div></div>
+              <div className="matchup-group">
+                <div className="matchup-label weakness">4× Weak</div>
+                <div>
+                  <span className="type-chip type-flying">Flying</span>
+                </div>
+              </div>
+              <div className="matchup-group">
+                <div className="matchup-label weakness">2× Weak</div>
+                <div>
+                  {["fire", "ice", "poison", "psychic"].map((t) => (
+                    <span key={t} className={`type-chip type-${t}`}>
+                      {capitalize(t)}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="matchup-group">
+                <div className="matchup-label resist">½× Resist</div>
+                <div>
+                  {["water", "grass", "electric", "ground", "rock", "dark"].map(
+                    (t) => (
+                      <span key={t} className={`type-chip type-${t}`}>
+                        {capitalize(t)}
+                      </span>
+                    )
+                  )}
+                </div>
+              </div>
             </div>
           </details>
         </div>
@@ -2084,31 +3748,73 @@ function LookupScreen({ onNavigate }) {
 // ROOT APP
 // =====================================================================
 const initialParty = [
-  { id: 1, name: "Breloom", level: 24, gender: "♂ Male", types: ["Grass","Fighting"], primaryType: "grass",
-    stats: {hp:70,atk:90,def:60,spa:60,spd:60,spe:70}, nature: "Adamant (+Atk, -SpA)", ability: "Effect Spore",
-    moves: ["Mach Punch","Seed Bomb","",""], dbData: {ability1:"effect-spore",ability2:null,ability_hidden:"poison-heal"} },
-  { id: 2, name: "Gyarados", level: 22, gender: "♂ Male", types: ["Water","Flying"], primaryType: "water",
-    stats: {hp:95,atk:125,def:79,spa:60,spd:100,spe:81}, nature: "Adamant (+Atk, -SpA)", ability: "Intimidate",
-    moves: ["Surf","Bite","",""], dbData: {ability1:"intimidate",ability2:null,ability_hidden:null} },
+  {
+    id: 1,
+    encounterId: null,
+    name: "Breloom",
+    level: 24,
+    gender: "♂ Male",
+    types: ["Grass", "Fighting"],
+    primaryType: "grass",
+    stats: { hp: 70, atk: 90, def: 60, spa: 60, spd: 60, spe: 70 },
+    nature: "Adamant (+Atk, -SpA)",
+    ability: "Effect Spore",
+    moves: ["Mach Punch", "Seed Bomb", "", ""],
+    dbData: {
+      ability1: "effect-spore",
+      ability2: null,
+      ability_hidden: "poison-heal",
+    },
+  },
+  {
+    id: 2,
+    encounterId: null,
+    name: "Gyarados",
+    level: 22,
+    gender: "♂ Male",
+    types: ["Water", "Flying"],
+    primaryType: "water",
+    stats: { hp: 95, atk: 125, def: 79, spa: 60, spd: 100, spe: 81 },
+    nature: "Adamant (+Atk, -SpA)",
+    ability: "Intimidate",
+    moves: ["Surf", "Bite", "", ""],
+    dbData: { ability1: "intimidate", ability2: null, ability_hidden: null },
+  },
 ];
 
 export default function App() {
-  const [screen, setScreen]         = useState("gen");
-  const [genBadge, setGenBadge]     = useState("—");
+  const [screen, setScreen] = useState("gen");
+  const [genBadge, setGenBadge] = useState("—");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [party, setParty]           = useState(initialParty);
-  const [pcBox, setPcBox]           = useState([]);
+  const [party, setParty] = useState(initialParty);
+  const [pcBox, setPcBox] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [encounters, setEncounters] = useState([ // Examples for demo mode TODO: Remove
-    { id: "ex1", location: "Route 104", pokemon: "Taillow", level: 10, outcome: "Caught", notes: "First catch!" },
-    { id: "ex2", location: "Petalburg Woods", pokemon: "Shroomish", level: 6, outcome: "Missed", notes: "Ran away." },
-    { id: "ex3", location: "Route 116", pokemon: "Whismur", level: 8, outcome: "Fainted", notes: "Crit hit accidentally." }
-  ]);
+  //const [encounters, setEncounters] = useState([ // Examples for demo mode TODO: Remove
+  //  { id: "ex1", location: "Route 104", pokemon: "Taillow", level: 10, outcome: "Caught", notes: "First catch!" },
+  //  { id: "ex2", location: "Petalburg Woods", pokemon: "Shroomish", level: 6, outcome: "Missed", notes: "Ran away." },
+  //  { id: "ex3", location: "Route 116", pokemon: "Whismur", level: 8, outcome: "Fainted", notes: "Crit hit accidentally." }
+  //]);
+  const [encounters, setEncounters] = useState([]);
+  const fetchEncounters = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/encounters/1");
+      const data = await res.json();
+      setEncounters(data);
+    } catch (err) {
+      console.error("Failed to fetch encounters:", err);
+    }
+  };
+  useEffect(() => {
+    fetchEncounters();
+  }, []);
   const [showEncounterModal, setShowEncounterModal] = useState(false);
 
   const navigate = (s) => setScreen(s);
 
-  const handleSelectGen = (n) => { setGenBadge(n); setScreen("dashboard"); };
+  const handleSelectGen = (n) => {
+    setGenBadge(n);
+    setScreen("dashboard");
+  };
 
   // Open the add modal and navigate to team screen
   const handleOpenAdd = () => {
@@ -2117,53 +3823,95 @@ export default function App() {
   };
 
   const handleAddPokemon = (mon) => {
-    if (party.length >= 6) { alert("Party is full (6/6)! Send a Pokémon to PC Box first."); return; }
-    setParty(prev => [...prev, mon]);
+    if (party.length >= 6) {
+      alert("Party is full (6/6)! Send a Pokémon to PC Box first.");
+      return;
+    }
+    setParty((prev) => [...prev, { ...mon, encounterId: mon.encounterId ?? null }]);
   };
 
   const handleSendToBox = (id) => {
-    if (party.length <= 1) { alert("You need at least 1 Pokémon in your party!"); return; }
-    const mon = party.find(m => m.id === id);
+    if (party.length <= 1) {
+      alert("You need at least 1 Pokémon in your party!");
+      return;
+    }
+    const mon = party.find((m) => m.id === id);
     if (!mon) return;
-    setParty(prev => prev.filter(m => m.id !== id));
-    setPcBox(prev => [...prev, mon]);
+    setParty((prev) => prev.filter((m) => m.id !== id));
+    setPcBox((prev) => [...prev, mon]);
   };
 
   const handleRemove = (id) => {
-    if (party.length <= 1) { alert("Party can't be empty! Send them to PC Box first if needed."); return; }
+    if (party.length <= 1) {
+      alert("Party can't be empty! Send them to PC Box first if needed.");
+      return;
+    }
     if (window.confirm("Remove this Pokémon from your run entirely?")) {
-      setParty(prev => prev.filter(m => m.id !== id));
+      setParty((prev) => prev.filter((m) => m.id !== id));
     }
   };
 
   const handleWithdraw = (idx) => {
-    if (party.length >= 6) { alert("Party is full (6/6)! Move someone to PC Box first."); return; }
+    if (party.length >= 6) {
+      alert("Party is full (6/6)! Move someone to PC Box first.");
+      return;
+    }
     const mon = pcBox[idx];
-    setPcBox(prev => prev.filter((_,i) => i !== idx));
-    setParty(prev => [...prev, mon]);
+    setPcBox((prev) => prev.filter((_, i) => i !== idx));
+    setParty((prev) => [...prev, mon]);
   };
 
   const handleRelease = (idx) => {
     const mon = pcBox[idx];
-    if (window.confirm(`Release ${mon.name} permanently? This can't be undone.`)) {
-      setPcBox(prev => prev.filter((_,i) => i !== idx));
+    if (
+      window.confirm(`Release ${mon.name} permanently? This can't be undone.`)
+    ) {
+      setPcBox((prev) => prev.filter((_, i) => i !== idx));
     }
   };
 
-  const handleDeleteEncounter = (id) => {
-    if (window.confirm("Delete this encounter?")) {
-      setEncounters(prev => prev.filter(e => e.id !== id));
+  const handleDeleteEncounter = async (id) => {
+    try {
+      await fetch(`http://localhost:5000/api/encounters/${id}`, {
+        method: "DELETE",
+      });
+
+      fetchEncounters();
+    } catch (err) {
+      console.error("Delete failed:", err);
     }
   };
 
-  const handleUpdateEncounter = (updatedEnc) => {
-    setEncounters(prev => prev.map(e => e.id === updatedEnc.id ? updatedEnc : e));
+  const handleUpdateEncounter = async (updatedEnc) => {
+    try {
+      await fetch(`http://localhost:5000/api/encounters/${updatedEnc.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          location: updatedEnc.location,
+          nickname: updatedEnc.nickname,
+          status: updatedEnc.outcome?.toLowerCase(),
+        }),
+      });
+
+      fetchEncounters();
+    } catch (err) {
+      console.error("Update failed:", err);
+    }
   };
 
   const navItems = [
-    {key:"gen",label:"Generation"},{key:"dashboard",label:"Dashboard"},{key:"team",label:"Team"},
-    {key:"encounters",label:"Encounters"},{key:"calculator",label:"Calculator"},{key:"ivev",label:"IV / EV"},
-    {key:"trainer",label:"Trainer"},{key:"boss",label:"Boss Data"},{key:"lookup",label:"Lookup"},
+    { key: "gen", label: "Generation" },
+    { key: "dashboard", label: "Dashboard" },
+    { key: "team", label: "Team" },
+    { key: "encounters", label: "Encounters" },
+    { key: "calculator", label: "Calculator" },
+    { key: "ivev", label: "IV / EV" },
+    { key: "trainer", label: "Trainer" },
+    { key: "boss", label: "Boss Data" },
+    { key: "lookup", label: "Lookup" },
   ];
 
   return (
@@ -2173,14 +3921,59 @@ export default function App() {
       {showAddModal && (
         <AddPokemonModal
           onClose={() => setShowAddModal(false)}
-          onAdd={(mon) => { handleAddPokemon(mon); setShowAddModal(false); }}
+          onAdd={handleAddPokemon}
         />
       )}
 
       {showEncounterModal && (
         <AddEncounterModal
           onClose={() => setShowEncounterModal(false)}
-          onAdd={(enc) => { setEncounters(prev => [enc, ...prev]); setShowEncounterModal(false); }}
+          onAdd={async (enc) => {
+            try {
+              const res = await fetch("http://localhost:5000/api/encounters", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  user_id: 1,
+                  pokemon_id: enc.pokemon_id,
+                  location: enc.location,
+                  nickname: enc.nickname,
+                  ability: enc.ability,
+                  nature: "serious",
+                  level: 50,
+                  hp_iv: 31,
+                  attack_iv: 31,
+                  defense_iv: 31,
+                  sp_attack_iv: 31,
+                  sp_defense_iv: 31,
+                  speed_iv: 31,
+                  hp_ev: 0,
+                  attack_ev: 0,
+                  defense_ev: 0,
+                  sp_attack_ev: 0,
+                  sp_defense_ev: 0,
+                  speed_ev: 0,
+                  move1_id: null,
+                  move2_id: null,
+                  move3_id: null,
+                  move4_id: null,
+                  item_id: null,
+                  status: enc.outcome?.toLowerCase() || "caught",
+                }),
+              });
+
+              if (!res.ok) {
+                throw new Error("Failed to create encounter");
+              }
+
+              await fetchEncounters();
+              setShowEncounterModal(false);
+            } catch (err) {
+              console.error("Add encounter failed:", err);
+            }
+          }}
         />
       )}
 
@@ -2191,52 +3984,122 @@ export default function App() {
           <span className="badge">Gen {genBadge}</span>
         </div>
         <nav className="nav">
-          {navItems.map(({key,label}) => (
-            <button key={key} className={`navbtn${screen===key?" active":""}`} onClick={() => navigate(key)}>{label}</button>
+          {navItems.map(({ key, label }) => (
+            <button
+              key={key}
+              className={`navbtn${screen === key ? " active" : ""}`}
+              onClick={() => navigate(key)}
+            >
+              {label}
+            </button>
           ))}
         </nav>
-        <button className="ghost icon-btn" onClick={() => setSidebarOpen(o => !o)}>☰</button>
+        <button
+          className="ghost icon-btn"
+          onClick={() => setSidebarOpen((o) => !o)}
+        >
+          ☰
+        </button>
       </header>
 
       <div className="shell">
-        <aside className={`sidebar${sidebarOpen?"":" collapsed"}`}>
+        <aside className={`sidebar${sidebarOpen ? "" : " collapsed"}`}>
           <h3>Quick Actions</h3>
           <details open>
             <summary>Current Run</summary>
             <div className="stack">
-              <div className="row"><span>Run:</span><strong>Emerald Nuzlocke</strong></div>
-              <div className="row"><span>Status:</span><strong className="status-active">Active</strong></div>
-              <div className="row"><span>Badges:</span><strong>2 / 8</strong></div>
+              <div className="row">
+                <span>Run:</span>
+                <strong>Emerald Nuzlocke</strong>
+              </div>
+              <div className="row">
+                <span>Status:</span>
+                <strong className="status-active">Active</strong>
+              </div>
+              <div className="row">
+                <span>Badges:</span>
+                <strong>2 / 8</strong>
+              </div>
             </div>
           </details>
           <details open>
             <summary>Shortcuts</summary>
             <div className="stack">
-              {[["encounters","+ Add Encounter"],["calculator","Open Calculator"],["boss","Boss Quick Load"],["lookup","Search Pokémon"]].map(([s,lbl])=>(
-                <button key={s} className="btn" onClick={() => navigate(s)}>{lbl}</button>
+              {[
+                ["encounters", "+ Add Encounter"],
+                ["calculator", "Open Calculator"],
+                ["boss", "Boss Quick Load"],
+                ["lookup", "Search Pokémon"],
+              ].map(([s, lbl]) => (
+                <button key={s} className="btn" onClick={() => navigate(s)}>
+                  {lbl}
+                </button>
               ))}
             </div>
           </details>
           <details>
             <summary>Boss Quick Load</summary>
             <div className="stack">
-              {[["roxanne","Roxanne (Gym 1)"],["brawly","Brawly (Gym 2)"],["wattson","Wattson (Gym 3)"],["flannery","Flannery (Gym 4)"]].map(([key,lbl])=>(
-                <button key={key} className="btn small" onClick={() => navigate("boss")}>{lbl}</button>
+              {[
+                ["roxanne", "Roxanne (Gym 1)"],
+                ["brawly", "Brawly (Gym 2)"],
+                ["wattson", "Wattson (Gym 3)"],
+                ["flannery", "Flannery (Gym 4)"],
+              ].map(([key, lbl]) => (
+                <button
+                  key={key}
+                  className="btn small"
+                  onClick={() => navigate("boss")}
+                >
+                  {lbl}
+                </button>
               ))}
             </div>
           </details>
         </aside>
 
         <main className="main">
-          {screen === "gen"        && <GenScreen onSelectGen={handleSelectGen} />}
-          {screen === "dashboard"  && <DashboardScreen party={party} onNavigate={navigate} onOpenAdd={handleOpenAdd} />}
-          {screen === "team"       && <TeamScreen party={party} pcBox={pcBox} onSendToBox={handleSendToBox} onRemove={handleRemove} onWithdraw={handleWithdraw} onRelease={handleRelease} onOpenAdd={() => setShowAddModal(true)} onNavigate={navigate} />}
-          {screen === "encounters" && <EncountersScreen onNavigate={navigate} onOpenAdd={() => setShowEncounterModal(true)} encounters={encounters} onDelete={handleDeleteEncounter} onUpdate={handleUpdateEncounter} />}
-          {screen === "calculator" && <CalculatorScreen onNavigate={navigate} />}
-          {screen === "ivev"       && <IvEvScreen />}
-          {screen === "trainer"    && <TrainerScreen />}
-          {screen === "boss"       && <BossScreen onNavigate={navigate} />}
-          {screen === "lookup"     && <LookupScreen onNavigate={navigate} />}
+          {screen === "gen" && <GenScreen onSelectGen={handleSelectGen} />}
+          {screen === "dashboard" && (
+            <DashboardScreen
+              party={party}
+              onNavigate={navigate}
+              onOpenAdd={handleOpenAdd}
+            />
+          )}
+          {screen === "team" && (
+            <TeamScreen
+              party={party}
+              pcBox={pcBox}
+              onSendToBox={handleSendToBox}
+              onRemove={handleRemove}
+              onWithdraw={handleWithdraw}
+              onRelease={handleRelease}
+              onOpenAdd={() => setShowAddModal(true)}
+              onNavigate={navigate}
+            />
+          )}
+          {screen === "encounters" && (
+            <EncountersScreen
+              onNavigate={navigate}
+              onOpenAdd={() => setShowEncounterModal(true)}
+              encounters={encounters}
+              onDelete={handleDeleteEncounter}
+              onUpdate={handleUpdateEncounter}
+            />
+          )}
+          {screen === "calculator" && (
+            <CalculatorScreen
+              onNavigate={navigate}
+              encounters={encounters}
+              party={party}
+              onRefreshEncounters={fetchEncounters}
+            />
+          )}
+          {screen === "ivev" && <IvEvScreen />}
+          {screen === "trainer" && <TrainerScreen />}
+          {screen === "boss" && <BossScreen onNavigate={navigate} />}
+          {screen === "lookup" && <LookupScreen onNavigate={navigate} />}
         </main>
       </div>
     </>

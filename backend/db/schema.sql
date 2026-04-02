@@ -70,6 +70,7 @@ CREATE TABLE encounter (
   nickname VARCHAR(20),
   ability VARCHAR(50),
   nature VARCHAR(20) NOT NULL DEFAULT 'serious',
+  level INT NOT NULL DEFAULT 50 CHECK (level BETWEEN 1 and 100),
 
   hp_iv INT NOT NULL DEFAULT 31 CHECK (hp_iv BETWEEN 0 AND 31),
   attack_iv INT NOT NULL DEFAULT 31 CHECK (attack_iv BETWEEN 0 AND 31),

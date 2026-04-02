@@ -4,6 +4,9 @@ const db = require("./db");
 const path = require("path");
 const fs = require("fs/promises");
 
+const pokemonRoutes = require("./api/pokemon");
+const encounterRoutes = require("./api/encounter");
+
 const app = express();
 
 app.use(cors());
@@ -13,46 +16,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Server is running" });
 });
 
-// GET /api/pokemon
-// Optional: ?search=bre
-app.get("/api/pokemon", async (req, res) => {
-  try {
-    const { search } = req.query;
-
-    let query = "SELECT * FROM pokemon ORDER BY id ASC";
-    let params = [];
-
-    if (search && search.trim()) {
-      query = "SELECT * FROM pokemon WHERE name LIKE ? ORDER BY id ASC";
-      params = [`${search.trim()}%`];
-    }
-
-    const [rows] = await db.pool.query(query, params);
-    res.json(rows);
-  } catch (err) {
-    console.error("GET /api/pokemon error:", err);
-    res.status(500).json({ error: "Database error" });
-  }
-});
-
-// GET /api/pokemon/:id
-app.get("/api/pokemon/:id", async (req, res) => {
-  try {
-    const [rows] = await db.pool.query(
-      "SELECT * FROM pokemon WHERE id = ?",
-      [req.params.id]
-    );
-
-    if (rows.length === 0) {
-      return res.status(404).json({ error: "Not found" });
-    }
-
-    res.json(rows[0]);
-  } catch (err) {
-    console.error("GET /api/pokemon/:id error:", err);
-    res.status(500).json({ error: "Database error" });
-  }
-});
+app.use("/api/pokemon", pokemonRoutes);
+app.use("/api/encounters", encounterRoutes);
 
 // GET /api/trainers
 app.get("/api/trainers", async (req, res) => {
