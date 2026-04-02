@@ -2383,10 +2383,13 @@ function CalculatorScreen({
   onRefreshEncounters,
 }) {
   const [defMode, setDefMode] = useState("lookup");
-  const [gameKey, setGameKey] = useState("");
-  const [routeKey, setRouteKey] = useState("");
-  const [trainerKey, setTrainerKey] = useState("");
-  const [pokeIdx, setPokeIdx] = useState("");
+  const [trainerRows, setTrainerRows] = useState([]);
+  const [pokemonIndex, setPokemonIndex] = useState({});
+  const [selectedRoute, setSelectedRoute] = useState("");
+  const [selectedTrainerId, setSelectedTrainerId] = useState("");
+  const [selectedPokemonIndex, setSelectedPokemonIndex] = useState("");
+  const [lookupLoading, setLookupLoading] = useState(true);
+  const [lookupError, setLookupError] = useState("");
   const [preview, setPreview] = useState(null);
 
   const [moves, setMoves] = useState([]);
@@ -2425,21 +2428,100 @@ function CalculatorScreen({
     };
   }, []);
 
-  const routes =
-    gameKey && defenderDB[gameKey]
-      ? Object.entries(defenderDB[gameKey].routes)
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadTrainerData() {
+      setLookupLoading(true);
+      setLookupError("");
+
+      try {
+        const [trainerRes, pokemonRes] = await Promise.all([
+          fetch(`${API_BASE}/api/trainers`),
+          fetch(`${API_BASE}/api/pokemon`),
+        ]);
+
+        if (!trainerRes.ok) throw new Error("Failed to load trainer data.");
+        if (!pokemonRes.ok) throw new Error("Failed to load Pokémon data.");
+
+        const [trainerData, pokemonData] = await Promise.all([
+          trainerRes.json(),
+          pokemonRes.json(),
+        ]);
+
+        if (cancelled) return;
+
+        const index = {};
+        for (const pokemon of Array.isArray(pokemonData) ? pokemonData : []) {
+          index[String(pokemon.name || "").toLowerCase()] = pokemon;
+        }
+
+        const rows = Array.isArray(trainerData) ? trainerData : [];
+        setPokemonIndex(index);
+        setTrainerRows(rows);
+
+        const firstRoute = formatTrainerRoute(rows[0]);
+        setSelectedRoute(firstRoute || "");
+        setSelectedTrainerId(rows[0]?.id || "");
+      } catch (err) {
+        if (!cancelled) {
+          setLookupError(err.message || "Failed to load trainer lookup data.");
+          setTrainerRows([]);
+          setPokemonIndex({});
+          setSelectedRoute("");
+          setSelectedTrainerId("");
+          setSelectedPokemonIndex("");
+          setPreview(null);
+        }
+      } finally {
+        if (!cancelled) setLookupLoading(false);
+      }
+    }
+
+    loadTrainerData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const groupedTrainers = groupTrainersByRoute(trainerRows);
+  const routeEntries = Object.entries(groupedTrainers).sort(([a], [b]) =>
+    a.localeCompare(b)
+  );
+  const trainerEntries =
+    selectedRoute && groupedTrainers[selectedRoute]
+      ? groupedTrainers[selectedRoute]
       : [];
-  const trainers =
-    gameKey && routeKey && defenderDB[gameKey]?.routes[routeKey]
-      ? Object.entries(defenderDB[gameKey].routes[routeKey].trainers)
-      : [];
-  const team =
-    gameKey && routeKey && trainerKey
-      ? defenderDB[gameKey].routes[routeKey].trainers[trainerKey]?.team || []
-      : [];
+  const selectedTrainer =
+    trainerEntries.find((t) => t.id === selectedTrainerId) ||
+    trainerEntries[0] ||
+    null;
+  const selectedTeam = Array.isArray(selectedTrainer?.pokemon)
+    ? selectedTrainer.pokemon
+    : [];
+  const trainerRouteLabel = selectedTrainer
+    ? formatTrainerRoute(selectedTrainer)
+    : "Unassigned";
+
   const handlePokeChange = (idx) => {
-    setPokeIdx(idx);
-    setPreview(idx !== "" ? team[parseInt(idx)] : null);
+    setSelectedPokemonIndex(idx);
+    const selected = idx !== "" ? selectedTeam[Number(idx)] || null : null;
+    setPreview(selected ? buildTrainerPokemonView(selected, pokemonIndex) : null);
+  };
+
+  const handleRouteChange = (routeLabel) => {
+    setSelectedRoute(routeLabel);
+    const firstTrainer = groupedTrainers[routeLabel]?.[0] || null;
+    setSelectedTrainerId(firstTrainer?.id || "");
+    setSelectedPokemonIndex("");
+    setPreview(null);
+  };
+
+  const handleTrainerChange = (trainerId) => {
+    setSelectedTrainerId(trainerId);
+    setSelectedPokemonIndex("");
+    setPreview(null);
   };
 
   const encounterOptionLabel = (e) =>
@@ -2561,7 +2643,7 @@ function CalculatorScreen({
   );
 
   const handleAddLookupAsDefender = async () => {
-    if (!preview || defMode !== "lookup" || !gameKey || !routeKey || !trainerKey)
+    if (!preview || defMode !== "lookup" || !selectedTrainer)
       return;
     setLookupAddError(null);
     setLookupAddBusy(true);
@@ -2577,10 +2659,8 @@ function CalculatorScreen({
       const poke =
         rows.find((r) => (r.name || "").toLowerCase() === needle) || rows[0];
 
-      const routeLabel =
-        routes.find(([k]) => k === routeKey)?.[1]?.label ?? routeKey;
-      const trainerLabel =
-        trainers.find(([k]) => k === trainerKey)?.[1]?.label ?? trainerKey;
+      const routeLabel = trainerRouteLabel;
+      const trainerLabel = selectedTrainer.name || selectedTrainer.id;
 
       const res = await fetch(`${API_BASE}/api/encounters`, {
         method: "POST",
@@ -2777,12 +2857,58 @@ function CalculatorScreen({
             </div>
             {defMode === "lookup" && (
               <div>
-                {loading && <div className="panel muted">Loading trainer database…</div>}
-                {!loading && error && <div className="panel muted">{error}</div>}
+                {lookupLoading && (
+                  <div className="panel muted">Loading trainer database…</div>
+                )}
+                {!lookupLoading && lookupError && (
+                  <div className="panel muted">{lookupError}</div>
+                )}
                 <div className="formGrid">
-                  <label>Route / Location<select value={selectedRoute} disabled={!routeEntries.length} onChange={e=>handleRouteChange(e.target.value)}><option value="">Select Route...</option>{routeEntries.map(([routeLabel])=><option key={routeLabel} value={routeLabel}>{routeLabel}</option>)}</select></label>
-                  <label>Trainer<select value={selectedTrainerId} disabled={!selectedRoute || trainerEntries.length === 0} onChange={e=>handleTrainerChange(e.target.value)}><option value="">Select Trainer...</option>{trainerEntries.map((trainer)=><option key={trainer.id} value={trainer.id}>{trainer.name} {trainer.party ? `(${trainer.party})` : ""}</option>)}</select></label>
-                  <label>Opponent Pokémon<select value={selectedPokemonIndex} disabled={!selectedTrainer || selectedTeam.length === 0} onChange={e=>handlePokeChange(e.target.value)}><option value="">Select Pokémon...</option>{selectedTeam.map((pokemon, index)=><option key={index} value={index}>Lv.{pokemon.level} {formatSpeciesName(pokemon.species)} {pokemon.iv != null ? `· IV ${pokemon.iv}` : ""}</option>)}</select></label>
+                  <label>
+                    Route / Location
+                    <select
+                      value={selectedRoute}
+                      disabled={!routeEntries.length}
+                      onChange={(e) => handleRouteChange(e.target.value)}
+                    >
+                      <option value="">Select Route...</option>
+                      {routeEntries.map(([routeLabel]) => (
+                        <option key={routeLabel} value={routeLabel}>
+                          {routeLabel}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Trainer
+                    <select
+                      value={selectedTrainerId}
+                      disabled={!selectedRoute || trainerEntries.length === 0}
+                      onChange={(e) => handleTrainerChange(e.target.value)}
+                    >
+                      <option value="">Select Trainer...</option>
+                      {trainerEntries.map((trainer) => (
+                        <option key={trainer.id} value={trainer.id}>
+                          {trainer.name} {trainer.party ? `(${trainer.party})` : ""}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Opponent Pokémon
+                    <select
+                      value={selectedPokemonIndex}
+                      disabled={!selectedTrainer || selectedTeam.length === 0}
+                      onChange={(e) => handlePokeChange(e.target.value)}
+                    >
+                      <option value="">Select Pokémon...</option>
+                      {selectedTeam.map((pokemon, index) => (
+                        <option key={index} value={index}>
+                          Lv.{pokemon.level} {formatSpeciesName(pokemon.species)} {pokemon.iv != null ? `· IV ${pokemon.iv}` : ""}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                 </div>
                 {selectedTrainer && (
                   <div className="panel mt8">
@@ -2794,9 +2920,15 @@ function CalculatorScreen({
                       <span className="type-chip type-normal">{capitalize(formatTrainerClassName(selectedTrainer.class || selectedTrainer.trainer_class))}</span>
                       <span className="muted small">Route: {trainerRouteLabel}</span>
                     </div>
-                    <div className="muted small mt8">Maps: {activeTrainerMaps.length > 0 ? activeTrainerMaps.join(", ") : "Unassigned"}</div>
+                    <div className="muted small mt8">
+                      Maps: {formatTrainerMaps(selectedTrainer).length > 0 ? formatTrainerMaps(selectedTrainer).join(", ") : "Unassigned"}
+                    </div>
                     {Array.isArray(selectedTrainer.items) && selectedTrainer.items.length > 0 && (
-                      <div className="boss-moves mt8">{selectedTrainer.items.map((item) => <span key={item} className="move-tag">{item}</span>)}</div>
+                      <div className="boss-moves mt8">
+                        {selectedTrainer.items.map((item) => (
+                          <span key={item} className="move-tag">{item}</span>
+                        ))}
+                      </div>
                     )}
                   </div>
                 )}
@@ -2807,8 +2939,22 @@ function CalculatorScreen({
                     <div className="statRow"><span>IV</span><strong>{preview.iv != null ? preview.iv : "—"}</strong></div>
                     <div className="statRow"><span>Base Stats</span><strong>{preview.baseStats ? `${preview.baseStats.HP} / ${preview.baseStats.Atk} / ${preview.baseStats.Def} / ${preview.baseStats.SpA} / ${preview.baseStats.SpD} / ${preview.baseStats.Spe}` : "No Pokémon record found"}</strong></div>
                     <div className="statRow"><span>Battle Stats</span><strong>{preview.battleStats ? `${preview.battleStats.HP} / ${preview.battleStats.Atk} / ${preview.battleStats.Def} / ${preview.battleStats.SpA} / ${preview.battleStats.SpD} / ${preview.battleStats.Spe}` : "—"}</strong></div>
-                    <div className="statRow"><span>Moves</span><strong style={{fontSize:12,textAlign:"right"}}>{preview.moves.length > 0 ? preview.moves.join(", ") : "No moves recorded"}</strong></div>
-                    <div className="muted small">Data is loaded from the trainer database/file and Pokémon base stats table.</div>
+                    <div className="statRow"><span>Moves</span><strong style={{ fontSize: 12, textAlign: "right" }}>{preview.moves.length > 0 ? preview.moves.join(", ") : "No moves recorded"}</strong></div>
+                    <div className="row mt8">
+                      <button
+                        type="button"
+                        className="ghost small"
+                        onClick={handleAddLookupAsDefender}
+                        disabled={lookupAddBusy}
+                      >
+                        {lookupAddBusy ? "Adding…" : "Use as encounter defender"}
+                      </button>
+                    </div>
+                    {lookupAddError && (
+                      <div className="muted small" style={{ color: "#f87171" }}>
+                        {lookupAddError}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
