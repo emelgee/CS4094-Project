@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 // =====================================================================
 // STYLES
@@ -196,6 +196,188 @@ textarea { resize: vertical; }
 // CONSTANTS
 // =====================================================================
 const API_BASE = "http://localhost:5000";
+
+const BOSS_PRIORITY = [
+  "ROXANNE_1",
+  "BRAWLY_1",
+  "WATTSON_1",
+  "FLANNERY_1",
+  "NORMAN_1",
+  "WINONA_1",
+  "TATE_AND_LIZA_1",
+  "JUAN_1",
+  "SIDNEY",
+  "PHOEBE",
+  "GLACIA",
+  "DRAKE",
+  "WALLACE"
+];
+
+const BOSS_ID_ALIASES = {
+  ROXANNE_1: { title: "Roxanne", subtitle: "Gym 1 · Rustboro City · Rock" },
+  BRAWLY_1: { title: "Brawly", subtitle: "Gym 2 · Dewford Town · Fighting" },
+  WATTSON_1: { title: "Wattson", subtitle: "Gym 3 · Mauville City · Electric" },
+  FLANNERY_1: { title: "Flannery", subtitle: "Gym 4 · Lavaridge Town · Fire" },
+  NORMAN_1: { title: "Norman", subtitle: "Gym 5 · Petalburg City · Normal" },
+  WINONA_1: { title: "Winona", subtitle: "Gym 6 · Fortree City · Flying" },
+  TATE_AND_LIZA_1: { title: "Tate & Liza", subtitle: "Gym 7 · Mossdeep City · Psychic" },
+  JUAN_1: { title: "Juan", subtitle: "Gym 8 · Sootopolis City · Water" },
+  SIDNEY: { title: "Sidney", subtitle: "Elite Four · Dark" },
+  PHOEBE: { title: "Phoebe", subtitle: "Elite Four · Ghost" },
+  GLACIA: { title: "Glacia", subtitle: "Elite Four · Ice" },
+  DRAKE: { title: "Drake", subtitle: "Elite Four · Dragon" },
+  WALLACE: { title: "Wallace", subtitle: "Champion · Ever Grande City · Water" }
+};
+
+const BOSS_CLASS_FILTERS = new Set(["TRAINER_CLASS_LEADER", "TRAINER_CLASS_RIVAL", "TRAINER_CLASS_ELITE_FOUR", "TRAINER_CLASS_CHAMPION"]);
+const BOSS_GROUP_PRIORITY = [
+  "ROXANNE",
+  "BRAWLY",
+  "WATTSON",
+  "FLANNERY",
+  "NORMAN",
+  "WINONA",
+  "TATE_AND_LIZA",
+  "JUAN",
+  "SIDNEY",
+  "PHOEBE",
+  "GLACIA",
+  "DRAKE",
+  "WALLACE",
+  "WALLY",
+  "BRENDAN",
+  "MAY",
+  "RED",
+  "LEAF"
+];
+const BOSS_MULTIWORD_BASES = new Set(["TATE_AND_LIZA"]);
+const RIVAL_STARTER_PRIORITY = ["MUDKIP", "TREECKO", "TORCHIC"];
+const BOSS_DISPLAY_NAMES = {
+  ROXANNE: "Roxanne",
+  BRAWLY: "Brawly",
+  WATTSON: "Wattson",
+  FLANNERY: "Flannery",
+  NORMAN: "Norman",
+  WINONA: "Winona",
+  TATE_AND_LIZA: "Tate & Liza",
+  JUAN: "Juan",
+  SIDNEY: "Sidney",
+  PHOEBE: "Phoebe",
+  GLACIA: "Glacia",
+  DRAKE: "Drake",
+  WALLACE: "Wallace",
+  WALLY: "Wally",
+  BRENDAN: "Brendan",
+  MAY: "May",
+  RED: "Red",
+  LEAF: "Leaf"
+};
+
+function getTrainerSortKey(trainer) {
+  const priorityIndex = BOSS_PRIORITY.indexOf(trainer.id);
+  if (priorityIndex !== -1) {
+    return priorityIndex;
+  }
+
+  return 10000 + String(trainer.route || trainer.name || trainer.id || "").localeCompare(String(trainer.id || ""));
+}
+
+function groupTrainersByRoute(trainers) {
+  const groups = {};
+
+  for (const trainer of trainers) {
+    const routeLabel = trainer.route || (Array.isArray(trainer.maps) && trainer.maps[0]) || "Unassigned";
+    if (!groups[routeLabel]) {
+      groups[routeLabel] = [];
+    }
+
+    groups[routeLabel].push(trainer);
+  }
+
+  for (const routeLabel of Object.keys(groups)) {
+    groups[routeLabel].sort((left, right) => getTrainerSortKey(left) - getTrainerSortKey(right));
+  }
+
+  return groups;
+}
+
+function formatTrainerClassName(trainerClass) {
+  return String(trainerClass || "")
+    .replace(/^TRAINER_CLASS_/, "")
+    .replace(/_/g, " ")
+    .toLowerCase();
+}
+
+function formatTrainerRoute(trainer) {
+  if (!trainer) return "Unassigned";
+  if (trainer.route) return trainer.route;
+  if (Array.isArray(trainer.maps) && trainer.maps.length > 0) return trainer.maps[0];
+  return "Unassigned";
+}
+
+function formatTrainerMaps(trainer) {
+  if (!trainer || !Array.isArray(trainer.maps) || trainer.maps.length === 0) {
+    return [];
+  }
+
+  return trainer.maps;
+}
+
+function formatSpeciesName(species) {
+  if (!species) return "Unknown";
+
+  return String(species)
+    .toLowerCase()
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function calculateGen3Stat(baseStat, iv, level, isHp) {
+  const effectiveIv = Number.isFinite(iv) ? iv : 0;
+  const effectiveLevel = Number.isFinite(level) && level > 0 ? level : 1;
+  const ivContribution = Math.floor(effectiveIv / 4);
+  const statCore = Math.floor((((2 * baseStat) + ivContribution) * effectiveLevel) / 100);
+
+  return isHp ? statCore + effectiveLevel + 10 : statCore + 5;
+}
+
+function buildTrainerPokemonView(entry, pokemonIndex) {
+  const speciesName = String(entry?.species || "").toLowerCase();
+  const basePokemon = pokemonIndex[speciesName] || null;
+  const level = Number(entry?.level) || 1;
+  const iv = Number(entry?.iv);
+  const moves = Array.isArray(entry?.moves) ? entry.moves : [];
+
+  const baseStats = basePokemon ? {
+    HP: basePokemon.hp,
+    Atk: basePokemon.attack,
+    Def: basePokemon.defense,
+    SpA: basePokemon.sp_attack,
+    SpD: basePokemon.sp_defense,
+    Spe: basePokemon.speed
+  } : null;
+
+  const battleStats = baseStats ? {
+    HP: calculateGen3Stat(basePokemon.hp, iv, level, true),
+    Atk: calculateGen3Stat(basePokemon.attack, iv, level, false),
+    Def: calculateGen3Stat(basePokemon.defense, iv, level, false),
+    SpA: calculateGen3Stat(basePokemon.sp_attack, iv, level, false),
+    SpD: calculateGen3Stat(basePokemon.sp_defense, iv, level, false),
+    Spe: calculateGen3Stat(basePokemon.speed, iv, level, false)
+  } : null;
+
+  return {
+    species: entry?.species || "",
+    displayName: formatSpeciesName(entry?.species),
+    level,
+    iv: Number.isFinite(iv) ? iv : null,
+    moves,
+    basePokemon,
+    baseStats,
+    battleStats
+  };
+}
 
 const defenderDB = {
   emerald: {
@@ -1083,15 +1265,91 @@ function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdat
 
 function CalculatorScreen({ onNavigate }) {
   const [defMode, setDefMode] = useState("lookup");
-  const [gameKey, setGameKey] = useState("");
-  const [routeKey, setRouteKey] = useState("");
-  const [trainerKey, setTrainerKey] = useState("");
-  const [pokeIdx, setPokeIdx] = useState("");
-  const [preview, setPreview] = useState(null);
-  const routes   = gameKey && defenderDB[gameKey] ? Object.entries(defenderDB[gameKey].routes) : [];
-  const trainers = gameKey && routeKey && defenderDB[gameKey]?.routes[routeKey] ? Object.entries(defenderDB[gameKey].routes[routeKey].trainers) : [];
-  const team     = gameKey && routeKey && trainerKey ? defenderDB[gameKey].routes[routeKey].trainers[trainerKey]?.team || [] : [];
-  const handlePokeChange = idx => { setPokeIdx(idx); setPreview(idx !== "" ? team[parseInt(idx)] : null); };
+  const [trainerRows, setTrainerRows] = useState([]);
+  const [pokemonIndex, setPokemonIndex] = useState({});
+  const [selectedRoute, setSelectedRoute] = useState("");
+  const [selectedTrainerId, setSelectedTrainerId] = useState("");
+  const [selectedPokemonIndex, setSelectedPokemonIndex] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadTrainerData() {
+      setLoading(true);
+      setError("");
+
+      try {
+        const [trainerRes, pokemonRes] = await Promise.all([
+          fetch(`${API_BASE}/api/trainers`),
+          fetch(`${API_BASE}/api/pokemon`)
+        ]);
+
+        if (!trainerRes.ok) throw new Error("Failed to load trainer data.");
+        if (!pokemonRes.ok) throw new Error("Failed to load Pokémon data.");
+
+        const [trainerData, pokemonData] = await Promise.all([
+          trainerRes.json(),
+          pokemonRes.json()
+        ]);
+
+        if (cancelled) return;
+
+        const index = {};
+        for (const pokemon of Array.isArray(pokemonData) ? pokemonData : []) {
+          index[String(pokemon.name || "").toLowerCase()] = pokemon;
+        }
+
+        const rows = Array.isArray(trainerData) ? trainerData : [];
+        setPokemonIndex(index);
+        setTrainerRows(rows);
+        setSelectedRoute((current) => current || (formatTrainerRoute(rows[0]) || ""));
+        setSelectedTrainerId((current) => current || (rows[0]?.id || ""));
+      } catch (loadError) {
+        if (!cancelled) {
+          setError(loadError.message || "Failed to load calculator data.");
+          setTrainerRows([]);
+          setPokemonIndex({});
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadTrainerData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const groupedTrainers = groupTrainersByRoute(trainerRows);
+  const routeEntries = Object.entries(groupedTrainers).sort(([left], [right]) => left.localeCompare(right));
+  const trainerEntries = selectedRoute && groupedTrainers[selectedRoute] ? groupedTrainers[selectedRoute] : [];
+  const selectedTrainer = trainerEntries.find((trainer) => trainer.id === selectedTrainerId) || trainerEntries[0] || null;
+  const selectedTeam = Array.isArray(selectedTrainer?.pokemon) ? selectedTrainer.pokemon : [];
+  const selectedPokemon = selectedPokemonIndex !== "" ? selectedTeam[Number(selectedPokemonIndex)] || null : null;
+  const preview = selectedPokemon ? buildTrainerPokemonView(selectedPokemon, pokemonIndex) : null;
+  const activeTrainerMaps = selectedTrainer ? formatTrainerMaps(selectedTrainer) : [];
+  const trainerRouteLabel = selectedTrainer ? formatTrainerRoute(selectedTrainer) : "Unassigned";
+
+  function handleRouteChange(routeLabel) {
+    setSelectedRoute(routeLabel);
+    const firstTrainer = groupedTrainers[routeLabel]?.[0] || null;
+    setSelectedTrainerId(firstTrainer?.id || "");
+    setSelectedPokemonIndex("");
+  }
+
+  function handleTrainerChange(trainerId) {
+    setSelectedTrainerId(trainerId);
+    setSelectedPokemonIndex("");
+  }
+
+  function handlePokeChange(index) {
+    setSelectedPokemonIndex(index);
+  }
+
   return (
     <section>
       <div className="page-header"><h1>Damage Calculator</h1><p className="muted">Gen 3 mechanics · parity target with Pokémon Showdown.</p></div>
@@ -1117,20 +1375,38 @@ function CalculatorScreen({ onNavigate }) {
             </div>
             {defMode === "lookup" && (
               <div>
+                {loading && <div className="panel muted">Loading trainer database…</div>}
+                {!loading && error && <div className="panel muted">{error}</div>}
                 <div className="formGrid">
-                  <label>Game<select value={gameKey} onChange={e=>{setGameKey(e.target.value);setRouteKey("");setTrainerKey("");setPokeIdx("");setPreview(null);}}><option value="">Select Game...</option>{Object.entries(defenderDB).map(([k,v])=><option key={k} value={k}>{v.label}</option>)}</select></label>
-                  <label>Route / Location<select value={routeKey} disabled={!gameKey} onChange={e=>{setRouteKey(e.target.value);setTrainerKey("");setPokeIdx("");setPreview(null);}}><option value="">Select Route...</option>{routes.map(([k,v])=><option key={k} value={k}>{v.label}</option>)}</select></label>
-                  <label>Trainer<select value={trainerKey} disabled={!routeKey} onChange={e=>{setTrainerKey(e.target.value);setPokeIdx("");setPreview(null);}}><option value="">Select Trainer...</option>{trainers.map(([k,v])=><option key={k} value={k}>{v.label}</option>)}</select></label>
-                  <label>Opponent Pokémon<select value={pokeIdx} disabled={!trainerKey} onChange={e=>handlePokeChange(e.target.value)}><option value="">Select Pokémon...</option>{team.map((p,i)=><option key={i} value={i}>Lv.{p.level} {p.species}</option>)}</select></label>
+                  <label>Route / Location<select value={selectedRoute} disabled={!routeEntries.length} onChange={e=>handleRouteChange(e.target.value)}><option value="">Select Route...</option>{routeEntries.map(([routeLabel])=><option key={routeLabel} value={routeLabel}>{routeLabel}</option>)}</select></label>
+                  <label>Trainer<select value={selectedTrainerId} disabled={!selectedRoute || trainerEntries.length === 0} onChange={e=>handleTrainerChange(e.target.value)}><option value="">Select Trainer...</option>{trainerEntries.map((trainer)=><option key={trainer.id} value={trainer.id}>{trainer.name} {trainer.party ? `(${trainer.party})` : ""}</option>)}</select></label>
+                  <label>Opponent Pokémon<select value={selectedPokemonIndex} disabled={!selectedTrainer || selectedTeam.length === 0} onChange={e=>handlePokeChange(e.target.value)}><option value="">Select Pokémon...</option>{selectedTeam.map((pokemon, index)=><option key={index} value={index}>Lv.{pokemon.level} {formatSpeciesName(pokemon.species)} {pokemon.iv != null ? `· IV ${pokemon.iv}` : ""}</option>)}</select></label>
                 </div>
+                {selectedTrainer && (
+                  <div className="panel mt8">
+                    <div className="rowBetween">
+                      <strong>{selectedTrainer.name}</strong>
+                      <span className="badge">{selectedTrainer.party || selectedTrainer.id}</span>
+                    </div>
+                    <div className="boss-meta">
+                      <span className="type-chip type-normal">{capitalize(formatTrainerClassName(selectedTrainer.class || selectedTrainer.trainer_class))}</span>
+                      <span className="muted small">Route: {trainerRouteLabel}</span>
+                    </div>
+                    <div className="muted small mt8">Maps: {activeTrainerMaps.length > 0 ? activeTrainerMaps.join(", ") : "Unassigned"}</div>
+                    {Array.isArray(selectedTrainer.items) && selectedTrainer.items.length > 0 && (
+                      <div className="boss-moves mt8">{selectedTrainer.items.map((item) => <span key={item} className="move-tag">{item}</span>)}</div>
+                    )}
+                  </div>
+                )}
                 {preview && (
                   <div className="stack mt8">
-                    <div className="statRow"><span>Type</span><strong>{preview.type}</strong></div>
+                    <div className="statRow"><span>Species</span><strong>{preview.displayName}</strong></div>
                     <div className="statRow"><span>Level</span><strong>{preview.level}</strong></div>
-                    <div className="statRow"><span>HP</span><strong>{preview.hp}</strong></div>
-                    <div className="statRow"><span>Def / SpD</span><strong>{preview.def} / {preview.spd}</strong></div>
-                    <div className="statRow"><span>Moves</span><strong style={{fontSize:12,textAlign:"right"}}>{preview.moves.join(", ")}</strong></div>
-                    <div className="muted small">Stats auto-loaded · Switch to Manual to override</div>
+                    <div className="statRow"><span>IV</span><strong>{preview.iv != null ? preview.iv : "—"}</strong></div>
+                    <div className="statRow"><span>Base Stats</span><strong>{preview.baseStats ? `${preview.baseStats.HP} / ${preview.baseStats.Atk} / ${preview.baseStats.Def} / ${preview.baseStats.SpA} / ${preview.baseStats.SpD} / ${preview.baseStats.Spe}` : "No Pokémon record found"}</strong></div>
+                    <div className="statRow"><span>Battle Stats</span><strong>{preview.battleStats ? `${preview.battleStats.HP} / ${preview.battleStats.Atk} / ${preview.battleStats.Def} / ${preview.battleStats.SpA} / ${preview.battleStats.SpD} / ${preview.battleStats.Spe}` : "—"}</strong></div>
+                    <div className="statRow"><span>Moves</span><strong style={{fontSize:12,textAlign:"right"}}>{preview.moves.length > 0 ? preview.moves.join(", ") : "No moves recorded"}</strong></div>
+                    <div className="muted small">Data is loaded from the trainer database/file and Pokémon base stats table.</div>
                   </div>
                 )}
               </div>
@@ -1299,54 +1575,213 @@ function TrainerScreen() {
 }
 
 function BossScreen({ onNavigate }) {
-  const [activeBoss, setActiveBoss] = useState("roxanne");
-  const bossList = [
-    {key:"roxanne",name:"Roxanne",sub:"Gym 1 · Rustboro City · Rock",type:"rock"},
-    {key:"brawly", name:"Brawly", sub:"Gym 2 · Dewford Town · Fighting",type:"fighting"},
-    {key:"wattson",name:"Wattson",sub:"Gym 3 · Mauville City · Electric",type:"electric"},
-    {key:"flannery",name:"Flannery",sub:"Gym 4 · Lavaridge Town · Fire",type:"fire"},
-    {key:"norman", name:"Norman", sub:"Gym 5 · Petalburg City · Normal",type:"normal"},
-    {key:"winona", name:"Winona", sub:"Gym 6 · Fortree City · Flying",type:"flying"},
-  ];
+  const [trainers, setTrainers] = useState([]);
+  const [pokemonIndex, setPokemonIndex] = useState({});
+  const [activeBossGroupKey, setActiveBossGroupKey] = useState("");
+  const [activeBossVariantId, setActiveBossVariantId] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadBossData() {
+      setLoading(true);
+      setError("");
+
+      try {
+        const [trainerRes, pokemonRes] = await Promise.all([
+          fetch(`${API_BASE}/api/trainers`),
+          fetch(`${API_BASE}/api/pokemon`)
+        ]);
+
+        if (!trainerRes.ok) throw new Error("Failed to load trainer data.");
+        if (!pokemonRes.ok) throw new Error("Failed to load pokemon data.");
+
+        const [trainerData, pokemonData] = await Promise.all([
+          trainerRes.json(),
+          pokemonRes.json()
+        ]);
+
+        if (cancelled) return;
+
+        const pokemonMap = {};
+        for (const pokemon of Array.isArray(pokemonData) ? pokemonData : []) {
+          pokemonMap[String(pokemon.name || "").toLowerCase()] = pokemon;
+        }
+
+        const trainerRows = Array.isArray(trainerData) ? trainerData : [];
+        const bossRows = trainerRows.filter((trainer) => isBossTrainer(trainer));
+
+        setPokemonIndex(pokemonMap);
+        setTrainers(bossRows);
+      } catch (loadError) {
+        if (!cancelled) {
+          setError(loadError.message || "Failed to load boss data.");
+          setTrainers([]);
+          setPokemonIndex({});
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadBossData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const bossGroups = useMemo(() => groupBossTrainers(trainers), [trainers]);
+
+  useEffect(() => {
+    if (bossGroups.length === 0) {
+      setActiveBossGroupKey("");
+      return;
+    }
+
+    setActiveBossGroupKey((current) => {
+      if (bossGroups.some((group) => group.key === current)) {
+        return current;
+      }
+
+      return bossGroups[0].key;
+    });
+  }, [bossGroups]);
+
+  useEffect(() => {
+    if (bossGroups.length === 0 || !activeBossGroupKey) {
+      setActiveBossVariantId("");
+      return;
+    }
+
+    const activeGroup = bossGroups.find((group) => group.key === activeBossGroupKey) || bossGroups[0];
+    if (!activeGroup) {
+      setActiveBossVariantId("");
+      return;
+    }
+
+    setActiveBossVariantId((current) => {
+      if (activeGroup.trainers.some((trainer) => trainer.id === current)) {
+        return current;
+      }
+
+      return activeGroup.trainers[0]?.id || "";
+    });
+  }, [bossGroups, activeBossGroupKey]);
+
+  const activeGroup = bossGroups.find((group) => group.key === activeBossGroupKey) || bossGroups[0] || null;
+  const activeTrainer = activeGroup?.trainers.find((trainer) => trainer.id === activeBossVariantId) || activeGroup?.trainers[0] || null;
+  const activeTeam = Array.isArray(activeTrainer?.pokemon) ? activeTrainer.pokemon : [];
+  const activeTrainerMaps = activeTrainer ? formatTrainerMaps(activeTrainer) : [];
+
+  const activeTeamDetails = activeTeam.map((entry) => {
+    const pokemon = pokemonIndex[String(entry.species || "").toLowerCase()] || null;
+    return {
+      ...entry,
+      pokemon,
+      displayName: formatSpeciesName(entry.species),
+      stats: pokemon ? {
+        HP: pokemon.hp,
+        Atk: pokemon.attack,
+        Def: pokemon.defense,
+        SpA: pokemon.sp_attack,
+        SpD: pokemon.sp_defense,
+        Spe: pokemon.speed
+      } : null,
+      types: pokemon ? [pokemon.type1, pokemon.type2].filter(Boolean) : []
+    };
+  });
+
+  const variantLabel = activeTrainer ? getBossVariantLabel(activeTrainer) : "";
+  const variantSelectLabel = activeGroup?.role === "Rival" ? "Battle variant" : activeGroup?.role === "Gym Leader" ? "Rematch" : "Variant";
+
   return (
     <section>
-      <div className="page-header"><h1>Boss Data</h1><p className="muted">Gym leaders, rivals, and Elite Four — preset data for Gen 3.</p></div>
+      <div className="page-header">
+        <h1>Boss Data</h1>
+        <p className="muted">Bosses are grouped once, with rematches and rival battle variants selectable from the same card.</p>
+      </div>
       <div className="twoCol">
         <div className="col">
           <div className="rowBetween mb8">
             <strong>Bosses — Emerald</strong>
-            <select style={{width:"auto",padding:"6px 10px",fontSize:13}}><option>Emerald</option><option>Ruby / Sapphire</option><option>FireRed / LeafGreen</option></select>
+            <select style={{ width: "auto", padding: "6px 10px", fontSize: 13 }} disabled><option>Emerald</option></select>
           </div>
+          <p className="muted small mb8">Gym leaders collapse into one entry with rematch options. Rivals collapse into one entry with route and starter variants.</p>
+          {loading && <div className="panel muted">Loading boss data…</div>}
+          {!loading && error && <div className="panel muted">{error}</div>}
           <div className="list">
-            {bossList.map(b=>(
-              <div key={b.key} className={`listItem boss-list-item${activeBoss===b.key?" active":""}`} onClick={()=>setActiveBoss(b.key)}>
-                <div><strong>{b.name}</strong><div className="muted">{b.sub}</div></div>
-                <span className={`type-chip type-${b.type}`}>{capitalize(b.type)}</span>
+            {bossGroups.map((group) => (
+              <div
+                key={group.key}
+                className={`listItem boss-list-item${activeBossGroupKey === group.key ? " active" : ""}`}
+                onClick={() => setActiveBossGroupKey(group.key)}
+                style={{ cursor: "pointer" }}
+              >
+                <div>
+                  <strong>{group.name}</strong>
+                  <div className="muted">{group.subtitle}</div>
+                </div>
+                <div className="row">
+                  <span className={`type-chip type-${group.type}`}>{capitalize(group.type)}</span>
+                  <span className="badge">{group.role}</span>
+                  <span className="badge">{group.trainers.length} {group.trainers.length === 1 ? "set" : "sets"}</span>
+                </div>
               </div>
             ))}
+            {!loading && !error && bossGroups.length === 0 && (
+              <div className="listItem"><div className="muted">No boss data found.</div></div>
+            )}
           </div>
         </div>
         <div className="col">
-          <details open className="panel">
-            <summary>Roxanne — Gym 1</summary>
-            <div className="boss-meta"><span className="type-chip type-rock">Rock</span><span className="muted small">Rustboro City · Lv 14–15 range</span></div>
+          <details key={activeGroup ? activeGroup.key : "no-boss-selected"} open className="panel">
+            <summary>{activeGroup ? `${activeGroup.name} — ${variantLabel}` : "Select a boss"}</summary>
+            {activeGroup ? (
+              <div>
+                <div className="boss-meta">
+                  <span className={`type-chip type-${activeGroup.type}`}>{capitalize(activeGroup.type)}</span>
+                  <span className="badge">{activeGroup.role}</span>
+                  <span className="muted small">{activeGroup.subtitle}</span>
+                </div>
+                <div className="formGrid" style={{ marginTop: 8 }}>
+                  <label>{variantSelectLabel}
+                    <select value={activeBossVariantId} onChange={(e) => setActiveBossVariantId(e.target.value)} disabled={!activeGroup || activeGroup.trainers.length === 0}>
+                      {activeGroup.trainers.map((trainer) => (
+                        <option key={trainer.id} value={trainer.id}>{getBossVariantLabel(trainer)}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <div className="muted small mt8">Selected battle: {variantLabel}</div>
+                <div className="muted small mt8">Maps: {activeTrainerMaps.length > 0 ? activeTrainerMaps.join(", ") : "Unassigned"}</div>
+                {Array.isArray(activeTrainer?.items) && activeTrainer.items.length > 0 && (
+                  <div className="boss-moves mt8">{activeTrainer.items.map((item) => <span key={item} className="move-tag">{item}</span>)}</div>
+                )}
+              </div>
+            ) : (
+              <div className="muted small mt8">No boss data loaded yet.</div>
+            )}
             <div className="list mt8">
-              {[
-                {name:"Geodude", level:14, types:["Rock","Ground"], stats:{HP:40,Atk:60,Def:80,SpA:30,SpD:30,Spe:20}, moves:["Tackle","Defense Curl","Mud Sport"]},
-                {name:"Nosepass",level:15, types:["Rock"],           stats:{HP:45,Atk:30,Def:115,SpA:45,SpD:90,Spe:30},moves:["Tackle","Harden","Rock Throw"]},
-              ].map(p=>(
-                <div key={p.name} className="boss-poke-card">
+              {activeTeamDetails.map((p, index) => (
+                <div key={`${activeGroup ? activeGroup.key : "boss"}-${index}-${p.species}-${p.level}`} className="boss-poke-card">
                   <div className="rowBetween">
-                    <strong>{p.name}</strong>
-                    <div><span className="badge">Lv {p.level}</span>{p.types.map(t=><span key={t} className={`type-chip type-${t.toLowerCase()}`}>{t}</span>)}</div>
+                    <strong>{p.displayName}</strong>
+                    <div>
+                      <span className="badge">Lv {p.level}</span>
+                      {p.types.map((t) => <span key={t} className={`type-chip type-${t.toLowerCase()}`}>{t}</span>)}
+                    </div>
                   </div>
-                  <div className="boss-stats">{Object.entries(p.stats).map(([k,v])=><span key={k}>{k} <strong>{v}</strong></span>)}</div>
-                  <div className="boss-moves">{p.moves.map(m=><span key={m} className="move-tag">{m}</span>)}</div>
+                  <div className="muted small">{p.stats ? `Base stats from Pokémon data for ${p.displayName}` : `Pokémon data not found for ${p.displayName}`}</div>
+                  {p.stats && <div className="boss-stats">{Object.entries(p.stats).map(([k, v]) => <span key={k}>{k} <strong>{v}</strong></span>)}</div>}
+                  <div className="boss-moves">{(p.moves || []).map((m) => <span key={m} className="move-tag">{m}</span>)}</div>
                 </div>
               ))}
             </div>
             <div className="row mt8">
-              <button className="btn small" onClick={()=>onNavigate("calculator")}>Load into Calc</button>
+              <button className="btn small" onClick={() => onNavigate("calculator")}>Load into Calc</button>
               <button className="ghost small">Export Team</button>
             </div>
           </details>
@@ -1358,6 +1793,230 @@ function BossScreen({ onNavigate }) {
       </div>
     </section>
   );
+}
+
+function isBossTrainer(trainer) {
+  if (!trainer || !trainer.id) return false;
+  const trainerClass = String(trainer.class || trainer.trainer_class || "");
+  return BOSS_CLASS_FILTERS.has(trainerClass);
+}
+
+function getBossSortIndex(id) {
+  const index = BOSS_PRIORITY.indexOf(id);
+  return index === -1 ? 9999 : index;
+}
+
+function inferBossType(trainer) {
+  const id = String(trainer?.id || "");
+  if (/ROXANNE/.test(id)) return "rock";
+  if (/BRAWLY/.test(id)) return "fighting";
+  if (/WATTSON/.test(id)) return "electric";
+  if (/FLANNERY/.test(id)) return "fire";
+  if (/NORMAN/.test(id)) return "normal";
+  if (/WINONA/.test(id)) return "flying";
+  if (/TATE_AND_LIZA/.test(id)) return "psychic";
+  if (/JUAN/.test(id)) return "water";
+  if (/SIDNEY/.test(id)) return "dark";
+  if (/PHOEBE/.test(id)) return "ghost";
+  if (/GLACIA/.test(id)) return "ice";
+  if (/DRAKE/.test(id)) return "dragon";
+  if (/WALLACE/.test(id)) return "water";
+  if (/BRENDAN|MAY/.test(id)) return "grass";
+  return "normal";
+}
+
+function formatTrainerSubtitle(trainer) {
+  const pieces = [];
+  if (trainer.route) pieces.push(trainer.route);
+  if (trainer.class) pieces.push(trainer.class.replace(/^TRAINER_CLASS_/, "").replace(/_/g, " ").toLowerCase());
+  return pieces.join(" · ");
+}
+
+function getBossBaseId(id) {
+  const value = String(id || "");
+  if (!value) return "";
+
+  for (const base of BOSS_MULTIWORD_BASES) {
+    if (value === base || value.startsWith(`${base}_`)) {
+      return base;
+    }
+  }
+
+  return value.split("_")[0];
+}
+
+function formatBossDisplayName(baseId) {
+  if (BOSS_DISPLAY_NAMES[baseId]) {
+    return BOSS_DISPLAY_NAMES[baseId];
+  }
+
+  return formatSpeciesName(baseId);
+}
+
+function getBossRoleLabel(trainer) {
+  const trainerClass = String(trainer?.class || trainer?.trainer_class || "");
+  if (trainerClass === "TRAINER_CLASS_LEADER") return "Gym Leader";
+  if (trainerClass === "TRAINER_CLASS_RIVAL") return "Rival";
+  if (trainerClass === "TRAINER_CLASS_ELITE_FOUR") return "Elite Four";
+  if (trainerClass === "TRAINER_CLASS_CHAMPION") return "Champion";
+  return "Boss";
+}
+
+function getBossVariantLabel(trainer) {
+  const trainerClass = String(trainer?.class || trainer?.trainer_class || "");
+  const id = String(trainer?.id || "");
+
+  if (trainerClass === "TRAINER_CLASS_LEADER") {
+    const battleNumber = Number(id.match(/_(\d+)$/)?.[1] || 1);
+    if (battleNumber <= 1) {
+      return "Initial battle";
+    }
+
+    return `Rematch ${battleNumber - 1}`;
+  }
+
+  if (trainerClass === "TRAINER_CLASS_RIVAL") {
+    const route = trainer?.route || (Array.isArray(trainer?.maps) && trainer.maps[0]) || "";
+    const starter = id.match(/_(MUDKIP|TREECKO|TORCHIC)$/)?.[1];
+
+    if (route && starter) {
+      return `${route} · ${formatSpeciesName(starter)}`;
+    }
+
+    if (route) {
+      return route;
+    }
+
+    if (starter) {
+      return formatSpeciesName(starter);
+    }
+
+    return "Single battle";
+  }
+
+  if (trainerClass === "TRAINER_CLASS_ELITE_FOUR") return "League battle";
+  if (trainerClass === "TRAINER_CLASS_CHAMPION") return "Champion battle";
+
+  return trainer?.party ? formatSpeciesName(trainer.party) : "Battle";
+}
+
+function getBossVariantSortIndex(trainer) {
+  const trainerClass = String(trainer?.class || trainer?.trainer_class || "");
+  const id = String(trainer?.id || "");
+
+  if (trainerClass === "TRAINER_CLASS_LEADER") {
+    return Number(id.match(/_(\d+)$/)?.[1] || 1);
+  }
+
+  if (trainerClass === "TRAINER_CLASS_RIVAL") {
+    const route = trainer?.route || (Array.isArray(trainer?.maps) && trainer.maps[0]) || "";
+    const routeMatch = route.match(/(\d+)/);
+    const routeIndex = routeMatch ? Number(routeMatch[1]) : 999;
+    const starter = id.match(/_(MUDKIP|TREECKO|TORCHIC)$/)?.[1];
+    const starterIndex = starter ? RIVAL_STARTER_PRIORITY.indexOf(starter) : 99;
+
+    return routeIndex * 10 + (starterIndex === -1 ? 99 : starterIndex);
+  }
+
+  return Number(id.match(/_(\d+)$/)?.[1] || 999);
+}
+
+function summarizeBossVariants(trainers) {
+  const routes = [];
+  const starters = [];
+
+  for (const trainer of trainers) {
+    const route = trainer?.route || (Array.isArray(trainer?.maps) && trainer.maps[0]) || "";
+    if (route && !routes.includes(route)) {
+      routes.push(route);
+    }
+
+    const starter = String(trainer?.id || "").match(/_(MUDKIP|TREECKO|TORCHIC)$/)?.[1];
+    if (starter) {
+      const starterLabel = formatSpeciesName(starter);
+      if (!starters.includes(starterLabel)) {
+        starters.push(starterLabel);
+      }
+    }
+  }
+
+  if (routes.length === 0 && starters.length === 0) {
+    return "Single battle";
+  }
+
+  const routeText = routes.length > 0
+    ? `${routes.slice(0, 2).join(" / ")}${routes.length > 2 ? ` +${routes.length - 2} more` : ""}`
+    : "";
+  const starterText = starters.length > 0
+    ? `${starters.slice(0, 3).join(" / ")}${starters.length > 3 ? ` +${starters.length - 3} more` : ""}`
+    : "";
+
+  if (routeText && starterText) {
+    return `${routeText} · ${starterText}`;
+  }
+
+  return routeText || starterText || "Single battle";
+}
+
+function groupBossTrainers(trainers) {
+  const grouped = new Map();
+
+  for (const trainer of trainers) {
+    if (!isBossTrainer(trainer)) {
+      continue;
+    }
+
+    const baseId = getBossBaseId(trainer.id);
+    if (!grouped.has(baseId)) {
+      grouped.set(baseId, []);
+    }
+
+    grouped.get(baseId).push(trainer);
+  }
+
+  return Array.from(grouped.entries())
+    .map(([key, groupTrainers]) => {
+      const sortedTrainers = [...groupTrainers].sort((left, right) => {
+        const leftIndex = getBossVariantSortIndex(left);
+        const rightIndex = getBossVariantSortIndex(right);
+
+        if (leftIndex !== rightIndex) {
+          return leftIndex - rightIndex;
+        }
+
+        return String(left.id || "").localeCompare(String(right.id || ""));
+      });
+
+      const primaryTrainer = sortedTrainers[0] || null;
+      const role = getBossRoleLabel(primaryTrainer);
+      const battleCount = sortedTrainers.length;
+      const battleLabel = battleCount === 1 ? "battle" : "battles";
+      const alias = BOSS_ID_ALIASES[`${key}_1`] || {};
+      const subtitle = role === "Rival"
+        ? `${battleCount} ${battleLabel} · ${summarizeBossVariants(sortedTrainers)}`
+        : `${alias.subtitle || formatTrainerSubtitle(primaryTrainer) || "Battle data"} · ${battleCount} ${battleLabel}`;
+
+      return {
+        key,
+        name: formatBossDisplayName(key),
+        role,
+        subtitle,
+        type: inferBossType(primaryTrainer),
+        trainers: sortedTrainers
+      };
+    })
+    .sort((left, right) => {
+      const leftIndex = BOSS_GROUP_PRIORITY.indexOf(left.key);
+      const rightIndex = BOSS_GROUP_PRIORITY.indexOf(right.key);
+      const leftPriority = leftIndex === -1 ? 999 : leftIndex;
+      const rightPriority = rightIndex === -1 ? 999 : rightIndex;
+
+      if (leftPriority !== rightPriority) {
+        return leftPriority - rightPriority;
+      }
+
+      return left.name.localeCompare(right.name);
+    });
 }
 
 function LookupScreen({ onNavigate }) {

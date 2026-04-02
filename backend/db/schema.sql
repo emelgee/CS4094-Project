@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS encounter;
 DROP TABLE IF EXISTS ability;
 DROP TABLE IF EXISTS move;
 DROP TABLE IF EXISTS item;
+DROP TABLE IF EXISTS trainer;
 DROP TABLE IF EXISTS pokemon;
 DROP TABLE IF EXISTS users;
 
@@ -32,6 +33,17 @@ CREATE TABLE pokemon (
 CREATE TABLE item (
   id INT PRIMARY KEY,
   name VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE trainer (
+  id VARCHAR(100) PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  trainer_class VARCHAR(60) NOT NULL,
+  party_name VARCHAR(80) NULL,
+  route VARCHAR(100) NULL,
+  maps_json JSON NOT NULL,
+  items_json JSON NOT NULL,
+  pokemon_json JSON NOT NULL
 );
 
 CREATE TABLE move (

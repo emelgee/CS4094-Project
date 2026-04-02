@@ -2,6 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const { insertPokemon } = require("./insertPokemon");
 const { insertMoves } = require("./insertMove");
+const { insertTrainers } = require("./insertTrainer");
 const { closePool } = require("../db/connection");
 const { waitForDatabase } = require("../db/waitForDatabase");
 
@@ -31,6 +32,18 @@ async function readMovesJson() {
   return parsed;
 }
 
+async function readTrainerJson() {
+  const INPUT_PATH = path.join(BASE_PATH, "/trainerData.json");
+  const raw = await fs.readFile(INPUT_PATH, "utf8");
+  const parsed = JSON.parse(raw);
+
+  if (!parsed || !Array.isArray(parsed.trainerList)) {
+    throw new Error("trainerData.json must contain an object with trainerList array.");
+  }
+
+  return parsed.trainerList;
+}
+
 async function seedFromJson() {
   await waitForDatabase();
 
@@ -41,6 +54,10 @@ async function seedFromJson() {
   const move_rows = await readMovesJson();
   await insertMoves(move_rows);
   console.log(`Inserted/updated ${move_rows.length} move rows from JSON.`);
+
+  const trainer_rows = await readTrainerJson();
+  await insertTrainers(trainer_rows);
+  console.log(`Inserted/updated ${trainer_rows.length} trainer rows from JSON.`);
 }
 
 if (require.main === module) {
