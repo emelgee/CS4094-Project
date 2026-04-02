@@ -4,12 +4,34 @@ const db = require("../db");
 
 // GET /api/encounters/:user_id
 // TODO: When authentication is added, update this to use auth token for user id
+//router.get("/:user_id", async (req, res) => {
+//try {
+//const [rows] = await db.pool.query(
+//"SELECT * FROM encounter WHERE user_id = ? ORDER BY id ASC",
+//[req.params.user_id]
+//);
+//res.json(rows);
+//} catch (err) {
+// console.error("GET /api/encounters/:user_id error:", err);
+// res.status(500).json({ error: "Database error" });
+// }
+//});
+
 router.get("/:user_id", async (req, res) => {
   try {
     const [rows] = await db.pool.query(
-      "SELECT * FROM encounter WHERE user_id = ? ORDER BY id ASC",
+      `SELECT 
+         e.*,
+         p.name AS pokemon_name,
+         p.type1,
+         p.type2
+       FROM encounter e
+       JOIN pokemon p ON e.pokemon_id = p.id
+       WHERE e.user_id = ?
+       ORDER BY e.id ASC`,
       [req.params.user_id]
     );
+
     res.json(rows);
   } catch (err) {
     console.error("GET /api/encounters/:user_id error:", err);
@@ -21,10 +43,30 @@ router.get("/:user_id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const {
-      user_id, pokemon_id, location, nickname, ability, nature,
-      hp_iv, attack_iv, defense_iv, sp_attack_iv, sp_defense_iv, speed_iv,
-      hp_ev, attack_ev, defense_ev, sp_attack_ev, sp_defense_ev, speed_ev,
-      move1_id, move2_id, move3_id, move4_id, item_id, status
+      user_id,
+      pokemon_id,
+      location,
+      nickname,
+      ability,
+      nature,
+      hp_iv,
+      attack_iv,
+      defense_iv,
+      sp_attack_iv,
+      sp_defense_iv,
+      speed_iv,
+      hp_ev,
+      attack_ev,
+      defense_ev,
+      sp_attack_ev,
+      sp_defense_ev,
+      speed_ev,
+      move1_id,
+      move2_id,
+      move3_id,
+      move4_id,
+      item_id,
+      status,
     } = req.body;
 
     const [result] = await db.pool.query(
@@ -35,10 +77,30 @@ router.post("/", async (req, res) => {
          move1_id, move2_id, move3_id, move4_id, item_id, status)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        user_id, pokemon_id, location, nickname, ability, nature,
-        hp_iv, attack_iv, defense_iv, sp_attack_iv, sp_defense_iv, speed_iv,
-        hp_ev, attack_ev, defense_ev, sp_attack_ev, sp_defense_ev, speed_ev,
-        move1_id, move2_id, move3_id, move4_id, item_id, status
+        user_id,
+        pokemon_id,
+        location,
+        nickname,
+        ability,
+        nature,
+        hp_iv,
+        attack_iv,
+        defense_iv,
+        sp_attack_iv,
+        sp_defense_iv,
+        speed_iv,
+        hp_ev,
+        attack_ev,
+        defense_ev,
+        sp_attack_ev,
+        sp_defense_ev,
+        speed_ev,
+        move1_id,
+        move2_id,
+        move3_id,
+        move4_id,
+        item_id,
+        status,
       ]
     );
 
@@ -53,20 +115,38 @@ router.post("/", async (req, res) => {
 router.patch("/:id", async (req, res) => {
   try {
     const allowed = [
-      "location", "nickname", "ability", "nature", "status",
-      "hp_iv", "attack_iv", "defense_iv", "sp_attack_iv", "sp_defense_iv", "speed_iv",
-      "hp_ev", "attack_ev", "defense_ev", "sp_attack_ev", "sp_defense_ev", "speed_ev",
-      "move1_id", "move2_id", "move3_id", "move4_id", "item_id"
+      "location",
+      "nickname",
+      "ability",
+      "nature",
+      "status",
+      "hp_iv",
+      "attack_iv",
+      "defense_iv",
+      "sp_attack_iv",
+      "sp_defense_iv",
+      "speed_iv",
+      "hp_ev",
+      "attack_ev",
+      "defense_ev",
+      "sp_attack_ev",
+      "sp_defense_ev",
+      "speed_ev",
+      "move1_id",
+      "move2_id",
+      "move3_id",
+      "move4_id",
+      "item_id",
     ];
 
-    const fields = Object.keys(req.body).filter(key => allowed.includes(key));
+    const fields = Object.keys(req.body).filter((key) => allowed.includes(key));
 
     if (fields.length === 0) {
       return res.status(400).json({ error: "No valid fields provided" });
     }
 
-    const values = fields.map(f => req.body[f]);
-    const setClause = fields.map(f => `${f} = ?`).join(", ");
+    const values = fields.map((f) => req.body[f]);
+    const setClause = fields.map((f) => `${f} = ?`).join(", ");
 
     const [result] = await db.pool.query(
       `UPDATE encounter SET ${setClause} WHERE id = ?`,
@@ -89,10 +169,28 @@ router.patch("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const {
-      location, nickname, ability, nature,
-      hp_iv, attack_iv, defense_iv, sp_attack_iv, sp_defense_iv, speed_iv,
-      hp_ev, attack_ev, defense_ev, sp_attack_ev, sp_defense_ev, speed_ev,
-      move1_id, move2_id, move3_id, move4_id, item_id, status
+      location,
+      nickname,
+      ability,
+      nature,
+      hp_iv,
+      attack_iv,
+      defense_iv,
+      sp_attack_iv,
+      sp_defense_iv,
+      speed_iv,
+      hp_ev,
+      attack_ev,
+      defense_ev,
+      sp_attack_ev,
+      sp_defense_ev,
+      speed_ev,
+      move1_id,
+      move2_id,
+      move3_id,
+      move4_id,
+      item_id,
+      status,
     } = req.body;
 
     const [result] = await db.pool.query(
@@ -103,11 +201,29 @@ router.put("/:id", async (req, res) => {
         move1_id = ?, move2_id = ?, move3_id = ?, move4_id = ?, item_id = ?, status = ?
        WHERE id = ?`,
       [
-        location, nickname, ability, nature,
-        hp_iv, attack_iv, defense_iv, sp_attack_iv, sp_defense_iv, speed_iv,
-        hp_ev, attack_ev, defense_ev, sp_attack_ev, sp_defense_ev, speed_ev,
-        move1_id, move2_id, move3_id, move4_id, item_id, status,
-        req.params.id
+        location,
+        nickname,
+        ability,
+        nature,
+        hp_iv,
+        attack_iv,
+        defense_iv,
+        sp_attack_iv,
+        sp_defense_iv,
+        speed_iv,
+        hp_ev,
+        attack_ev,
+        defense_ev,
+        sp_attack_ev,
+        sp_defense_ev,
+        speed_ev,
+        move1_id,
+        move2_id,
+        move3_id,
+        move4_id,
+        item_id,
+        status,
+        req.params.id,
       ]
     );
 
@@ -126,10 +242,9 @@ router.put("/:id", async (req, res) => {
 // TODO: When authentication is added, update this to use auth token for user id
 router.delete("/:id", async (req, res) => {
   try {
-    const [result] = await db.pool.query(
-      "DELETE FROM encounter WHERE id = ?",
-      [req.params.id]
-    );
+    const [result] = await db.pool.query("DELETE FROM encounter WHERE id = ?", [
+      req.params.id,
+    ]);
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Encounter not found" });
@@ -143,7 +258,6 @@ router.delete("/:id", async (req, res) => {
 });
 
 module.exports = router;
-
 
 /*
 CREATE TABLE encounter (
