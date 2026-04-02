@@ -15,7 +15,7 @@ Returns all pokemon ordered by id.
 **Optional query params:**
 - `search` — filter by name prefix (e.g. `?search=char`)
 
-**Example:**
+**Examples:**
 ```
 GET /api/pokemon
 GET /api/pokemon?search=char
@@ -31,6 +31,42 @@ GET /api/pokemon/:id
 **Example:**
 ```
 GET /api/pokemon/25
+```
+
+---
+
+## Moves
+
+### Get all moves
+```
+GET /api/moves
+```
+Returns all moves. Supports optional filtering and sorting.
+
+**Optional query params:**
+- `search` — filter by name prefix (e.g. `?search=thunder`)
+- `type` — filter by type (e.g. `?type=fire`)
+- `orderBy=power` — sort by base power descending
+
+**Examples:**
+```
+GET /api/moves
+GET /api/moves?search=thunder
+GET /api/moves?type=fire
+GET /api/moves?type=fire&orderBy=power
+GET /api/moves?orderBy=power
+```
+
+---
+
+### Get a single move
+```
+GET /api/moves/:id
+```
+
+**Example:**
+```
+GET /api/moves/25
 ```
 
 ---
