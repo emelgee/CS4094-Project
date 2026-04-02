@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const { calculateDamage } = require("../calc/damageFormula");
 
 // GET /api/pokemon
 // Optional: ?search=bre
@@ -24,26 +25,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/pokemon/:id
-router.get("/:id", async (req, res) => {
-  try {
-    const [rows] = await db.pool.query(
-      "SELECT * FROM pokemon WHERE id = ?",
-      [req.params.id]
-    );
-
-    if (rows.length === 0) {
-      return res.status(404).json({ error: "Not found" });
-    }
-
-    res.json(rows[0]);
-  } catch (err) {
-    console.error("GET /api/pokemon/:id error:", err);
-    res.status(500).json({ error: "Database error" });
-  }
-})
-
-// GET /api/pokemon/moves
+// GET /api/pokemon/moves — must be registered before /:id so "moves" is not captured as an id
 // Optional: ?search=thunder ?type=fire ?orderBy=power
 router.get("/moves", async (req, res) => {
   try {
@@ -100,6 +82,25 @@ router.get("/moves/:id", async (req, res) => {
   }
 });
 
+// GET /api/pokemon/:id
+router.get("/:id", async (req, res) => {
+  try {
+    const [rows] = await db.pool.query(
+      "SELECT * FROM pokemon WHERE id = ?",
+      [req.params.id]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Not found" });
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("GET /api/pokemon/:id error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
 // POST /api/pokemon/damage
 // Body: { attacker_id, defender_id, move_id, conditions }
 router.post("/damage", async (req, res) => {
@@ -117,7 +118,7 @@ router.post("/damage", async (req, res) => {
 
     // fetch defender encounter + pokemon data
     const [defenderRows] = await db.pool.query(
-      `SELECT e.*, p.type1, p.type2, p.base_attack, p.base_defense, p.base_sp_attack, p.base_sp_defense, p.base_speed, p.base_hp
+      `SELECT e.*, p.type1, p.type2, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed, p.hp
        FROM encounter e
        JOIN pokemon p ON e.pokemon_id = p.id
        WHERE e.id = ?`,

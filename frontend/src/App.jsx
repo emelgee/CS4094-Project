@@ -783,6 +783,213 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+const SIMPLE_PHYSICAL_TYPES = new Set([
+  "normal",
+  "fighting",
+  "flying",
+  "poison",
+  "ground",
+  "rock",
+  "bug",
+  "ghost",
+  "steel",
+]);
+
+const SIMPLE_TYPE_CHART = {
+  normal: { rock: 0.5, ghost: 0, steel: 0.5 },
+  fire: {
+    fire: 0.5,
+    water: 0.5,
+    grass: 2,
+    ice: 2,
+    bug: 2,
+    rock: 0.5,
+    dragon: 0.5,
+    steel: 2,
+  },
+  water: {
+    fire: 2,
+    water: 0.5,
+    grass: 0.5,
+    ground: 2,
+    rock: 2,
+    dragon: 0.5,
+  },
+  electric: {
+    water: 2,
+    electric: 0.5,
+    grass: 0.5,
+    ground: 0,
+    flying: 2,
+    dragon: 0.5,
+  },
+  grass: {
+    fire: 0.5,
+    water: 2,
+    grass: 0.5,
+    poison: 0.5,
+    ground: 2,
+    flying: 0.5,
+    bug: 0.5,
+    rock: 2,
+    dragon: 0.5,
+    steel: 0.5,
+  },
+  ice: {
+    fire: 0.5,
+    water: 0.5,
+    grass: 2,
+    ice: 0.5,
+    ground: 2,
+    flying: 2,
+    dragon: 2,
+    steel: 0.5,
+  },
+  fighting: {
+    normal: 2,
+    ice: 2,
+    rock: 2,
+    dark: 2,
+    steel: 2,
+    poison: 0.5,
+    flying: 0.5,
+    psychic: 0.5,
+    bug: 0.5,
+    ghost: 0,
+  },
+  poison: {
+    grass: 2,
+    poison: 0.5,
+    ground: 0.5,
+    rock: 0.5,
+    ghost: 0.5,
+    steel: 0,
+  },
+  ground: {
+    fire: 2,
+    electric: 2,
+    grass: 0.5,
+    poison: 2,
+    flying: 0,
+    bug: 0.5,
+    rock: 2,
+    steel: 2,
+  },
+  flying: {
+    electric: 0.5,
+    grass: 2,
+    fighting: 2,
+    bug: 2,
+    rock: 0.5,
+    steel: 0.5,
+  },
+  psychic: {
+    fighting: 2,
+    poison: 2,
+    psychic: 0.5,
+    dark: 0,
+    steel: 0.5,
+  },
+  bug: {
+    fire: 0.5,
+    grass: 2,
+    fighting: 0.5,
+    poison: 0.5,
+    flying: 0.5,
+    psychic: 2,
+    ghost: 0.5,
+    dark: 2,
+    steel: 0.5,
+  },
+  rock: {
+    fire: 2,
+    ice: 2,
+    fighting: 0.5,
+    ground: 0.5,
+    flying: 2,
+    bug: 2,
+    steel: 0.5,
+  },
+  ghost: { normal: 0, psychic: 2, ghost: 2, dark: 0.5, steel: 0.5 },
+  dragon: { dragon: 2, steel: 0.5 },
+  dark: { fighting: 0.5, psychic: 2, ghost: 2, dark: 0.5, steel: 0.5 },
+  steel: {
+    fire: 0.5,
+    water: 0.5,
+    electric: 0.5,
+    ice: 2,
+    rock: 2,
+    steel: 0.5,
+  },
+};
+
+function simpleTypeRowMult(row, t) {
+  if (!row || !t) return 1;
+  return Object.prototype.hasOwnProperty.call(row, t) ? row[t] : 1;
+}
+
+function simpleTypeEffectiveness(moveType, defType1, defType2) {
+  const mt = moveType.toLowerCase();
+  const d1 = (defType1 || "normal").toLowerCase();
+  const d2 = defType2 ? String(defType2).toLowerCase() : null;
+  const row = SIMPLE_TYPE_CHART[mt];
+  if (!row) return 1;
+  const m1 = simpleTypeRowMult(row, d1);
+  const m2 = d2 ? simpleTypeRowMult(row, d2) : 1;
+  return m1 * m2;
+}
+
+function simpleWeatherMod(moveType, weather) {
+  if (!weather) return 1;
+  const t = moveType.toLowerCase();
+  if (weather === "sun") {
+    if (t === "fire") return 1.5;
+    if (t === "water") return 0.5;
+  }
+  if (weather === "rain") {
+    if (t === "fire") return 0.5;
+    if (t === "water") return 1.5;
+  }
+  return 1;
+}
+
+function gen3CombatStat(base, iv, ev, level) {
+  const b = Number(base) || 0;
+  const lv = Number(level) || 1;
+  return Math.floor(((2 * b + iv + Math.floor(ev / 4)) * lv) / 100 + 5);
+}
+
+/** Gen 3 damage (simplified client-side): team offensive stats vs defender def/spD, STAB, chart, weather, crit, burn. */
+function computeSimpleBattleDamage(attacker, defender, move, conditions) {
+  const moveType = (move.type || "normal").toLowerCase();
+  const isPhysical = SIMPLE_PHYSICAL_TYPES.has(moveType);
+  const atk = isPhysical ? attacker.atk : attacker.spa;
+  const def = isPhysical ? defender.def : defender.spd;
+  const level = Number(attacker.level) || 1;
+  const power = Number(move.power) || 0;
+  if (!atk || power <= 0 || !def || def <= 0) return { min: 0, max: 0 };
+
+  const baseDamage = Math.floor(
+    (((2 * level) / 5 + 2) * power * atk) / def / 50 + 2
+  );
+
+  const mt = moveType;
+  const atkTypes = attacker.types || [];
+  const stab = atkTypes.some((t) => t === mt) ? 1.5 : 1;
+
+  const d1 = (defender.type1 || "normal").toLowerCase();
+  const d2 = defender.type2 ? String(defender.type2).toLowerCase() : null;
+  const eff = simpleTypeEffectiveness(moveType, d1, d2);
+
+  const weather = simpleWeatherMod(moveType, conditions.weather || "");
+  const crit = conditions.isCrit ? 2 : 1;
+  const burn = conditions.isBurned && isPhysical ? 0.5 : 1;
+
+  const min = Math.floor(baseDamage * stab * eff * weather * crit * burn * 0.85);
+  const max = Math.floor(baseDamage * stab * eff * weather * crit * burn * 1.0);
+  return { min, max };
+}
+
 let nextId = 3;
 
 // =====================================================================
@@ -1987,13 +2194,55 @@ function EncountersScreen({
   );
 }
 
-function CalculatorScreen({ onNavigate }) {
+function CalculatorScreen({
+  onNavigate,
+  encounters = [],
+  party = [],
+  onRefreshEncounters,
+}) {
   const [defMode, setDefMode] = useState("lookup");
   const [gameKey, setGameKey] = useState("");
   const [routeKey, setRouteKey] = useState("");
   const [trainerKey, setTrainerKey] = useState("");
   const [pokeIdx, setPokeIdx] = useState("");
   const [preview, setPreview] = useState(null);
+
+  const [moves, setMoves] = useState([]);
+  const [attackerPartyMonId, setAttackerPartyMonId] = useState("");
+  const [defenderId, setDefenderId] = useState("");
+  const [moveId, setMoveId] = useState("");
+  const [calcLoading, setCalcLoading] = useState(false);
+  const [calcError, setCalcError] = useState(null);
+  const [damageResult, setDamageResult] = useState(null);
+  const [crit, setCrit] = useState(false);
+  const [burned, setBurned] = useState(false);
+  const [weather, setWeather] = useState("");
+  const [lookupAddBusy, setLookupAddBusy] = useState(false);
+  const [lookupAddError, setLookupAddError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(
+          `${API_BASE}/api/pokemon/moves?orderBy=power`
+        );
+        if (!res.ok) throw new Error("Failed to load moves");
+        const data = await res.json();
+        if (!cancelled) {
+          setMoves(
+            data.filter((m) => m.power != null && Number(m.power) > 0)
+          );
+        }
+      } catch {
+        if (!cancelled) setMoves([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const routes =
     gameKey && defenderDB[gameKey]
       ? Object.entries(defenderDB[gameKey].routes)
@@ -2010,6 +2259,192 @@ function CalculatorScreen({ onNavigate }) {
     setPokeIdx(idx);
     setPreview(idx !== "" ? team[parseInt(idx)] : null);
   };
+
+  const encounterOptionLabel = (e) =>
+    `${e.nickname || e.pokemon_name || "Pokémon"} · Lv.${e.level} · #${
+      e.id
+    }`;
+
+  const handleDamageCalculate = async () => {
+    setCalcError(null);
+    setDamageResult(null);
+    if (!attackerPartyMonId) {
+      setCalcError("Choose a party attacker.");
+      return;
+    }
+    const atkMon = party.find((m) => String(m.id) === attackerPartyMonId);
+    if (!atkMon || !atkMon.stats) {
+      setCalcError("Party Pokémon is missing stats.");
+      return;
+    }
+    if (!moveId) {
+      setCalcError("Choose a move.");
+      return;
+    }
+    const moveRow = moves.find((m) => String(m.id) === String(moveId));
+    if (!moveRow) {
+      setCalcError("Move list not loaded.");
+      return;
+    }
+
+    const usePreviewDef =
+      !defenderId && defMode === "lookup" && preview;
+
+    if (!defenderId && !usePreviewDef) {
+      setCalcError(
+        "Choose a defender encounter, or pick a Pokémon in route / trainer lookup."
+      );
+      return;
+    }
+
+    setCalcLoading(true);
+    try {
+      let defStat;
+      let spdStat;
+      let type1;
+      let type2;
+
+      if (defenderId) {
+        const enc = encounters.find((e) => String(e.id) === String(defenderId));
+        if (!enc || enc.pokemon_id == null) {
+          setCalcError("Defender encounter not found.");
+          return;
+        }
+        const pres = await fetch(`${API_BASE}/api/pokemon/${enc.pokemon_id}`);
+        if (!pres.ok) {
+          setCalcError("Could not load defender species.");
+          return;
+        }
+        const p = await pres.json();
+        const lv = Number(enc.level);
+        defStat = gen3CombatStat(
+          p.defense,
+          enc.defense_iv,
+          enc.defense_ev,
+          lv
+        );
+        spdStat = gen3CombatStat(
+          p.sp_defense,
+          enc.sp_defense_iv,
+          enc.sp_defense_ev,
+          lv
+        );
+        type1 = p.type1;
+        type2 = p.type2;
+      } else {
+        defStat = preview.def;
+        spdStat = preview.spd;
+        const raw = (preview.type || "").split("/");
+        type1 = (raw[0] || "normal").trim().toLowerCase();
+        type2 = raw[1] ? raw[1].trim().toLowerCase() : null;
+      }
+
+      const atkTypes = (atkMon.types || []).map((t) =>
+        String(t).toLowerCase()
+      );
+      const conditions = { isCrit: crit, isBurned: burned };
+      if (weather) conditions.weather = weather;
+
+      const out = computeSimpleBattleDamage(
+        {
+          level: atkMon.level,
+          atk: atkMon.stats.atk,
+          spa: atkMon.stats.spa,
+          types: atkTypes,
+        },
+        { def: defStat, spd: spdStat, type1, type2 },
+        { type: moveRow.type, power: moveRow.power },
+        conditions
+      );
+      setDamageResult(out);
+    } catch (err) {
+      setCalcError(err.message || "Calculation failed");
+    } finally {
+      setCalcLoading(false);
+    }
+  };
+
+  const resultMain =
+    damageResult &&
+    typeof damageResult.min === "number" &&
+    typeof damageResult.max === "number"
+      ? `${damageResult.min} – ${damageResult.max}`
+      : "—";
+
+  const canCalculate = Boolean(
+    attackerPartyMonId &&
+      moveId &&
+      moves.length &&
+      (defenderId || (defMode === "lookup" && preview))
+  );
+
+  const handleAddLookupAsDefender = async () => {
+    if (!preview || defMode !== "lookup" || !gameKey || !routeKey || !trainerKey)
+      return;
+    setLookupAddError(null);
+    setLookupAddBusy(true);
+    try {
+      const search = encodeURIComponent(preview.species.trim());
+      const pres = await fetch(`${API_BASE}/api/pokemon?search=${search}`);
+      const rows = await pres.json();
+      if (!Array.isArray(rows) || rows.length === 0) {
+        setLookupAddError(`No database Pokémon matching “${preview.species}”.`);
+        return;
+      }
+      const needle = preview.species.trim().toLowerCase();
+      const poke =
+        rows.find((r) => (r.name || "").toLowerCase() === needle) || rows[0];
+
+      const routeLabel =
+        routes.find(([k]) => k === routeKey)?.[1]?.label ?? routeKey;
+      const trainerLabel =
+        trainers.find(([k]) => k === trainerKey)?.[1]?.label ?? trainerKey;
+
+      const res = await fetch(`${API_BASE}/api/encounters`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: 1,
+          pokemon_id: poke.id,
+          location: `${routeLabel} · ${trainerLabel}`,
+          nickname: preview.species.slice(0, 20),
+          ability: poke.ability1 || "",
+          nature: "serious",
+          level: preview.level,
+          hp_iv: 31,
+          attack_iv: 31,
+          defense_iv: 31,
+          sp_attack_iv: 31,
+          sp_defense_iv: 31,
+          speed_iv: 31,
+          hp_ev: 0,
+          attack_ev: 0,
+          defense_ev: 0,
+          sp_attack_ev: 0,
+          sp_defense_ev: 0,
+          speed_ev: 0,
+          move1_id: null,
+          move2_id: null,
+          move3_id: null,
+          move4_id: null,
+          item_id: null,
+          status: "caught",
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setLookupAddError(data.error || "Failed to create encounter");
+        return;
+      }
+      if (onRefreshEncounters) await onRefreshEncounters();
+      setDefenderId(String(data.id));
+    } catch (e) {
+      setLookupAddError(e.message || "Could not add defender");
+    } finally {
+      setLookupAddBusy(false);
+    }
+  };
+
   return (
     <section>
       <div className="page-header">
@@ -2021,36 +2456,122 @@ function CalculatorScreen({ onNavigate }) {
       <div className="twoCol">
         <div className="col">
           <details open className="panel">
-            <summary>Attacker</summary>
+            <summary>Damage calc</summary>
+            <p className="muted small" style={{ marginTop: 4 }}>
+              Estimate uses your party&apos;s Attack / Sp. Atk and level, the
+              move&apos;s power and type, plus defender stats (from a logged
+              encounter or the route lookup preview). Crit, burn, and weather
+              are applied; held items and unknown stat stages are ignored.
+            </p>
             <div className="formGrid">
               <label>
-                Pokémon (team)
-                <select>
-                  <option>Breloom</option>
-                  <option>Gyarados</option>
-                  <option>Manual...</option>
+                Attacker (from party)
+                <select
+                  value={attackerPartyMonId}
+                  onChange={(e) => setAttackerPartyMonId(e.target.value)}
+                >
+                  <option value="">
+                    {party.length
+                      ? "Select party Pokémon…"
+                      : "Party is empty — add Pokémon on Team"}
+                  </option>
+                  {party.map((mon) => (
+                    <option key={mon.id} value={String(mon.id)}>
+                      {mon.name} · Lv.{mon.level}
+                    </option>
+                  ))}
                 </select>
               </label>
               <label>
-                Level
-                <input defaultValue="24" type="number" />
+                Defender (opponent)
+                <select
+                  value={defenderId}
+                  onChange={(e) => setDefenderId(e.target.value)}
+                >
+                  <option value="">Select encounter…</option>
+                  {encounters.map((e) => (
+                    <option key={e.id} value={e.id}>
+                      {encounterOptionLabel(e)}
+                    </option>
+                  ))}
+                </select>
               </label>
               <label>
-                Atk / SpA
-                <input defaultValue="90" type="number" />
+                Move
+                <select
+                  value={moveId}
+                  onChange={(e) => setMoveId(e.target.value)}
+                >
+                  <option value="">Select move…</option>
+                  {moves.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.name} ({m.type}) — power {m.power}
+                    </option>
+                  ))}
+                </select>
               </label>
               <label>
-                Nature Modifier
-                <select>
-                  <option value="1">Neutral (1.0×)</option>
-                  <option value="1.1">+10% (1.1×)</option>
-                  <option value="0.9">−10% (0.9×)</option>
+                Weather
+                <select
+                  value={weather}
+                  onChange={(e) => setWeather(e.target.value)}
+                >
+                  <option value="">None</option>
+                  <option value="sun">Sun</option>
+                  <option value="rain">Rain</option>
                 </select>
               </label>
             </div>
+            <div className="row mt8" style={{ flexWrap: "wrap" }}>
+              <label className="row" style={{ gap: 8 }}>
+                <input
+                  type="checkbox"
+                  checked={crit}
+                  onChange={(e) => setCrit(e.target.checked)}
+                />
+                <span className="muted small">Critical hit</span>
+              </label>
+              <label className="row" style={{ gap: 8 }}>
+                <input
+                  type="checkbox"
+                  checked={burned}
+                  onChange={(e) => setBurned(e.target.checked)}
+                />
+                <span className="muted small">Attacker burned</span>
+              </label>
+            </div>
+            {calcError && (
+              <p className="muted small" style={{ color: "#f87171" }}>
+                {calcError}
+              </p>
+            )}
+            <div className="row mt8">
+              <button
+                type="button"
+                className="btn"
+                disabled={calcLoading || !canCalculate}
+                onClick={handleDamageCalculate}
+              >
+                {calcLoading ? "…" : "Calculate"}
+              </button>
+              <button
+                type="button"
+                className="ghost"
+                onClick={() => onNavigate("team")}
+              >
+                Team
+              </button>
+              <button
+                type="button"
+                className="ghost"
+                onClick={() => onNavigate("encounters")}
+              >
+                Encounters
+              </button>
+            </div>
           </details>
-          <details open className="panel">
-            <summary>Defender</summary>
+          <details className="panel">
+            <summary>Route / trainer lookup (reference)</summary>
             <div className="rowBetween mb8" style={{ marginTop: 8 }}>
               <span className="muted small">Input mode:</span>
               <div className="def-mode-toggle">
@@ -2176,8 +2697,26 @@ function CalculatorScreen({ onNavigate }) {
                         {preview.moves.join(", ")}
                       </strong>
                     </div>
-                    <div className="muted small">
-                      Stats auto-loaded · Switch to Manual to override
+                    <div className="row mt8" style={{ flexWrap: "wrap" }}>
+                      <button
+                        type="button"
+                        className="btn small"
+                        disabled={lookupAddBusy || !onRefreshEncounters}
+                        onClick={handleAddLookupAsDefender}
+                      >
+                        {lookupAddBusy
+                          ? "Saving…"
+                          : "Set as defender (save encounter)"}
+                      </button>
+                    </div>
+                    {lookupAddError && (
+                      <p className="muted small" style={{ color: "#f87171" }}>
+                        {lookupAddError}
+                      </p>
+                    )}
+                    <div className="muted small mt8">
+                      Saves this trainer Pokémon as a new encounter and selects
+                      it as defender.
                     </div>
                   </div>
                 )}
@@ -2217,70 +2756,26 @@ function CalculatorScreen({ onNavigate }) {
               </div>
             )}
           </details>
-          <details open className="panel">
-            <summary>Move</summary>
-            <div className="formGrid">
-              <label>
-                Move Power
-                <input defaultValue="40" type="number" />
-              </label>
-              <label>
-                Category
-                <select>
-                  <option>Physical</option>
-                  <option>Special</option>
-                </select>
-              </label>
-              <label>
-                STAB
-                <select>
-                  <option>Yes (1.5×)</option>
-                  <option>No (1.0×)</option>
-                </select>
-              </label>
-              <label>
-                Effectiveness
-                <select>
-                  <option>0.25×</option>
-                  <option>0.5×</option>
-                  <option>1×</option>
-                  <option>2×</option>
-                  <option>4×</option>
-                </select>
-              </label>
-            </div>
-            <div className="row mt8">
-              <button className="btn">Calculate</button>
-              <button className="ghost">Save to Encounter</button>
-            </div>
-          </details>
-          <details className="panel">
-            <summary>Advanced (later)</summary>
-            <div className="muted small">
-              Crit, held items, weather, stat stages, abilities — Gen 3 parity
-              pass.
-            </div>
-          </details>
         </div>
         <div className="col">
           <details open className="panel">
             <summary>Results</summary>
             <div className="results-block">
-              <div className="result-main">12 – 16</div>
-              <div className="muted">damage range</div>
+              <div className="result-main">{resultMain}</div>
+              <div className="muted">damage range (rolled min–max)</div>
             </div>
             <div className="stack mt8">
               <div className="statRow">
                 <span>% of HP</span>
-                <strong>35% – 46%</strong>
+                <strong>—</strong>
               </div>
               <div className="statRow">
                 <span>KO Estimate</span>
-                <strong>2HKO</strong>
+                <strong>—</strong>
               </div>
               <div className="statRow">
                 <span>Crit Damage</span>
-                <strong>18 – 24</strong>
+                <strong>—</strong>
               </div>
             </div>
           </details>
@@ -2891,6 +3386,7 @@ function LookupScreen({ onNavigate }) {
 const initialParty = [
   {
     id: 1,
+    encounterId: null,
     name: "Breloom",
     level: 24,
     gender: "♂ Male",
@@ -2908,6 +3404,7 @@ const initialParty = [
   },
   {
     id: 2,
+    encounterId: null,
     name: "Gyarados",
     level: 22,
     gender: "♂ Male",
@@ -2966,7 +3463,7 @@ export default function App() {
       alert("Party is full (6/6)! Send a Pokémon to PC Box first.");
       return;
     }
-    setParty((prev) => [...prev, mon]);
+    setParty((prev) => [...prev, { ...mon, encounterId: mon.encounterId ?? null }]);
   };
 
   const handleSendToBox = (id) => {
@@ -3228,7 +3725,12 @@ export default function App() {
             />
           )}
           {screen === "calculator" && (
-            <CalculatorScreen onNavigate={navigate} />
+            <CalculatorScreen
+              onNavigate={navigate}
+              encounters={encounters}
+              party={party}
+              onRefreshEncounters={fetchEncounters}
+            />
           )}
           {screen === "ivev" && <IvEvScreen />}
           {screen === "trainer" && <TrainerScreen />}
