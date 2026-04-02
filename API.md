@@ -184,13 +184,44 @@ DELETE /api/encounters/1
 
 ---
 
-## Status Values
-Suggested values for the `status` field:
+## Damage Calculator
 
-| Status | Meaning |
-|--------|---------|
-| `alive` | Pokemon is active |
-| `dead` | Pokemon has fainted (nuzlocke) |
-| `caught` | Encountered but in box |
-| `fled` | Encounter failed |
-| `missed` | Already used this route |
+### Calculate damage between two encounters
+```
+POST /api/pokemon/damage
+```
+Calculates the min/max damage dealt by the attacker's move against the defender, using their actual stats, IVs, EVs, and level.
+TODO: SUPPORT DAMAGE RANGES INSTEAD OF MIN/MAX
+**Body:**
+```json
+{
+  "attacker_id": 1,
+  "defender_id": 2,
+  "move_id": 53,
+  "conditions": {
+    "weather": "sun",
+    "isCrit": false,
+    "isBurned": false,
+    "atkStage": 0,
+    "spAtkStage": 0,
+    "defStage": 0,
+    "spDefStage": 0
+  }
+}
+```
+
+**Fields:**
+- `attacker_id` — encounter id of the attacking pokemon
+- `defender_id` — encounter id of the defending pokemon
+- `move_id` — id of the move being used
+- `conditions` — all optional, defaults to neutral if omitted
+  - `weather` — `"sun"`, `"rain"`, or omit for none
+  - `isCrit` — boolean, default `false`
+  - `isBurned` — boolean, default `false`
+  - `atkStage` / `spAtkStage` — stat stages -6 to 6, default `0`
+  - `defStage` / `spDefStage` — stat stages -6 to 6, default `0`
+
+**Returns:**
+```json
+{ "min": 45, "max": 53 }
+```
