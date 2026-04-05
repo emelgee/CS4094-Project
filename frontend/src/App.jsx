@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { initialParty } from "./data/constants";
 import AddPokemonModal from "./components/AddPokemonModal";
 import AddEncounterModal from "./components/AddEncounterModal";
 import GenScreen from "./screens/GenScreen";
@@ -38,62 +37,150 @@ export default function App() {
   };
 
   // ── Party / PC Box ──────────────────────────────────────────────────
-  const [party, setParty] = useState(initialParty);
+  const [party, setParty] = useState([]);
   const [pcBox, setPcBox] = useState([]);
 
-  const handleOpenAdd = () => {
-    setScreen("team");
-    setShowAddModal(true);
+  const fetchTeam = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/team/1");
+      const data = await res.json();
+      const mapped = data.map((row) => ({
+        id: row.id,
+        pokemonId: row.pokemon_id,
+        name: row.name.charAt(0).toUpperCase() + row.name.slice(1),
+        nickname: row.nickname,
+        level: row.level,
+        nature: row.nature,
+        ability: row.ability,
+        types: [row.type1, row.type2]
+          .filter(Boolean)
+          .map((t) => t.charAt(0).toUpperCase() + t.slice(1)),
+        primaryType: row.type1,
+        stats: {
+          hp: row.hp,
+          atk: row.attack,
+          def: row.defense,
+          spa: row.sp_attack,
+          spd: row.sp_defense,
+          spe: row.speed,
+        },
+        moves: [
+          row.move1 || "",
+          row.move2 || "",
+          row.move3 || "",
+          row.move4 || "",
+        ],
+        slot: row.slot,
+        dbData: {
+          ability1: row.ability1,
+          ability2: row.ability2,
+          ability_hidden: row.ability_hidden,
+        },
+      }));
+      setParty(mapped.filter((m) => m.slot !== null));
+      setPcBox(mapped.filter((m) => m.slot === null));
+    } catch (err) {
+      console.error("Failed to fetch team:", err);
+    }
   };
 
-  const handleAddPokemon = (mon) => {
+  useEffect(() => {
+    fetchTeam();
+  }, []);
+
+  const handleAddPokemon = async (mon) => {
     if (party.length >= 6) {
       alert("Party is full (6/6)! Send a Pokémon to PC Box first.");
       return;
     }
-    setParty((prev) => [
-      ...prev,
-      { ...mon, encounterId: mon.encounterId ?? null },
-    ]);
+    try {
+      // assign the next available slot
+      const usedSlots = party.map((m) => m.slot);
+      const slot = [0, 1, 2, 3, 4, 5].find((s) => !usedSlots.includes(s));
+      await fetch("http://localhost:5000/api/team", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: 1,
+          pokemon_id: mon.dbData.id,
+          nickname: mon.name,
+          level: mon.level,
+          nature: "hardy",
+          ability: mon.ability || null,
+          slot,
+        }),
+      });
+      await fetchTeam();
+    } catch (err) {
+      console.error("Add pokemon failed:", err);
+    }
   };
 
-  const handleSendToBox = (id) => {
+  const handleSendToBox = async (id) => {
     if (party.length <= 1) {
       alert("You need at least 1 Pokémon in your party!");
       return;
     }
-    const mon = party.find((m) => m.id === id);
-    if (!mon) return;
-    setParty((prev) => prev.filter((m) => m.id !== id));
-    setPcBox((prev) => [...prev, mon]);
+    try {
+      await fetch(`http://localhost:5000/api/team/${id}/slot`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slot: null }),
+      });
+      await fetchTeam();
+    } catch (err) {
+      console.error("Send to box failed:", err);
+    }
   };
 
-  const handleRemove = (id) => {
+  const handleRemove = async (id) => {
     if (party.length <= 1) {
-      alert("Party can't be empty! Send them to PC Box first if needed.");
+      alert("Party can't be empty!");
       return;
     }
-    if (window.confirm("Remove this Pokémon from your run entirely?")) {
-      setParty((prev) => prev.filter((m) => m.id !== id));
+    if (window.confirm("Remove this Pokémon from your team entirely?")) {
+      try {
+        await fetch(`http://localhost:5000/api/team/${id}`, {
+          method: "DELETE",
+        });
+        await fetchTeam();
+      } catch (err) {
+        console.error("Remove failed:", err);
+      }
     }
   };
 
-  const handleWithdraw = (idx) => {
+  const handleWithdraw = async (id) => {
     if (party.length >= 6) {
       alert("Party is full (6/6)! Move someone to PC Box first.");
       return;
     }
-    const mon = pcBox[idx];
-    setPcBox((prev) => prev.filter((_, i) => i !== idx));
-    setParty((prev) => [...prev, mon]);
+    try {
+      const usedSlots = party.map((m) => m.slot);
+      const slot = [0, 1, 2, 3, 4, 5].find((s) => !usedSlots.includes(s));
+      await fetch(`http://localhost:5000/api/team/${id}/slot`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slot }),
+      });
+      await fetchTeam();
+    } catch (err) {
+      console.error("Withdraw failed:", err);
+    }
   };
 
-  const handleRelease = (idx) => {
-    const mon = pcBox[idx];
-    if (
-      window.confirm(`Release ${mon.name} permanently? This can't be undone.`)
-    ) {
-      setPcBox((prev) => prev.filter((_, i) => i !== idx));
+  const handleRelease = async (id) => {
+    const mon = pcBox.find((m) => m.id === id);
+    if (!mon) return;
+    if (window.confirm(`Release ${mon.nickname || mon.name} permanently?`)) {
+      try {
+        await fetch(`http://localhost:5000/api/team/${id}`, {
+          method: "DELETE",
+        });
+        await fetchTeam();
+      } catch (err) {
+        console.error("Release failed:", err);
+      }
     }
   };
 
@@ -145,6 +232,11 @@ export default function App() {
   // ── Modals ───────────────────────────────────────────────────────────
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEncounterModal, setShowEncounterModal] = useState(false);
+
+  const handleOpenAdd = () => {
+    setScreen("team");
+    setShowAddModal(true);
+  };
 
   const handleAddEncounter = async (enc) => {
     try {
@@ -290,6 +382,7 @@ export default function App() {
           {screen === "dashboard" && (
             <DashboardScreen
               party={party}
+              encounters={encounters}
               onNavigate={navigate}
               onOpenAdd={handleOpenAdd}
             />

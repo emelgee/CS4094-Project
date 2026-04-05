@@ -17,19 +17,30 @@ export default function TeamScreen({
       <div className="page-header rowBetween">
         <div>
           <h1>Your Team</h1>
-          <p className="muted">Active party (max 6) · Manage stats, moves, and nature. Overflow goes to PC Box.</p>
+          <p className="muted">
+            Active party (max 6) · Manage stats, moves, and nature. Overflow
+            goes to PC Box.
+          </p>
         </div>
         <button
           className="btn"
-          onClick={() => document.getElementById("pcBoxAnchor")?.scrollIntoView({ behavior: "smooth" })}
+          onClick={() =>
+            document
+              .getElementById("pcBoxAnchor")
+              ?.scrollIntoView({ behavior: "smooth" })
+          }
         >
           💾 PC Box ↓
         </button>
       </div>
 
       <div className="rowBetween mb8">
-        <strong>Active Party <span className="muted small">({party.length} / 6)</span></strong>
-        <button className="btn small" onClick={onOpenAdd}>+ Add Pokémon</button>
+        <strong>
+          Active Party <span className="muted small">({party.length} / 6)</span>
+        </strong>
+        <button className="btn small" onClick={onOpenAdd}>
+          + Add Pokémon
+        </button>
       </div>
 
       <div className="grid">
@@ -43,7 +54,9 @@ export default function TeamScreen({
           />
         ))}
         {Array.from({ length: emptySlots }).map((_, i) => (
-          <div key={i} className="card empty big" onClick={onOpenAdd}>+ Add Pokémon</div>
+          <div key={i} className="card empty big" onClick={onOpenAdd}>
+            + Add Pokémon
+          </div>
         ))}
       </div>
 
@@ -52,9 +65,13 @@ export default function TeamScreen({
         <div className="rowBetween mb8">
           <div>
             <strong>💾 PC Box</strong>
-            <span className="muted small" style={{ marginLeft: 8 }}>({pcBox.length} stored)</span>
+            <span className="muted small" style={{ marginLeft: 8 }}>
+              ({pcBox.length} stored)
+            </span>
           </div>
-          <span className="muted small">Pokémon here can be withdrawn back to party</span>
+          <span className="muted small">
+            Pokémon here can be withdrawn back to party
+          </span>
         </div>
 
         <div className="grid">
@@ -71,15 +88,34 @@ export default function TeamScreen({
                 </div>
                 <div className="pc-mon-meta" style={{ margin: "4px 0" }}>
                   {mon.types.map((t) => (
-                    <span key={t} className={`type-chip type-${t.toLowerCase().split("/")[0]}`}>{t}</span>
+                    <span
+                      key={t}
+                      className={`type-chip type-${
+                        t.toLowerCase().split("/")[0]
+                      }`}
+                    >
+                      {t}
+                    </span>
                   ))}
                 </div>
                 {mon.moves.filter(Boolean).length > 0 && (
-                  <div className="pc-mon-meta">{mon.moves.filter(Boolean).slice(0, 4).join(" · ")}</div>
+                  <div className="pc-mon-meta">
+                    {mon.moves.filter(Boolean).slice(0, 4).join(" · ")}
+                  </div>
                 )}
                 <div className="pc-box-actions">
-                  <button className="btn small" onClick={() => onWithdraw(idx)}>⬆ Withdraw</button>
-                  <button className="ghost small danger" onClick={() => onRelease(idx)}>Release</button>
+                  <button
+                    className="btn small"
+                    onClick={() => onWithdraw(mon.id)}
+                  >
+                    ⬆ Withdraw
+                  </button>
+                  <button
+                    className="ghost small danger"
+                    onClick={() => onRelease(mon.id)}
+                  >
+                    Release
+                  </button>
                 </div>
               </div>
             ))

@@ -6,6 +6,7 @@ const fs = require("fs/promises");
 
 const pokemonRoutes = require("./api/pokemon");
 const encounterRoutes = require("./api/encounter");
+const teamRoutes = require("./api/team");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/pokemon", pokemonRoutes);
 app.use("/api/encounters", encounterRoutes);
+app.use("/api/team", teamRoutes);
 
 // GET /api/trainers
 app.get("/api/trainers", async (req, res) => {
@@ -30,7 +32,9 @@ app.get("/api/trainers", async (req, res) => {
       const trainerDataPath = path.join(__dirname, "data", "trainerData.json");
       const raw = await fs.readFile(trainerDataPath, "utf8");
       const parsed = JSON.parse(raw);
-      return res.json(Array.isArray(parsed.trainerList) ? parsed.trainerList : []);
+      return res.json(
+        Array.isArray(parsed.trainerList) ? parsed.trainerList : []
+      );
     }
 
     const trainers = rows.map((row) => ({
@@ -41,7 +45,7 @@ app.get("/api/trainers", async (req, res) => {
       route: row.route,
       maps: parseJsonField(row.maps_json),
       items: parseJsonField(row.items_json),
-      pokemon: parseJsonField(row.pokemon_json)
+      pokemon: parseJsonField(row.pokemon_json),
     }));
 
     res.json(trainers);
@@ -72,7 +76,7 @@ app.get("/api/trainers/:id", async (req, res) => {
       route: row.route,
       maps: parseJsonField(row.maps_json),
       items: parseJsonField(row.items_json),
-      pokemon: parseJsonField(row.pokemon_json)
+      pokemon: parseJsonField(row.pokemon_json),
     });
   } catch (err) {
     console.error("GET /api/trainers/:id error:", err);
