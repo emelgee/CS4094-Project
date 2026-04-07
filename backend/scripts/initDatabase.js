@@ -3,6 +3,7 @@ const path = require("path");
 const { pool, closePool } = require("../db/connection");
 const { waitForDatabase } = require("../db/waitForDatabase");
 const { insertUser } = require("./users");
+const { insertEncounterBasic } = require("./encounters");
 
 const schemaPath = path.join(__dirname, "../db/schema.sql");
 

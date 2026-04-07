@@ -2,8 +2,8 @@ const { pool, closePool } = require("../db/connection");
 
 const INSERT_ENCOUNTER_BASIC_SQL = `
   INSERT INTO encounter (
-  user_id, pokemon_id, location, nickname, ability, nature, status, level)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  user_id, pokemon_id, location, nickname, ability, nature, status, level, team_slot)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   ON DUPLICATE KEY UPDATE
     pokemon_id = VALUES(pokemon_id),
     location   = VALUES(location),
@@ -11,10 +11,11 @@ const INSERT_ENCOUNTER_BASIC_SQL = `
     ability    = VALUES(ability),
     nature     = VALUES(nature),
     status     = VALUES(status),
-    level      = VALUES(level)
+    level      = VALUES(level),
+    team_slot  = VALUES(team_slot)
   `;
 
-async function insertEncounterBasic(user_id, pokemon_id, location, nickname, ability, nature, status, level) {
+async function insertEncounterBasic(user_id, pokemon_id, location, nickname, ability, nature, status, level, team_slot) {
 
   const connection = await pool.getConnection();
   try {
@@ -44,7 +45,8 @@ async function insertEncounterBasic(user_id, pokemon_id, location, nickname, abi
     ability, 
     nature, 
     status,
-    level
+    level,
+    team_slot
       ]);
 
     await connection.commit();
@@ -56,9 +58,9 @@ async function insertEncounterBasic(user_id, pokemon_id, location, nickname, abi
   }
 }
 
-async function runDirectInsert(user_id, pokemon_id, location, nickname, ability, nature, status, level) {
+async function runDirectInsert(user_id, pokemon_id, location, nickname, ability, nature, status, level, team_slot) {
   try {
-    await insertEncounterBasic(user_id, pokemon_id, location, nickname, ability, nature, status, level);
+    await insertEncounterBasic(user_id, pokemon_id, location, nickname, ability, nature, status, level, team_slot);
     console.log(`Inserted/updated basic encounter.`);
   } catch (error) {
     console.error("Failed to insert basic encounter:", error.message);
