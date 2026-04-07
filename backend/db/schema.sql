@@ -32,8 +32,12 @@ CREATE TABLE pokemon (
 );
 
 CREATE TABLE item (
-  id INT PRIMARY KEY,
-  name VARCHAR(20) NOT NULL
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  category VARCHAR(50),
+  effect TEXT NULL,
+  effect_long TEXT NULL,
+  flavor_text TEXT NULL
 );
 
 CREATE TABLE trainer (
