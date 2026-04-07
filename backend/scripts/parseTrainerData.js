@@ -4,21 +4,22 @@ const path = require('path');
 const DATA_PATH = path.join(__dirname, '../data/trainerData.json');
 const TRAINERS_URL = 'https://raw.githubusercontent.com/pret/pokeemerald/25ffb2c12c069ac6b2040f9238b2978f1de72e3f/src/data/trainers.h';
 const PARTIES_URL = 'https://raw.githubusercontent.com/pret/pokeemerald/25ffb2c12c069ac6b2040f9238b2978f1de72e3f/src/data/trainer_parties.h';
+const TREE_URL = 'https://api.github.com/repos/pret/pokeemerald/git/trees/25ffb2c12c069ac6b2040f9238b2978f1de72e3f?recursive=1';
+const RAW_BASE_URL = 'https://raw.githubusercontent.com/pret/pokeemerald/25ffb2c12c069ac6b2040f9238b2978f1de72e3f/';
+const LOCATION_FETCH_CONCURRENCY = 24;
 
 async function parseTrainerData() {
   try {
     console.log('Fetching trainer data...');
 
-    // Pull both source files, then parse each into plain JS objects.
-    const trainers = await fetch(TRAINERS_URL)
-      .then(r => r.text())
-      .then(parseTrainers);
+    // Pull source files, then parse each into plain JS objects.
+    const [trainers, parties, trainerLocations] = await Promise.all([
+      fetch(TRAINERS_URL).then(assertOk).then(r => r.text()).then(parseTrainers),
+      fetch(PARTIES_URL).then(assertOk).then(r => r.text()).then(parseParties),
+      parseTrainerLocations()
+    ]);
 
-    const parties = await fetch(PARTIES_URL)
-      .then(r => r.text())
-      .then(parseParties);
-
-    const data = buildOutput(trainers, parties);
+    const data = buildOutput(trainers, parties, trainerLocations);
 
     // Create data directory if needed
     const dir = path.dirname(DATA_PATH);
@@ -54,6 +55,75 @@ function parseTrainers(content) {
   }
 
   return trainers;
+}
+
+async function parseTrainerLocations() {
+  console.log('Fetching trainer map locations...');
+
+  const tree = await fetch(TREE_URL)
+    .then(assertOk)
+    .then(r => r.json());
+
+  const scriptPaths = (tree.tree || [])
+    .map(node => node.path)
+    .filter(Boolean)
+    .filter(p => /^data\/maps\/[^/]+\/scripts\.inc$/.test(p));
+
+  const trainerToMaps = {};
+
+  for (let i = 0; i < scriptPaths.length; i += LOCATION_FETCH_CONCURRENCY) {
+    const batch = scriptPaths.slice(i, i + LOCATION_FETCH_CONCURRENCY);
+    const responses = await Promise.all(batch.map(fetchMapScriptTrainers));
+
+    for (const { map, trainerIds } of responses) {
+      for (const trainerId of trainerIds) {
+        if (!trainerToMaps[trainerId]) trainerToMaps[trainerId] = new Set();
+        trainerToMaps[trainerId].add(map);
+      }
+    }
+  }
+
+  return Object.fromEntries(
+    Object.entries(trainerToMaps)
+      .map(([trainerId, maps]) => [trainerId, Array.from(maps).sort()])
+  );
+}
+
+async function fetchMapScriptTrainers(scriptPath) {
+  const mapId = scriptPath.split('/')[2];
+  const locationLabel = prettifyMapName(mapId);
+  const content = await fetch(`${RAW_BASE_URL}${scriptPath}`)
+    .then(assertOk)
+    .then(r => r.text());
+
+  const trainerIds = new Set();
+  const regex = /\bTRAINER_([A-Z0-9_]+)\b/g;
+
+  let match;
+  while ((match = regex.exec(content))) {
+    trainerIds.add(match[1]);
+  }
+
+  return {
+    map: locationLabel,
+    trainerIds
+  };
+}
+
+function prettifyMapName(mapId) {
+  return mapId
+    .replace(/_/g, ' ')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/\bRoute\s*(\d+)\b/gi, 'Route $1')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function assertOk(response) {
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.url} (${response.status})`);
+  }
+  return response;
 }
 
 function parseParties(content) {
@@ -109,22 +179,38 @@ function extractItems(block) {
     .filter(s => s && s !== 'NONE' && s !== '');
 }
 
-function buildOutput(trainers, parties) {
+function buildOutput(trainers, parties, trainerLocations) {
   const trainerList = Object.values(trainers)
     .map(trainer => ({
       ...trainer,
+      maps: trainerLocations[trainer.id] || [],
+      route: trainerLocations[trainer.id]?.[0] || null,
       pokemon: trainer.party && parties[trainer.party] ? parties[trainer.party].pokemon : []
     }))
     .sort((a, b) => a.id.localeCompare(b.id));
+
+  const enrichedTrainers = Object.fromEntries(
+    Object.entries(trainers).map(([id, trainer]) => [
+      id,
+      {
+        ...trainer,
+        maps: trainerLocations[id] || [],
+        route: trainerLocations[id]?.[0] || null
+      }
+    ])
+  );
+
+  const mappedTrainerCount = trainerList.filter(t => t.maps.length > 0).length;
 
   return {
     meta: {
       generatedAt: new Date().toISOString(),
       source: 'pret/pokeemerald',
       totalTrainers: trainerList.length,
-      totalParties: Object.keys(parties).length
+      totalParties: Object.keys(parties).length,
+      trainersWithLocation: mappedTrainerCount
     },
-    trainers,
+    trainers: enrichedTrainers,
     parties,
     trainerList
   };

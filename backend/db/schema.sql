@@ -1,7 +1,9 @@
+DROP TABLE IF EXISTS team_pokemon;
 DROP TABLE IF EXISTS encounter;
 DROP TABLE IF EXISTS ability;
 DROP TABLE IF EXISTS move;
 DROP TABLE IF EXISTS item;
+DROP TABLE IF EXISTS trainer;
 DROP TABLE IF EXISTS pokemon;
 DROP TABLE IF EXISTS users;
 
@@ -34,6 +36,17 @@ CREATE TABLE item (
   name VARCHAR(20) NOT NULL
 );
 
+CREATE TABLE trainer (
+  id VARCHAR(100) PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  trainer_class VARCHAR(60) NOT NULL,
+  party_name VARCHAR(80) NULL,
+  route VARCHAR(100) NULL,
+  maps_json JSON NOT NULL,
+  items_json JSON NOT NULL,
+  pokemon_json JSON NOT NULL
+);
+
 CREATE TABLE move (
   id INT PRIMARY KEY,
   name VARCHAR(20) NOT NULL,
@@ -58,6 +71,7 @@ CREATE TABLE encounter (
   nickname VARCHAR(20),
   ability VARCHAR(50),
   nature VARCHAR(20) NOT NULL DEFAULT 'serious',
+  level INT NOT NULL DEFAULT 50 CHECK (level BETWEEN 1 and 100),
 
   hp_iv INT NOT NULL DEFAULT 31 CHECK (hp_iv BETWEEN 0 AND 31),
   attack_iv INT NOT NULL DEFAULT 31 CHECK (attack_iv BETWEEN 0 AND 31),
@@ -93,4 +107,25 @@ CREATE TABLE encounter (
   FOREIGN KEY (move4_id) REFERENCES move(id),
   FOREIGN KEY (pokemon_id) REFERENCES pokemon(id),
   FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS team_pokemon (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  pokemon_id INT NOT NULL,
+  nickname VARCHAR(50),
+  level INT NOT NULL DEFAULT 5 CHECK (level BETWEEN 1 AND 100),
+  nature VARCHAR(20) NOT NULL DEFAULT 'hardy',
+  ability VARCHAR(50),
+  move1_id INT NULL,
+  move2_id INT NULL,
+  move3_id INT NULL,
+  move4_id INT NULL,
+  slot TINYINT NULL,  -- 0-5 = active party slot, NULL = PC box
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (pokemon_id) REFERENCES pokemon(id),
+  FOREIGN KEY (move1_id) REFERENCES move(id),
+  FOREIGN KEY (move2_id) REFERENCES move(id),
+  FOREIGN KEY (move3_id) REFERENCES move(id),
+  FOREIGN KEY (move4_id) REFERENCES move(id)
 );
