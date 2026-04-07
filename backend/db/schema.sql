@@ -70,7 +70,7 @@ CREATE TABLE encounter (
   location VARCHAR(50),
   nickname VARCHAR(20),
   ability VARCHAR(50),
-  nature VARCHAR(20) NOT NULL DEFAULT 'serious',
+  nature VARCHAR(20) NOT NULL DEFAULT 'hardy',
   level INT NOT NULL DEFAULT 50 CHECK (level BETWEEN 1 and 100),
 
   hp_iv INT NOT NULL DEFAULT 31 CHECK (hp_iv BETWEEN 0 AND 31),
@@ -100,6 +100,9 @@ CREATE TABLE encounter (
 
   status VARCHAR(20),
 
+  team_slot INT DEFAULT NULL CHECK (team_slot BETWEEN 1 AND 6),
+  UNIQUE (user_id, team_slot),
+
   FOREIGN KEY (item_id) REFERENCES item(id),
   FOREIGN KEY (move1_id) REFERENCES move(id),
   FOREIGN KEY (move2_id) REFERENCES move(id),
@@ -107,25 +110,4 @@ CREATE TABLE encounter (
   FOREIGN KEY (move4_id) REFERENCES move(id),
   FOREIGN KEY (pokemon_id) REFERENCES pokemon(id),
   FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
-CREATE TABLE IF NOT EXISTS team_pokemon (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  pokemon_id INT NOT NULL,
-  nickname VARCHAR(50),
-  level INT NOT NULL DEFAULT 5 CHECK (level BETWEEN 1 AND 100),
-  nature VARCHAR(20) NOT NULL DEFAULT 'hardy',
-  ability VARCHAR(50),
-  move1_id INT NULL,
-  move2_id INT NULL,
-  move3_id INT NULL,
-  move4_id INT NULL,
-  slot TINYINT NULL,  -- 0-5 = active party slot, NULL = PC box
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (pokemon_id) REFERENCES pokemon(id),
-  FOREIGN KEY (move1_id) REFERENCES move(id),
-  FOREIGN KEY (move2_id) REFERENCES move(id),
-  FOREIGN KEY (move3_id) REFERENCES move(id),
-  FOREIGN KEY (move4_id) REFERENCES move(id)
 );
