@@ -6,9 +6,9 @@ import {
   formatSpeciesName,
   buildTrainerPokemonView,
   gen3CombatStat,
-  computeSimpleBattleDamage,
   capitalize,
 } from "../utils/helpers";
+import { calculateDamage } from "../utils/calc";
 
 export default function CalculatorScreen({ onNavigate, encounters = [], party = [], onRefreshEncounters }) {
   const [defMode, setDefMode] = useState("lookup");
@@ -156,21 +156,35 @@ export default function CalculatorScreen({ onNavigate, encounters = [], party = 
         type1 = p.type1;
         type2 = p.type2;
       } else {
-        defStat = preview.def;
-        spdStat = preview.spd;
-        const raw = (preview.type || "").split("/");
-        type1 = (raw[0] || "normal").trim().toLowerCase();
-        type2 = raw[1] ? raw[1].trim().toLowerCase() : null;
+        defStat = preview.battleStats?.Def;
+        spdStat = preview.battleStats?.SpD;
+        type1 = preview.basePokemon?.type1 || "normal";
+        type2 = preview.basePokemon?.type2 || null;
       }
 
       const atkTypes = (atkMon.types || []).map((t) => String(t).toLowerCase());
-      const conditions = { isCrit: crit, isBurned: burned };
-      if (weather) conditions.weather = weather;
+      const conditions = { isCrit: crit, isBurned: burned, weather: weather || "" };
 
-      const out = computeSimpleBattleDamage(
-        { level: atkMon.level, atk: atkMon.stats.atk, spa: atkMon.stats.spa, types: atkTypes },
-        { def: defStat, spd: spdStat, type1, type2 },
-        { type: moveRow.type, power: moveRow.power },
+      const out = calculateDamage(
+        {
+          level: atkMon.level,
+          attack: atkMon.stats.atk,
+          sp_attack: atkMon.stats.spa,
+          type1: atkTypes[0] || null,
+          type2: atkTypes[1] || null,
+          item: atkMon.item || null,
+          atkStage: 0,
+          spAtkStage: 0,
+        },
+        {
+          defense: defStat,
+          sp_defense: spdStat,
+          type1,
+          type2,
+          defStage: 0,
+          spDefStage: 0,
+        },
+        { type: moveRow.type, basePower: moveRow.power },
         conditions
       );
       setDamageResult(out);

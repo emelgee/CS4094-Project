@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
-const { calculateDamage } = require("../calc/damageFormula");
 
 // GET /api/pokemon
 // Optional: ?search=bre
@@ -100,84 +99,5 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
-
-// POST /api/pokemon/damage
-// Body: { attacker_id, defender_id, move_id, conditions }
-router.post("/damage", async (req, res) => {
-  try {
-    const { attacker_id, defender_id, move_id, conditions = {} } = req.body;
-
-    // fetch attacker encounter + pokemon data
-    const [attackerRows] = await db.pool.query(
-      `SELECT e.*, p.type1, p.type2, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed, p.hp
-       FROM encounter e
-       JOIN pokemon p ON e.pokemon_id = p.id
-       WHERE e.id = ?`,
-      [attacker_id]
-    );
-
-    // fetch defender encounter + pokemon data
-    const [defenderRows] = await db.pool.query(
-      `SELECT e.*, p.type1, p.type2, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed, p.hp
-       FROM encounter e
-       JOIN pokemon p ON e.pokemon_id = p.id
-       WHERE e.id = ?`,
-      [defender_id]
-    );
-
-    // fetch move
-    const [moveRows] = await db.pool.query(
-      "SELECT * FROM move WHERE id = ?",
-      [move_id]
-    );
-
-    if (attackerRows.length === 0) return res.status(404).json({ error: "Attacker encounter not found" });
-    if (defenderRows.length === 0) return res.status(404).json({ error: "Defender encounter not found" });
-    if (moveRows.length === 0) return res.status(404).json({ error: "Move not found" });
-
-    const encounterAttacker = attackerRows[0];
-    const encounterDefender = defenderRows[0];
-    const move = moveRows[0];
-
-    // build attacker object for calculator
-    const attacker = {
-      level: encounterAttacker.level ?? 50,
-      attack: calculateStat(encounterAttacker.attack, encounterAttacker.attack_iv, encounterAttacker.attack_ev),
-      sp_attack: calculateStat(encounterAttacker.sp_attack, encounterAttacker.sp_attack_iv, encounterAttacker.sp_attack_ev),
-      type1: encounterAttacker.type1,
-      type2: encounterAttacker.type2,
-      item: encounterAttacker.item_id,
-      atkStage: conditions.atkStage ?? 0,
-      spAtkStage: conditions.spAtkStage ?? 0,
-    };
-
-    // build defender object for calculator
-    const defender = {
-      defense: calculateStat(encounterDefender.defense, encounterDefender.defense_iv, encounterDefender.defense_ev),
-      sp_defense: calculateStat(encounterDefender.sp_defense, encounterDefender.sp_defense_iv, encounterDefender.sp_defense_ev),
-      type1: encounterDefender.type1,
-      type2: encounterDefender.type2,
-      defStage: conditions.defStage ?? 0,
-      spDefStage: conditions.spDefStage ?? 0,
-    };
-
-    const moveData = {
-      type: move.type,
-      basePower: move.power,
-    };
-
-    const result = calculateDamage(attacker, defender, moveData, conditions);
-    res.json(result);
-
-  } catch (err) {
-    console.error("POST /api/damage error:", err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-
-// Gen 3 stat formula
-function calculateStat(base, iv, ev) {
-  return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * 50) / 100 + 5);
-}
 
 module.exports = router;

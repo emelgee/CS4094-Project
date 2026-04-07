@@ -1,0 +1,124 @@
+const typeChart = {
+  normal:   { rock: 0.5, ghost: 0, steel: 0.5 },
+  fire:     { fire: 0.5, water: 0.5, grass: 2, ice: 2, bug: 2, rock: 0.5, dragon: 0.5, steel: 2 },
+  water:    { fire: 2, water: 0.5, grass: 0.5, ground: 2, rock: 2, dragon: 0.5 },
+  electric: { water: 2, electric: 0.5, grass: 0.5, ground: 0, flying: 2, dragon: 0.5 },
+  grass:    { fire: 0.5, water: 2, grass: 0.5, poison: 0.5, ground: 2, flying: 0.5, bug: 0.5, rock: 2, dragon: 0.5, steel: 0.5 },
+  ice:      { fire: 0.5, water: 0.5, grass: 2, ice: 0.5, ground: 2, flying: 2, dragon: 2, steel: 0.5 },
+  fighting: { normal: 2, ice: 2, rock: 2, dark: 2, steel: 2, poison: 0.5, flying: 0.5, psychic: 0.5, bug: 0.5, ghost: 0 },
+  poison:   { grass: 2, poison: 0.5, ground: 0.5, rock: 0.5, ghost: 0.5, steel: 0 },
+  ground:   { fire: 2, electric: 2, grass: 0.5, poison: 2, flying: 0, bug: 0.5, rock: 2, steel: 2 },
+  flying:   { electric: 0.5, grass: 2, fighting: 2, bug: 2, rock: 0.5, steel: 0.5 },
+  psychic:  { fighting: 2, poison: 2, psychic: 0.5, dark: 0, steel: 0.5 },
+  bug:      { fire: 0.5, grass: 2, fighting: 0.5, poison: 0.5, flying: 0.5, psychic: 2, ghost: 0.5, dark: 2, steel: 0.5 },
+  rock:     { fire: 2, ice: 2, fighting: 0.5, ground: 0.5, flying: 2, bug: 2, steel: 0.5 },
+  ghost:    { normal: 0, psychic: 2, ghost: 2, dark: 0.5, steel: 0.5 },
+  dragon:   { dragon: 2, steel: 0.5 },
+  dark:     { fighting: 0.5, psychic: 2, ghost: 2, dark: 0.5, steel: 0.5 },
+  steel:    { fire: 0.5, water: 0.5, electric: 0.5, ice: 2, rock: 2, steel: 0.5 },
+};
+
+const stageMultipliers = {
+  "-6": 0.25, "-5": 0.28, "-4": 0.33, "-3": 0.40, "-2": 0.50, "-1": 0.67,
+  "0": 1.00, "1": 1.50, "2": 2.00, "3": 2.50, "4": 3.00, "5": 3.50, "6": 4.00,
+};
+
+const PHYSICAL_TYPES = new Set([
+  "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost", "steel",
+]);
+
+function getTypeEffectiveness(moveType, defType1, defType2) {
+  const row = typeChart[moveType];
+  if (!row) return 1;
+  const mult1 = row[defType1] ?? 1;
+  const mult2 = defType2 ? (row[defType2] ?? 1) : 1;
+  return mult1 * mult2;
+}
+
+function getWeatherModifier(moveType, weather) {
+  if (weather === "sun")  { if (moveType === "fire") return 1.5; if (moveType === "water") return 0.5; }
+  if (weather === "rain") { if (moveType === "fire") return 0.5; if (moveType === "water") return 1.5; }
+  return 1;
+}
+
+function getStatMultiplier(stage) {
+  return stageMultipliers[String(stage)] ?? 1;
+}
+
+function getItemModifier(item, moveType, isPhysical) {
+  if (item === "black_belt"    && moveType === "fighting") return 1.1;
+  if (item === "black_glasses" && moveType === "dark")     return 1.1;
+  if (item === "charcoal"      && moveType === "fire")     return 1.1;
+  if (item === "dragon_fang"   && moveType === "dragon")   return 1.1;
+  if (item === "hard_stone"    && moveType === "rock")     return 1.1;
+  if (item === "magnet"        && moveType === "electric") return 1.1;
+  if (item === "metal_coat"    && moveType === "steel")    return 1.1;
+  if (item === "miracle_seed"  && moveType === "grass")    return 1.1;
+  if (item === "mystic_water"  && moveType === "water")    return 1.1;
+  if (item === "never_melt_ice"&& moveType === "ice")      return 1.1;
+  if (item === "poison_barb"   && moveType === "poison")   return 1.1;
+  if (item === "sea_incense"   && moveType === "water")    return 1.05;
+  if (item === "sharp_beak"    && moveType === "flying")   return 1.1;
+  if (item === "silk_scarf"    && moveType === "normal")   return 1.1;
+  if (item === "silver_powder" && moveType === "bug")      return 1.1;
+  if (item === "soft_sand"     && moveType === "ground")   return 1.1;
+  if (item === "spell_tag"     && moveType === "ghost")    return 1.1;
+  if (item === "twisted_spoon" && moveType === "psychic")  return 1.1;
+  if (item === "choice_band"   && isPhysical)              return 1.5;
+  return 1;
+}
+
+/**
+ * Gen 3 damage formula.
+ *
+ * @param {object} attacker - { level, attack, sp_attack, type1, type2, item, atkStage, spAtkStage }
+ * @param {object} defender - { defense, sp_defense, type1, type2, defStage, spDefStage }
+ * @param {object} move     - { type, basePower }
+ * @param {object} conditions - { isCrit, isBurned, weather }
+ * @returns {{ min: number, max: number }}
+ */
+export function calculateDamage(attacker, defender, move, conditions = {}) {
+  const moveType = (move.type || "normal").toLowerCase();
+  const isPhysical = PHYSICAL_TYPES.has(moveType);
+
+  const atk = isPhysical ? attacker.attack : attacker.sp_attack;
+  const def = isPhysical ? defender.defense : defender.sp_defense;
+
+  const atkStage = isPhysical ? (attacker.atkStage ?? 0) : (attacker.spAtkStage ?? 0);
+  const defStage = isPhysical ? (defender.defStage ?? 0) : (defender.spDefStage ?? 0);
+
+  // On a crit, ignore negative atk stages and positive def stages
+  const finalAtkStage = conditions.isCrit ? Math.max(0, atkStage) : atkStage;
+  const finalDefStage = conditions.isCrit ? Math.min(0, defStage) : defStage;
+
+  const finalAtk = atk * getStatMultiplier(finalAtkStage);
+  const finalDef = def * getStatMultiplier(finalDefStage);
+
+  const power = Number(move.basePower) || 0;
+  if (!finalAtk || power <= 0 || !finalDef || finalDef <= 0) return { min: 0, max: 0 };
+
+  const baseDamage = Math.floor(
+    (((2 * attacker.level) / 5 + 2) * power * finalAtk) / finalDef / 50 + 2
+  );
+
+  const stab =
+    moveType === String(attacker.type1 || "").toLowerCase() ||
+    moveType === String(attacker.type2 || "").toLowerCase()
+      ? 1.5 : 1;
+
+  const typeEff = getTypeEffectiveness(
+    moveType,
+    String(defender.type1 || "normal").toLowerCase(),
+    defender.type2 ? String(defender.type2).toLowerCase() : null
+  );
+
+  const weather = getWeatherModifier(moveType, conditions.weather || "");
+  const crit    = conditions.isCrit    ? 2   : 1;
+  const burn    = conditions.isBurned && isPhysical ? 0.5 : 1;
+  const item    = getItemModifier(attacker.item || null, moveType, isPhysical);
+
+  return {
+    min: Math.floor(baseDamage * stab * typeEff * weather * crit * burn * item * 0.85),
+    max: Math.floor(baseDamage * stab * typeEff * weather * crit * burn * item * 1.0),
+  };
+}

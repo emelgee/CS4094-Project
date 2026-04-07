@@ -1,6 +1,4 @@
 import {
-  SIMPLE_TYPE_CHART,
-  SIMPLE_PHYSICAL_TYPES,
   BOSS_PRIORITY,
   BOSS_CLASS_FILTERS,
   BOSS_MULTIWORD_BASES,
@@ -118,53 +116,6 @@ export function buildTrainerPokemonView(entry, pokemonIndex) {
     basePokemon,
     baseStats,
     battleStats,
-  };
-}
-
-// =====================================================================
-// DAMAGE CALCULATION
-// =====================================================================
-function simpleTypeRowMult(row, t) {
-  if (!row || !t) return 1;
-  return Object.prototype.hasOwnProperty.call(row, t) ? row[t] : 1;
-}
-
-export function simpleTypeEffectiveness(moveType, defType1, defType2) {
-  const mt = moveType.toLowerCase();
-  const d1 = (defType1 || "normal").toLowerCase();
-  const d2 = defType2 ? String(defType2).toLowerCase() : null;
-  const row = SIMPLE_TYPE_CHART[mt];
-  if (!row) return 1;
-  return simpleTypeRowMult(row, d1) * (d2 ? simpleTypeRowMult(row, d2) : 1);
-}
-
-export function simpleWeatherMod(moveType, weather) {
-  if (!weather) return 1;
-  const t = moveType.toLowerCase();
-  if (weather === "sun")  { if (t === "fire") return 1.5; if (t === "water") return 0.5; }
-  if (weather === "rain") { if (t === "fire") return 0.5; if (t === "water") return 1.5; }
-  return 1;
-}
-
-export function computeSimpleBattleDamage(attacker, defender, move, conditions) {
-  const moveType = (move.type || "normal").toLowerCase();
-  const isPhysical = SIMPLE_PHYSICAL_TYPES.has(moveType);
-  const atk = isPhysical ? attacker.atk : attacker.spa;
-  const def = isPhysical ? defender.def : defender.spd;
-  const level = Number(attacker.level) || 1;
-  const power = Number(move.power) || 0;
-  if (!atk || power <= 0 || !def || def <= 0) return { min: 0, max: 0 };
-
-  const baseDamage = Math.floor((((2 * level) / 5 + 2) * power * atk) / def / 50 + 2);
-  const stab = (attacker.types || []).some((t) => t === moveType) ? 1.5 : 1;
-  const eff = simpleTypeEffectiveness(moveType, defender.type1, defender.type2);
-  const weather = simpleWeatherMod(moveType, conditions.weather || "");
-  const crit = conditions.isCrit ? 2 : 1;
-  const burn = conditions.isBurned && isPhysical ? 0.5 : 1;
-
-  return {
-    min: Math.floor(baseDamage * stab * eff * weather * crit * burn * 0.85),
-    max: Math.floor(baseDamage * stab * eff * weather * crit * burn * 1.0),
   };
 }
 
