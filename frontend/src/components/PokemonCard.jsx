@@ -33,7 +33,7 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) 
           </div>
         </details>
 
-        <details>
+        <details open>
           <summary>Nature &amp; Ability</summary>
           <div className="formGrid tight">
             <label>
@@ -60,7 +60,7 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) 
           </div>
         </details>
 
-        <details>
+        <details open>
           <summary>Moves (4)</summary>
           <div className="formGrid tight">
             {[0, 1, 2, 3].map((i) => (
