@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS team_pokemon;
 DROP TABLE IF EXISTS encounter;
-DROP TABLE IF EXISTS ability;
 DROP TABLE IF EXISTS pokemon_move;
 DROP TABLE IF EXISTS move;
 DROP TABLE IF EXISTS item;
@@ -9,6 +8,7 @@ DROP TABLE IF EXISTS area_encounter;
 DROP TABLE IF EXISTS area;
 DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS pokemon;
+DROP TABLE IF EXISTS ability;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
@@ -17,6 +17,13 @@ CREATE TABLE users (
   email VARCHAR(100) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ability(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  effect TEXT,
+  flavor_text TEXT
 );
 
 CREATE TABLE pokemon (
@@ -30,9 +37,13 @@ CREATE TABLE pokemon (
   speed INT NOT NULL,
   type1 VARCHAR(20) NOT NULL,
   type2 VARCHAR(20) NULL,
-  ability1 VARCHAR(50) NULL,
-  ability2 VARCHAR(50) NULL,
-  ability_hidden VARCHAR(50) NULL
+  ability1 INT NULL,
+  ability2 INT NULL,
+  ability_hidden INT NULL,
+
+  FOREIGN KEY (ability1) REFERENCES ability(id),
+  FOREIGN KEY (ability2) REFERENCES ability(id),
+  FOREIGN KEY (ability_hidden) REFERENCES ability(id)
 );
 
 CREATE TABLE location (
@@ -99,13 +110,6 @@ CREATE TABLE pokemon_move (
 
   FOREIGN KEY (pokemon_id) REFERENCES pokemon(id),
   FOREIGN KEY (move_id) REFERENCES move(id)
-);
-
-CREATE TABLE ability(
-  id INT PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
-  effect JSON NOT NULL,
-  flavorText VARCHAR(255)
 );
 
 CREATE TABLE encounter (

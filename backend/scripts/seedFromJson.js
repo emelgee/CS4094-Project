@@ -8,6 +8,7 @@ const { waitForDatabase } = require("../db/waitForDatabase");
 const { insertItems } = require("./insertItem");
 const { insertLocations } = require("./insertLocations");
 const { insertPokemonMoves } = require("./insertLearnsets");
+const { insertAbilities }    = require("./insertAbility");
 
 const BASE_PATH = path.join(__dirname, "../data");
 
@@ -71,6 +72,18 @@ async function readItemJson() {
   return parsed;
 }
 
+async function readAbilityJson() {
+  const INPUT_PATH = path.join(BASE_PATH, "/abilities.json");
+  const raw = await fs.readFile(INPUT_PATH, "utf8");
+  const parsed = JSON.parse(raw);
+
+  if (!Array.isArray(parsed)) {
+    throw new Error("abilities.json must contain an array.");
+  }
+
+  return parsed;
+}
+
 async function readLocationJson() {
   const INPUT_PATH = path.join(BASE_PATH, "/location.json");
   const raw = await fs.readFile(INPUT_PATH, "utf8");
@@ -85,6 +98,10 @@ async function readLocationJson() {
 
 async function seedFromJson() {
   await waitForDatabase();
+
+  const ability_rows = await readAbilityJson();
+  await insertAbilities(ability_rows);
+  console.log(`Inserted/updated ${ability_rows.length} ability rows from JSON.`);
 
   const pokemon_rows = await readPokemonJson();
   await insertPokemon(pokemon_rows);
