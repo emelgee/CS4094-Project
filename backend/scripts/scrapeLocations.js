@@ -21,20 +21,20 @@ function parseEncounterDetails(encounter_details) {
                 min_level: encounter.min_level,
             };
             } else {
-            methodMap[method].max_chance = Math.max(
-                methodMap[method].max_chance,
-                encounter.chance
-            );
+                methodMap[method].max_chance += encounter.chance;
+                if (methodMap[method].max_chance > 100) {
+                    methodMap[method].max_chance = 100;
+                }
 
-            methodMap[method].max_level = Math.max(
-                methodMap[method].max_level,
-                encounter.max_level
-            );
+                methodMap[method].max_level = Math.max(
+                    methodMap[method].max_level,
+                    encounter.max_level
+                );
 
-            methodMap[method].min_level = Math.min(
-                methodMap[method].min_level,
-                encounter.min_level
-            );
+                methodMap[method].min_level = Math.min(
+                    methodMap[method].min_level,
+                    encounter.min_level
+                );
             }
         }
 
@@ -64,7 +64,6 @@ async function fetchArea(nameOrid) {
                 if (version_details.version.name == "emerald") {
                     const encounter_details = version_details.encounter_details;
                     const encounter = await parseEncounterDetails(encounter_details);
-                    console.log(pokemon.pokemon.name + ":\n" + JSON.stringify(encounter, null, 2));
                     encounters.push({
                         pokemon: pokemon.pokemon.name,
                         encounter: encounter            

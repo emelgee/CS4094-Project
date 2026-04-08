@@ -51,7 +51,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 100,
                   "max_level": 35,
                   "min_level": 5
                 }
@@ -70,7 +70,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -139,7 +139,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -152,7 +152,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -171,7 +171,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -258,7 +258,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -271,7 +271,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -290,7 +290,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 85,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -364,7 +364,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -377,7 +377,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -409,7 +409,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -466,7 +466,7 @@
               "methods": [
                 {
                   "method_name": "good-rod",
-                  "max_chance": 60,
+                  "max_chance": 100,
                   "max_level": 30,
                   "min_level": 10
                 },
@@ -478,13 +478,13 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 80,
                   "max_level": 35,
                   "min_level": 30
                 },
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 100,
                   "max_level": 35,
                   "min_level": 5
                 }
@@ -497,7 +497,7 @@
               "methods": [
                 {
                   "method_name": "super-rod",
-                  "max_chance": 15,
+                  "max_chance": 20,
                   "max_level": 45,
                   "min_level": 5
                 }
@@ -573,7 +573,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -586,7 +586,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -605,7 +605,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 45,
                   "max_level": 45,
                   "min_level": 30
                 }
@@ -649,13 +649,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 90,
                   "max_level": 35,
                   "min_level": 5
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 80,
                   "max_level": 20,
                   "min_level": 14
                 }
@@ -706,13 +706,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 5,
+                  "max_chance": 10,
                   "max_level": 35,
                   "min_level": 5
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 18,
                   "min_level": 14
                 }
@@ -731,7 +731,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -750,13 +750,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 90,
                   "max_level": 35,
                   "min_level": 30
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 65,
                   "max_level": 40,
                   "min_level": 33
                 }
@@ -807,13 +807,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 5,
+                  "max_chance": 10,
                   "max_level": 35,
                   "min_level": 5
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 35,
                   "max_level": 39,
                   "min_level": 33
                 }
@@ -832,7 +832,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 80,
                   "max_level": 35,
                   "min_level": 25
                 }
@@ -845,7 +845,7 @@
               "methods": [
                 {
                   "method_name": "super-rod",
-                  "max_chance": 15,
+                  "max_chance": 20,
                   "max_level": 45,
                   "min_level": 30
                 }
@@ -864,13 +864,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 90,
                   "max_level": 35,
                   "min_level": 30
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 65,
                   "max_level": 40,
                   "min_level": 33
                 }
@@ -921,13 +921,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 5,
+                  "max_chance": 10,
                   "max_level": 35,
                   "min_level": 5
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 35,
                   "max_level": 39,
                   "min_level": 33
                 }
@@ -946,7 +946,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 80,
                   "max_level": 35,
                   "min_level": 25
                 }
@@ -959,7 +959,7 @@
               "methods": [
                 {
                   "method_name": "super-rod",
-                  "max_chance": 15,
+                  "max_chance": 20,
                   "max_level": 45,
                   "min_level": 30
                 }
@@ -978,13 +978,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 90,
                   "max_level": 35,
                   "min_level": 30
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 40,
                   "min_level": 33
                 }
@@ -1035,13 +1035,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 5,
+                  "max_chance": 10,
                   "max_level": 35,
                   "min_level": 5
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 25,
                   "max_level": 39,
                   "min_level": 35
                 }
@@ -1060,7 +1060,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 80,
                   "max_level": 35,
                   "min_level": 25
                 }
@@ -1073,7 +1073,7 @@
               "methods": [
                 {
                   "method_name": "super-rod",
-                  "max_chance": 15,
+                  "max_chance": 20,
                   "max_level": 45,
                   "min_level": 30
                 }
@@ -1086,7 +1086,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 25,
                   "max_level": 35,
                   "min_level": 25
                 }
@@ -1111,7 +1111,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 8,
                   "min_level": 5
                 }
@@ -1136,7 +1136,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 8,
                   "min_level": 7
                 }
@@ -1162,7 +1162,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 9,
                   "min_level": 6
                 }
@@ -1175,7 +1175,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 10,
                   "min_level": 6
                 }
@@ -1194,7 +1194,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 10,
                   "min_level": 9
                 }
@@ -1220,7 +1220,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 10,
                   "max_level": 11,
                   "min_level": 10
                 }
@@ -1233,7 +1233,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 11,
                   "min_level": 9
                 }
@@ -1246,7 +1246,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 11,
                   "min_level": 9
                 }
@@ -1265,7 +1265,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 11,
                   "min_level": 10
                 }
@@ -1291,7 +1291,7 @@
               "methods": [
                 {
                   "method_name": "rock-smash",
-                  "max_chance": 60,
+                  "max_chance": 70,
                   "max_level": 20,
                   "min_level": 5
                 }
@@ -1317,7 +1317,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 20,
                   "max_level": 12,
                   "min_level": 10
                 }
@@ -1330,7 +1330,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 12,
                   "min_level": 10
                 }
@@ -1349,7 +1349,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 8,
                   "min_level": 7
                 }
@@ -1375,7 +1375,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 10,
                   "min_level": 6
                 }
@@ -1388,7 +1388,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 8,
                   "min_level": 7
                 }
@@ -1413,7 +1413,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 6,
                   "min_level": 5
                 }
@@ -1426,7 +1426,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 25,
                   "max_level": 6,
                   "min_level": 5
                 }
@@ -1465,7 +1465,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 6,
                   "min_level": 5
                 }
@@ -1478,7 +1478,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 6,
                   "min_level": 5
                 }
@@ -1491,7 +1491,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 6,
                   "min_level": 5
                 }
@@ -1516,7 +1516,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 25,
                   "max_level": 22,
                   "min_level": 20
                 }
@@ -1529,7 +1529,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 55,
                   "max_level": 22,
                   "min_level": 20
                 }
@@ -1542,7 +1542,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 22,
                   "min_level": 20
                 }
@@ -1567,7 +1567,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 16,
                   "min_level": 15
                 }
@@ -1580,7 +1580,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 1,
+                  "max_chance": 2,
                   "max_level": 14,
                   "min_level": 14
                 }
@@ -1593,7 +1593,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 25,
                   "max_level": 16,
                   "min_level": 15
                 }
@@ -1619,7 +1619,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 16,
                   "min_level": 15
                 }
@@ -1632,7 +1632,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 18,
                   "max_level": 16,
                   "min_level": 14
                 }
@@ -1657,7 +1657,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 29,
                   "min_level": 22
                 }
@@ -1676,7 +1676,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 29,
                   "min_level": 22
                 }
@@ -1695,7 +1695,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 29,
                   "min_level": 22
                 }
@@ -1714,7 +1714,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 90,
                   "max_level": 29,
                   "min_level": 22
                 }
@@ -1727,7 +1727,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 29,
                   "min_level": 25
                 }
@@ -1746,7 +1746,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 90,
                   "max_level": 29,
                   "min_level": 22
                 }
@@ -1759,7 +1759,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 29,
                   "min_level": 25
                 }
@@ -1778,7 +1778,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 90,
                   "max_level": 29,
                   "min_level": 22
                 }
@@ -1791,7 +1791,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 29,
                   "min_level": 25
                 }
@@ -1810,7 +1810,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 30,
                   "max_level": 29,
                   "min_level": 25
                 }
@@ -1823,7 +1823,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 28,
                   "min_level": 26
                 }
@@ -1836,7 +1836,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 60,
                   "max_level": 29,
                   "min_level": 27
                 }
@@ -1855,7 +1855,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 85,
                   "max_level": 30,
                   "min_level": 24
                 }
@@ -1868,7 +1868,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 13,
                   "max_level": 30,
                   "min_level": 26
                 }
@@ -1881,7 +1881,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 1,
+                  "max_chance": 2,
                   "max_level": 28,
                   "min_level": 28
                 }
@@ -1906,13 +1906,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 35,
                   "min_level": 5
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 90,
                   "max_level": 35,
                   "min_level": 28
                 }
@@ -1925,13 +1925,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 35,
                   "min_level": 30
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 36,
                   "min_level": 33
                 }
@@ -1994,7 +1994,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -2019,7 +2019,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 90,
                   "max_level": 35,
                   "min_level": 28
                 }
@@ -2032,7 +2032,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 36,
                   "min_level": 33
                 }
@@ -2051,7 +2051,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 60,
                   "max_level": 34,
                   "min_level": 30
                 }
@@ -2064,7 +2064,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 36,
                   "min_level": 33
                 }
@@ -2077,7 +2077,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 30,
                   "max_level": 34,
                   "min_level": 30
                 }
@@ -2096,7 +2096,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 60,
                   "max_level": 34,
                   "min_level": 30
                 }
@@ -2109,7 +2109,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 36,
                   "min_level": 33
                 }
@@ -2122,7 +2122,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 30,
                   "max_level": 34,
                   "min_level": 30
                 }
@@ -2141,7 +2141,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 60,
                   "max_level": 34,
                   "min_level": 30
                 }
@@ -2154,7 +2154,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 36,
                   "min_level": 33
                 }
@@ -2167,7 +2167,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 30,
                   "max_level": 34,
                   "min_level": 30
                 }
@@ -2186,7 +2186,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 60,
                   "max_level": 34,
                   "min_level": 30
                 }
@@ -2199,7 +2199,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 36,
                   "min_level": 33
                 }
@@ -2212,7 +2212,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 30,
                   "max_level": 34,
                   "min_level": 30
                 }
@@ -2255,7 +2255,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 25,
                   "max_level": 40,
                   "min_level": 38
                 }
@@ -2268,7 +2268,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 36,
                   "min_level": 36
                 }
@@ -2307,7 +2307,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 25,
                   "max_level": 40,
                   "min_level": 38
                 }
@@ -2320,7 +2320,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 36,
                   "min_level": 36
                 }
@@ -2352,7 +2352,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 35,
                   "max_level": 42,
                   "min_level": 38
                 }
@@ -2378,7 +2378,7 @@
               "methods": [
                 {
                   "method_name": "rock-smash",
-                  "max_chance": 60,
+                  "max_chance": 70,
                   "max_level": 40,
                   "min_level": 30
                 }
@@ -2391,7 +2391,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 35,
                   "max_level": 42,
                   "min_level": 38
                 }
@@ -2404,7 +2404,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 38,
                   "min_level": 38
                 }
@@ -2417,7 +2417,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 25,
                   "max_level": 42,
                   "min_level": 40
                 }
@@ -2436,13 +2436,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 100,
                   "max_level": 40,
                   "min_level": 25
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 35,
                   "max_level": 44,
                   "min_level": 40
                 }
@@ -2493,7 +2493,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 35,
                   "max_level": 44,
                   "min_level": 40
                 }
@@ -2506,7 +2506,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 44,
                   "min_level": 42
                 }
@@ -2519,7 +2519,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 25,
                   "max_level": 44,
                   "min_level": 40
                 }
@@ -2538,7 +2538,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 80,
                   "max_level": 35,
                   "min_level": 25
                 }
@@ -2551,7 +2551,7 @@
               "methods": [
                 {
                   "method_name": "super-rod",
-                  "max_chance": 15,
+                  "max_chance": 20,
                   "max_level": 45,
                   "min_level": 30
                 }
@@ -2582,7 +2582,7 @@
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 45,
                   "max_level": 32,
                   "min_level": 26
                 }
@@ -2595,7 +2595,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 32,
                   "min_level": 32
                 }
@@ -2658,7 +2658,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -2671,13 +2671,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 5,
+                  "max_chance": 10,
                   "max_level": 35,
                   "min_level": 25
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 32,
                   "min_level": 26
                 }
@@ -2696,7 +2696,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 45,
                   "max_level": 32,
                   "min_level": 26
                 }
@@ -2709,7 +2709,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 32,
                   "min_level": 32
                 }
@@ -2722,7 +2722,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 32,
                   "min_level": 26
                 }
@@ -2741,7 +2741,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 45,
                   "max_level": 32,
                   "min_level": 26
                 }
@@ -2754,7 +2754,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 32,
                   "min_level": 32
                 }
@@ -2767,7 +2767,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 32,
                   "min_level": 26
                 }
@@ -2786,7 +2786,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 45,
                   "max_level": 32,
                   "min_level": 26
                 }
@@ -2799,7 +2799,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 32,
                   "min_level": 32
                 }
@@ -2812,7 +2812,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 32,
                   "min_level": 26
                 }
@@ -2831,7 +2831,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 30,
                   "min_level": 26
                 }
@@ -2844,7 +2844,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 32,
                   "min_level": 30
                 }
@@ -2857,7 +2857,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 10,
                   "max_level": 30,
                   "min_level": 26
                 }
@@ -2870,7 +2870,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 45,
                   "max_level": 32,
                   "min_level": 26
                 }
@@ -2895,7 +2895,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 26,
                   "min_level": 22
                 }
@@ -2908,7 +2908,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 26,
                   "min_level": 22
                 }
@@ -2927,7 +2927,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 49,
                   "max_level": 26,
                   "min_level": 22
                 }
@@ -2953,7 +2953,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 49,
                   "max_level": 26,
                   "min_level": 22
                 },
@@ -3003,7 +3003,7 @@
               "methods": [
                 {
                   "method_name": "good-rod",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 30,
                   "min_level": 10
                 },
@@ -3015,13 +3015,13 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 80,
                   "max_level": 35,
                   "min_level": 25
                 },
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 99,
                   "max_level": 35,
                   "min_level": 5
                 }
@@ -3034,7 +3034,7 @@
               "methods": [
                 {
                   "method_name": "super-rod",
-                  "max_chance": 15,
+                  "max_chance": 20,
                   "max_level": 35,
                   "min_level": 20
                 },
@@ -3084,7 +3084,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 35,
                   "min_level": 34
                 }
@@ -3097,7 +3097,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 34,
                   "min_level": 33
                 }
@@ -3110,7 +3110,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 25,
                   "max_level": 38,
                   "min_level": 36
                 }
@@ -3123,7 +3123,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 38,
                   "min_level": 37
                 }
@@ -3142,7 +3142,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 35,
                   "min_level": 34
                 }
@@ -3155,7 +3155,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 34,
                   "min_level": 33
                 }
@@ -3168,7 +3168,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 25,
                   "max_level": 38,
                   "min_level": 36
                 }
@@ -3181,7 +3181,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 38,
                   "min_level": 37
                 }
@@ -3200,7 +3200,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 35,
                   "min_level": 34
                 }
@@ -3213,7 +3213,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 34,
                   "min_level": 33
                 }
@@ -3226,7 +3226,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 6,
                   "max_level": 39,
                   "min_level": 38
                 }
@@ -3239,7 +3239,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 19,
                   "max_level": 37,
                   "min_level": 36
                 }
@@ -3252,7 +3252,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 38,
                   "min_level": 37
                 }
@@ -3335,7 +3335,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 45,
                   "max_level": 3,
                   "min_level": 2
                 }
@@ -3348,7 +3348,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 3,
                   "min_level": 2
                 }
@@ -3361,7 +3361,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 45,
                   "max_level": 3,
                   "min_level": 2
                 }
@@ -3430,7 +3430,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 99,
                   "max_level": 35,
                   "min_level": 5
                 }
@@ -3443,7 +3443,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 4,
                   "min_level": 3
                 }
@@ -3456,7 +3456,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 15,
                   "max_level": 4,
                   "min_level": 3
                 }
@@ -3469,7 +3469,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 4,
                   "min_level": 3
                 }
@@ -3482,7 +3482,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 4,
                   "min_level": 3
                 }
@@ -3527,7 +3527,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -3596,7 +3596,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 60,
                   "max_level": 4,
                   "min_level": 2
                 }
@@ -3609,7 +3609,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 4,
                   "min_level": 3
                 }
@@ -3622,13 +3622,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 4,
                   "min_level": 2
                 }
@@ -3641,7 +3641,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -3673,7 +3673,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -3698,19 +3698,19 @@
               "methods": [
                 {
                   "method_name": "good-rod",
-                  "max_chance": 60,
+                  "max_chance": 100,
                   "max_level": 30,
                   "min_level": 10
                 },
                 {
                   "method_name": "old-rod",
-                  "max_chance": 70,
+                  "max_chance": 100,
                   "max_level": 10,
                   "min_level": 5
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -3723,7 +3723,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 5,
                   "min_level": 4
                 }
@@ -3736,7 +3736,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 5,
                   "min_level": 4
                 }
@@ -3762,7 +3762,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 10,
                   "max_level": 5,
                   "min_level": 4
                 }
@@ -3775,13 +3775,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 95,
                   "max_level": 30,
                   "min_level": 10
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 5,
                   "min_level": 3
                 }
@@ -3794,7 +3794,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -3873,7 +3873,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -3886,7 +3886,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -3905,7 +3905,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -3974,7 +3974,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -3987,7 +3987,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -4006,7 +4006,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -4075,7 +4075,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -4088,7 +4088,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -4107,7 +4107,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -4176,7 +4176,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -4189,7 +4189,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -4208,7 +4208,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -4277,7 +4277,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -4290,7 +4290,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -4309,7 +4309,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -4404,13 +4404,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 8,
                   "max_level": 12,
                   "min_level": 12
                 }
@@ -4423,7 +4423,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -4436,7 +4436,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 13,
                   "min_level": 12
                 }
@@ -4449,7 +4449,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 1,
+                  "max_chance": 2,
                   "max_level": 13,
                   "min_level": 12
                 }
@@ -4462,7 +4462,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 13,
                   "min_level": 13
                 }
@@ -4475,7 +4475,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 13,
                   "min_level": 12
                 }
@@ -4494,7 +4494,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -4519,7 +4519,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 35,
                   "max_level": 21,
                   "min_level": 19
                 }
@@ -4532,7 +4532,7 @@
               "methods": [
                 {
                   "method_name": "rock-smash",
-                  "max_chance": 60,
+                  "max_chance": 100,
                   "max_level": 20,
                   "min_level": 5
                 }
@@ -4589,7 +4589,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 99,
                   "max_level": 35,
                   "min_level": 5
                 }
@@ -4602,7 +4602,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 35,
                   "max_level": 21,
                   "min_level": 19
                 }
@@ -4615,7 +4615,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 6,
                   "max_level": 22,
                   "min_level": 20
                 }
@@ -4634,7 +4634,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -4647,7 +4647,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 24,
                   "max_level": 21,
                   "min_level": 19
                 }
@@ -4672,7 +4672,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 25,
                   "max_level": 16,
                   "min_level": 14
                 }
@@ -4685,7 +4685,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 75,
                   "max_level": 16,
                   "min_level": 14
                 }
@@ -4710,7 +4710,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 25,
                   "max_level": 16,
                   "min_level": 14
                 }
@@ -4723,7 +4723,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 16,
                   "min_level": 16
                 }
@@ -4736,7 +4736,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 70,
                   "max_level": 16,
                   "min_level": 14
                 }
@@ -4761,7 +4761,7 @@
               "methods": [
                 {
                   "method_name": "rock-smash",
-                  "max_chance": 60,
+                  "max_chance": 100,
                   "max_level": 20,
                   "min_level": 5
                 }
@@ -4818,7 +4818,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 99,
                   "max_level": 35,
                   "min_level": 5
                 }
@@ -4831,7 +4831,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 16,
                   "min_level": 15
                 }
@@ -4844,7 +4844,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 18,
                   "min_level": 16
                 }
@@ -4870,7 +4870,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 17,
                   "min_level": 15
                 }
@@ -4883,7 +4883,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 9,
                   "max_level": 17,
                   "min_level": 15
                 }
@@ -4902,7 +4902,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -4927,7 +4927,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 10,
                   "max_level": 25,
                   "min_level": 24
                 }
@@ -4984,7 +4984,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 25,
                   "min_level": 23
                 }
@@ -5010,13 +5010,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 10,
                   "max_level": 26,
                   "min_level": 24
                 }
@@ -5029,7 +5029,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -5048,7 +5048,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -5061,7 +5061,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 25,
                   "min_level": 23
                 }
@@ -5099,7 +5099,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 28,
                   "max_level": 8,
                   "min_level": 6
                 }
@@ -5112,7 +5112,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 8,
                   "min_level": 6
                 }
@@ -5125,7 +5125,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 7,
                   "min_level": 6
                 }
@@ -5151,7 +5151,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 1,
+                  "max_chance": 2,
                   "max_level": 8,
                   "min_level": 7
                 }
@@ -5176,7 +5176,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 14,
                   "min_level": 13
                 }
@@ -5233,7 +5233,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 99,
                   "max_level": 35,
                   "min_level": 5
                 },
@@ -5252,7 +5252,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 14,
                   "min_level": 13
                 }
@@ -5291,7 +5291,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 18,
                   "max_level": 14,
                   "min_level": 13
                 }
@@ -5310,7 +5310,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -5379,7 +5379,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 26,
                   "min_level": 24
                 }
@@ -5405,13 +5405,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 19,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -5424,7 +5424,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -5437,7 +5437,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 26,
                   "min_level": 24
                 }
@@ -5469,7 +5469,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -5520,7 +5520,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 30,
                   "max_level": 27,
                   "min_level": 24
                 }
@@ -5577,7 +5577,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -5590,7 +5590,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -5603,7 +5603,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -5616,7 +5616,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -5635,7 +5635,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -5680,7 +5680,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 9,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -5724,7 +5724,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 25,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -5781,13 +5781,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 99,
                   "max_level": 35,
                   "min_level": 5
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -5813,7 +5813,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -5845,7 +5845,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -5877,7 +5877,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 8,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -5902,7 +5902,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 28,
                   "min_level": 26
                 }
@@ -5985,7 +5985,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 28,
                   "min_level": 26
                 }
@@ -5998,13 +5998,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 9,
                   "max_level": 28,
                   "min_level": 26
                 }
@@ -6017,7 +6017,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -6036,7 +6036,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -6062,7 +6062,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 28,
                   "min_level": 26
                 }
@@ -6131,7 +6131,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -6144,7 +6144,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -6176,7 +6176,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -6201,7 +6201,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 28,
                   "min_level": 26
                 }
@@ -6284,7 +6284,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 28,
                   "min_level": 26
                 }
@@ -6297,13 +6297,13 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 },
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 9,
                   "max_level": 28,
                   "min_level": 26
                 }
@@ -6316,7 +6316,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -6335,7 +6335,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -6361,7 +6361,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 28,
                   "min_level": 26
                 }
@@ -6430,7 +6430,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -6443,7 +6443,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -6475,7 +6475,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -6507,7 +6507,7 @@
               "methods": [
                 {
                   "method_name": "seaweed",
-                  "max_chance": 60,
+                  "max_chance": 65,
                   "max_level": 35,
                   "min_level": 20
                 }
@@ -6520,7 +6520,7 @@
               "methods": [
                 {
                   "method_name": "seaweed",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 35,
                   "min_level": 30
                 }
@@ -6589,7 +6589,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -6602,7 +6602,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -6634,7 +6634,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -6703,7 +6703,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -6716,7 +6716,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -6748,7 +6748,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -6780,7 +6780,7 @@
               "methods": [
                 {
                   "method_name": "seaweed",
-                  "max_chance": 60,
+                  "max_chance": 65,
                   "max_level": 35,
                   "min_level": 20
                 }
@@ -6793,7 +6793,7 @@
               "methods": [
                 {
                   "method_name": "seaweed",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 35,
                   "min_level": 30
                 }
@@ -6862,7 +6862,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -6875,7 +6875,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -6907,7 +6907,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -6983,7 +6983,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -6996,7 +6996,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -7015,7 +7015,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 45,
                   "max_level": 45,
                   "min_level": 30
                 }
@@ -7103,7 +7103,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -7148,7 +7148,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -7230,7 +7230,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -7243,7 +7243,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -7275,7 +7275,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -7288,7 +7288,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 50,
                   "min_level": 5
                 }
@@ -7357,7 +7357,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -7370,7 +7370,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -7402,7 +7402,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -7484,7 +7484,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -7497,7 +7497,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -7529,7 +7529,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 45,
                   "max_level": 45,
                   "min_level": 30
                 }
@@ -7611,7 +7611,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -7624,7 +7624,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -7656,7 +7656,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 45,
                   "max_level": 45,
                   "min_level": 30
                 }
@@ -7738,7 +7738,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -7751,7 +7751,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -7783,7 +7783,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 45,
                   "max_level": 45,
                   "min_level": 30
                 }
@@ -7808,7 +7808,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 29,
                   "min_level": 27
                 }
@@ -7821,7 +7821,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 31,
                   "min_level": 29
                 }
@@ -7834,7 +7834,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 95,
                   "max_level": 35,
                   "min_level": 20
                 }
@@ -7847,7 +7847,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 40,
                   "min_level": 25
                 }
@@ -7860,7 +7860,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 29,
                   "min_level": 27
                 }
@@ -7873,7 +7873,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 31,
                   "min_level": 29
                 }
@@ -7886,7 +7886,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 29,
                   "min_level": 27
                 }
@@ -7899,7 +7899,7 @@
               "methods": [
                 {
                   "method_name": "good-rod",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 30,
                   "min_level": 10
                 },
@@ -7911,7 +7911,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 80,
                   "max_level": 35,
                   "min_level": 25
                 }
@@ -7924,7 +7924,7 @@
               "methods": [
                 {
                   "method_name": "super-rod",
-                  "max_chance": 15,
+                  "max_chance": 20,
                   "max_level": 40,
                   "min_level": 25
                 }
@@ -7937,7 +7937,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 29,
                   "min_level": 27
                 }
@@ -7975,7 +7975,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 29,
                   "min_level": 27
                 }
@@ -7988,7 +7988,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 31,
                   "min_level": 29
                 }
@@ -8001,7 +8001,7 @@
               "methods": [
                 {
                   "method_name": "rock-smash",
-                  "max_chance": 60,
+                  "max_chance": 100,
                   "max_level": 30,
                   "min_level": 5
                 }
@@ -8014,7 +8014,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 15,
                   "max_level": 29,
                   "min_level": 27
                 }
@@ -8027,7 +8027,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 31,
                   "min_level": 29
                 }
@@ -8040,7 +8040,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 29,
                   "min_level": 27
                 }
@@ -8053,7 +8053,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 29,
                   "min_level": 27
                 }
@@ -8072,7 +8072,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -8085,7 +8085,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -8111,7 +8111,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 60,
+                  "max_chance": 100,
                   "max_level": 35,
                   "min_level": 20
                 }
@@ -8137,7 +8137,7 @@
               "methods": [
                 {
                   "method_name": "good-rod",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 30,
                   "min_level": 10
                 },
@@ -8149,7 +8149,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 80,
                   "max_level": 35,
                   "min_level": 25
                 }
@@ -8162,7 +8162,7 @@
               "methods": [
                 {
                   "method_name": "super-rod",
-                  "max_chance": 15,
+                  "max_chance": 20,
                   "max_level": 40,
                   "min_level": 25
                 }
@@ -8207,7 +8207,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 10,
                   "max_level": 29,
                   "min_level": 27
                 }
@@ -8220,7 +8220,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -8239,7 +8239,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -8252,7 +8252,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 40,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -8304,7 +8304,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 10,
                   "max_level": 29,
                   "min_level": 27
                 }
@@ -8317,7 +8317,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 20,
                   "max_level": 27,
                   "min_level": 25
                 }
@@ -8406,7 +8406,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 36,
                   "min_level": 34
                 }
@@ -8419,7 +8419,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 39,
                   "max_level": 35,
                   "min_level": 25
                 }
@@ -8445,7 +8445,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 35,
                   "min_level": 33
                 }
@@ -8484,7 +8484,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 40,
                   "min_level": 37
                 }
@@ -8516,7 +8516,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 59,
                   "max_level": 35,
                   "min_level": 25
                 }
@@ -8542,7 +8542,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 39,
                   "min_level": 36
                 }
@@ -8587,7 +8587,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 35,
                   "min_level": 33
                 }
@@ -8626,7 +8626,7 @@
               "methods": [
                 {
                   "method_name": "rock-smash",
-                  "max_chance": 60,
+                  "max_chance": 100,
                   "max_level": 40,
                   "min_level": 20
                 }
@@ -8639,7 +8639,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 36,
                   "min_level": 34
                 }
@@ -8652,7 +8652,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 39,
                   "min_level": 36
                 }
@@ -8665,7 +8665,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 40,
                   "min_level": 37
                 }
@@ -8734,7 +8734,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -8747,7 +8747,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -8766,7 +8766,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 100,
                   "max_level": 45,
                   "min_level": 20
                 }
@@ -8835,7 +8835,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 30,
+                  "max_chance": 35,
                   "max_level": 30,
                   "min_level": 10
                 }
@@ -8848,7 +8848,7 @@
               "methods": [
                 {
                   "method_name": "surf",
-                  "max_chance": 4,
+                  "max_chance": 5,
                   "max_level": 30,
                   "min_level": 25
                 }
@@ -8880,7 +8880,7 @@
                 },
                 {
                   "method_name": "super-rod",
-                  "max_chance": 40,
+                  "max_chance": 60,
                   "max_level": 45,
                   "min_level": 25
                 }
@@ -8905,7 +8905,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 55,
                   "max_level": 30,
                   "min_level": 27
                 }
@@ -8918,7 +8918,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 5,
+                  "max_chance": 15,
                   "max_level": 33,
                   "min_level": 30
                 }
@@ -8931,7 +8931,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 30,
                   "max_level": 30,
                   "min_level": 28
                 }
@@ -8956,7 +8956,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 24,
                   "min_level": 20
                 }
@@ -8969,7 +8969,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 24,
                   "min_level": 20
                 }
@@ -8994,7 +8994,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 50,
                   "max_level": 45,
                   "min_level": 38
                 }
@@ -9007,7 +9007,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 34,
                   "max_level": 38,
                   "min_level": 35
                 }
@@ -9020,7 +9020,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 10,
+                  "max_chance": 16,
                   "max_level": 44,
                   "min_level": 38
                 }
@@ -9045,7 +9045,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 50,
                   "min_level": 40
                 }
@@ -9070,7 +9070,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 16,
                   "min_level": 6
                 }
@@ -9089,7 +9089,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 13,
                   "min_level": 3
                 }
@@ -9108,7 +9108,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 29,
                   "min_level": 19
                 }
@@ -9127,7 +9127,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 22,
                   "min_level": 12
                 }
@@ -9146,7 +9146,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 16,
                   "min_level": 6
                 }
@@ -9165,7 +9165,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 28,
                   "min_level": 18
                 }
@@ -9184,7 +9184,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 28,
                   "min_level": 18
                 }
@@ -9203,7 +9203,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 28,
                   "min_level": 18
                 }
@@ -9222,7 +9222,7 @@
               "methods": [
                 {
                   "method_name": "walk",
-                  "max_chance": 20,
+                  "max_chance": 100,
                   "max_level": 28,
                   "min_level": 18
                 }
@@ -9630,6 +9630,27 @@
     ]
   },
   {
+    "id": 693,
+    "name": "sea-mauville",
+    "areas": [
+      {
+        "id": 1178,
+        "name": "sea-mauville-area",
+        "encounters": []
+      },
+      {
+        "id": 1179,
+        "name": "sea-mauville-outside",
+        "encounters": []
+      },
+      {
+        "id": 1180,
+        "name": "sea-mauville-inside",
+        "encounters": []
+      }
+    ]
+  },
+  {
     "id": 694,
     "name": "team-magma-hideout",
     "areas": [
@@ -9791,6 +9812,32 @@
         "encounters": []
       }
     ]
+  },
+  {
+    "id": 706,
+    "name": "secret-islet",
+    "areas": []
+  },
+  {
+    "id": 707,
+    "name": "soaring-in-the-sky",
+    "areas": [
+      {
+        "id": 1184,
+        "name": "soaring-in-the-sky-area",
+        "encounters": []
+      }
+    ]
+  },
+  {
+    "id": 708,
+    "name": "secret-shore",
+    "areas": []
+  },
+  {
+    "id": 709,
+    "name": "secret-meadow",
+    "areas": []
   },
   {
     "id": 801,

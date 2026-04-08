@@ -4,6 +4,9 @@ DROP TABLE IF EXISTS ability;
 DROP TABLE IF EXISTS move;
 DROP TABLE IF EXISTS item;
 DROP TABLE IF EXISTS trainer;
+DROP TABLE IF EXISTS area_encounter;
+DROP TABLE IF EXISTS area;
+DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS pokemon;
 DROP TABLE IF EXISTS users;
 
@@ -33,14 +36,16 @@ CREATE TABLE pokemon (
 
 CREATE TABLE location (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
-)
+  name VARCHAR(50) NOT NULL
+);
 
 CREATE TABLE area (
   id INT AUTO_INCREMENT PRIMARY KEY,
   loc_id INT NOT NULL,
   name VARCHAR(50) NOT NULL,
-)
+
+  FOREIGN KEY (loc_id) REFERENCES location(id)
+);
 
 CREATE TABLE area_encounter (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -50,7 +55,10 @@ CREATE TABLE area_encounter (
   encounter_method VARCHAR(50),
   max_level INT CHECK(max_level > 0 && max_level < 101),
   min_level INT CHECK(min_level > 0 && min_level < 101),
-)
+
+  FOREIGN KEY (area_id) REFERENCES area(id),
+  FOREIGN KEY (pokemon_id) REFERENCES pokemon(id)
+);
 
 CREATE TABLE item (
   id INT AUTO_INCREMENT PRIMARY KEY,
