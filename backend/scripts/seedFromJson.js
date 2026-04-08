@@ -7,6 +7,7 @@ const { closePool } = require("../db/connection");
 const { waitForDatabase } = require("../db/waitForDatabase");
 const { insertItems } = require("./insertItem");
 const { insertLocations } = require("./insertLocations");
+const { insertPokemonMoves } = require("./insertLearnsets");
 
 const BASE_PATH = path.join(__dirname, "../data");
 
@@ -29,6 +30,18 @@ async function readMovesJson() {
 
   if (!Array.isArray(parsed)) {
     throw new Error("moves.json must contain an array.");
+  }
+
+  return parsed;
+}
+
+async function readPokemonMovesJson() {
+  const INPUT_PATH = path.join(BASE_PATH, "/learnsets.json");
+  const raw = await fs.readFile(INPUT_PATH, "utf8");
+  const parsed = JSON.parse(raw);
+
+  if (!Array.isArray(parsed)) {
+    throw new Error("learnsets.json must contain an array.");
   }
 
   return parsed;
@@ -80,6 +93,10 @@ async function seedFromJson() {
   const move_rows = await readMovesJson();
   await insertMoves(move_rows);
   console.log(`Inserted/updated ${move_rows.length} move rows from JSON.`);
+
+  const pokemon_move_rows = await readPokemonMovesJson();
+  await insertPokemonMoves(pokemon_move_rows);
+  console.log(`Inserted/updated ${pokemon_move_rows.length} learnset rows from JSON.`);
 
   const trainer_rows = await readTrainerJson();
   await insertTrainers(trainer_rows);

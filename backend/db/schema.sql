@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS team_pokemon;
 DROP TABLE IF EXISTS encounter;
 DROP TABLE IF EXISTS ability;
+DROP TABLE IF EXISTS pokemon_move;
 DROP TABLE IF EXISTS move;
 DROP TABLE IF EXISTS item;
 DROP TABLE IF EXISTS trainer;
@@ -87,6 +88,17 @@ CREATE TABLE move (
   power INT NULL,
   accuracy INT NULL CHECK (accuracy BETWEEN 0 AND 100 OR accuracy IS NULL),
   pp INT NOT NULL
+);
+
+CREATE TABLE pokemon_move (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  pokemon_id INT NOT NULL,
+  move_id INT NOT NULL,
+  learn_method VARCHAR(50) NOT NULL,
+  level INT NULL,
+
+  FOREIGN KEY (pokemon_id) REFERENCES pokemon(id),
+  FOREIGN KEY (move_id) REFERENCES move(id)
 );
 
 CREATE TABLE ability(
