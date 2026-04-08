@@ -31,6 +31,27 @@ CREATE TABLE pokemon (
   ability_hidden VARCHAR(50) NULL
 );
 
+CREATE TABLE location (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+)
+
+CREATE TABLE area (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  loc_id INT NOT NULL,
+  name VARCHAR(50) NOT NULL,
+)
+
+CREATE TABLE area_encounter (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  area_id INT NOT NULL,
+  pokemon_id INT NOT NULL,
+  encounter_rate INT NOT NULL CHECK(encounter_rate > 0 && encounter_rate < 101),
+  encounter_method VARCHAR(50),
+  max_level INT CHECK(max_level > 0 && max_level < 101),
+  min_level INT CHECK(min_level > 0 && min_level < 101),
+)
+
 CREATE TABLE item (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
