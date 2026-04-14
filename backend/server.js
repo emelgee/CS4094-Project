@@ -7,6 +7,9 @@ const fs = require("fs/promises");
 const pokemonRoutes = require("./api/pokemon");
 const encounterRoutes = require("./api/encounter");
 const teamRoutes = require("./api/team");
+const abilityRoutes = require("/api/ability")
+const itemRoutes = require("/api/item")
+const routeRoutes = require("/api/route")
 
 const app = express();
 
@@ -17,6 +20,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Server is running" });
 });
 
+app.use("/api/abilities", abilityRoutes)
 app.use("/api/pokemon", pokemonRoutes);
 app.use("/api/encounters", encounterRoutes);
 app.use("/api/team", teamRoutes);

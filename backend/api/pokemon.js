@@ -100,6 +100,42 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// GET /api/pokemon/:id/locations
+// Returns all locations (and areas) where a given pokemon can be found
+router.get("/:id/locations", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [pokemon] = await db.pool.query("SELECT id, name FROM pokemon WHERE id = ?", [id]);
+    if (pokemon.length === 0) {
+      return res.status(404).json({ error: "Pokemon not found" });
+    }
+
+    const query = `
+      SELECT
+        l.id AS location_id,
+        l.name AS location_name,
+        a.id AS area_id,
+        a.name AS area_name,
+        ae.encounter_rate,
+        ae.encounter_method,
+        ae.min_level,
+        ae.max_level
+      FROM area_encounter ae
+      JOIN area a ON ae.area_id = a.id
+      JOIN location l ON a.loc_id = l.id
+      WHERE ae.pokemon_id = ?
+      ORDER BY l.name ASC, a.name ASC
+    `;
+
+    const [rows] = await db.pool.query(query, [id]);
+    res.json(rows);
+  } catch (err) {
+    console.error("GET /api/pokemon/:id/locations error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
 /* COMMENTED OUT BECAUSE NOT USED
 // POST /api/pokemon/damage
 // Body: { attacker_id, defender_id, move_id, conditions }

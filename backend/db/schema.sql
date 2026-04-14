@@ -116,10 +116,10 @@ CREATE TABLE encounter (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   pokemon_id INT NOT NULL,
-  location VARCHAR(50),
+  location_id INT,
   nickname VARCHAR(20),
-  ability VARCHAR(50),
-  nature VARCHAR(20) NOT NULL DEFAULT 'serious',
+  ability_id VARCHAR(50),
+  nature VARCHAR(20) NOT NULL DEFAULT 'hardy',
   level INT NOT NULL DEFAULT 50 CHECK (level BETWEEN 1 and 100),
 
   hp_iv INT NOT NULL DEFAULT 31 CHECK (hp_iv BETWEEN 0 AND 31),
@@ -150,6 +150,8 @@ CREATE TABLE encounter (
   status VARCHAR(20),
 
   FOREIGN KEY (item_id) REFERENCES item(id),
+  FOREIGN KEY (ability_id) REFERENCES ability(id),
+  FOREIGN KEY (location_id) REFERENCES location(id),
   FOREIGN KEY (move1_id) REFERENCES move(id),
   FOREIGN KEY (move2_id) REFERENCES move(id),
   FOREIGN KEY (move3_id) REFERENCES move(id),
