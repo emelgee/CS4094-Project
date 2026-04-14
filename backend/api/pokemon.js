@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
-const { calculateDamage } = require("../calc/damageFormula");
 
 // GET /api/pokemon
 // Optional: ?search=bre
@@ -101,6 +100,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+/* COMMENTED OUT BECAUSE NOT USED
 // POST /api/pokemon/damage
 // Body: { attacker_id, defender_id, move_id, conditions }
 router.post("/damage", async (req, res) => {
@@ -179,5 +179,6 @@ router.post("/damage", async (req, res) => {
 function calculateStat(base, iv, ev) {
   return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * 50) / 100 + 5);
 }
+*/
 
 module.exports = router;
