@@ -25,16 +25,12 @@ router.get("/", async (req, res) => {
 });
 
 // GET /api/abilities/25
-router.get("/id:", async (req, res) => {
+router.get("/:id", async (req, res) => {
     try {;
-
-        let query = `
-        SELECT * FROM ability WHERE id = ?"
-        `;
-        let params = [];
-
-        const [rows] = await db.pool.query(query, params);
-        res.json(rows);
+        const { id } = req.params;
+        const [rows] = await db.pool.query("SELECT * FROM ability WHERE id = ?", [id]);
+        if (rows.length === 0) return res.status(404).json({ error: "Ability not found" });
+        res.json(rows[0]);
     } catch (err) {
         console.error("GET /api/abilities/id: error:", err);
         res.status(500).json({ error: "Database error" });
@@ -42,7 +38,7 @@ router.get("/id:", async (req, res) => {
 });
 
 // GET /api/abilities/25/pokemon
-router.get("/id:/pokemon", async (req, res) => {
+router.get("/:id/pokemon", async (req, res) => {
     try {;
 
         let query = `
@@ -50,9 +46,10 @@ router.get("/id:/pokemon", async (req, res) => {
         WHERE ability1 = ? OR ability2 = ? OR ability_hidden = ?
         ORDER BY id ASC
         `;
-        let params = [];
 
-        const [rows] = await db.pool.query(query, params);
+        const { id } = req.params;
+        const [rows] = await db.pool.query(query, [id, id, id]); // not req.params
+        if (rows.length === 0) return res.status(404).json({ error: "No pokemon found with that ability" });
         res.json(rows);
     } catch (err) {
         console.error("GET /api/abilities/id:/pokemon error:", err);
@@ -60,3 +57,4 @@ router.get("/id:/pokemon", async (req, res) => {
     }
 });
 
+module.exports = router;

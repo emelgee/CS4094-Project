@@ -7,9 +7,9 @@ const fs = require("fs/promises");
 const pokemonRoutes = require("./api/pokemon");
 const encounterRoutes = require("./api/encounter");
 const teamRoutes = require("./api/team");
-const abilityRoutes = require("/api/ability")
-const itemRoutes = require("/api/item")
-const routeRoutes = require("/api/route")
+const abilityRoutes = require("./api/ability");
+const itemRoutes = require("./api/item");
+const routeRoutes = require("./api/route");
 
 const app = express();
 
@@ -24,6 +24,8 @@ app.use("/api/abilities", abilityRoutes)
 app.use("/api/pokemon", pokemonRoutes);
 app.use("/api/encounters", encounterRoutes);
 app.use("/api/team", teamRoutes);
+app.use("/api/items", itemRoutes);
+app.use("/api/locations", routeRoutes);
 
 // GET /api/trainers
 app.get("/api/trainers", async (req, res) => {
@@ -103,6 +105,4 @@ function parseJsonField(value) {
   return [];
 }
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
-});
+module.exports = app;

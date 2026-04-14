@@ -41,3 +41,5 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
+
+module.exports = router;

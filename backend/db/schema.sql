@@ -118,7 +118,7 @@ CREATE TABLE encounter (
   pokemon_id INT NOT NULL,
   location_id INT,
   nickname VARCHAR(20),
-  ability_id VARCHAR(50),
+  ability_id INT NULL,
   nature VARCHAR(20) NOT NULL DEFAULT 'hardy',
   level INT NOT NULL DEFAULT 50 CHECK (level BETWEEN 1 and 100),
 
