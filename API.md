@@ -137,7 +137,42 @@ Returns all locations and areas where the given pokemon can be encountered in th
 
 ---
 
-### GET `/pokemon/moves`
+### GET `/pokemon/:id/moves`
+Returns all moves a pokemon can learn, including learn method and level.
+
+**Response** `200 OK`
+```json
+[
+  {
+    "move_id": 10,
+    "move_name": "scratch",
+    "type": "normal",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 35,
+    "learn_method": "level-up",
+    "level": 1
+  },
+  {
+    "move_id": 52,
+    "move_name": "ember",
+    "type": "fire",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "learn_method": "level-up",
+    "level": 7
+  }
+]
+```
+
+**Errors**
+- `404 Not Found` — pokemon not found
+---
+
+## Moves
+
+### GET `/moves`
 Returns a list of all moves, with optional filtering and sorting.
 
 **Query Parameters**
@@ -163,7 +198,7 @@ Returns a list of all moves, with optional filtering and sorting.
 
 ---
 
-### GET `/pokemon/moves/:id`
+### GET `/moves/:id`
 Returns a single move by ID.
 
 **Response** `200 OK` — single move object (same shape as above)

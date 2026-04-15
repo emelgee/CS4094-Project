@@ -10,6 +10,7 @@ const teamRoutes = require("./api/team");
 const abilityRoutes = require("./api/ability");
 const itemRoutes = require("./api/item");
 const routeRoutes = require("./api/route");
+const moveRoutes = require("./api/move");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("/api/encounters", encounterRoutes);
 app.use("/api/team", teamRoutes);
 app.use("/api/items", itemRoutes);
 app.use("/api/locations", routeRoutes);
+app.use("/api/moves", moveRoutes);
 
 // GET /api/trainers
 app.get("/api/trainers", async (req, res) => {
