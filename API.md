@@ -329,6 +329,27 @@ Returns all encounters for a given user, including basic pokemon info.
 
 ---
 
+### GET `/encounters/encounter/:id`
+Returns one encounter based on encounter ID:
+
+**Response** `200 OK`
+```json
+  {
+  "id": 1,
+  "user_id": 1,
+  "pokemon_id": 4,
+  "pokemon_name": "charmander",
+  "type1": "fire",
+  "type2": null,
+  "nickname": "Charmy",
+  "nature": "adamant",
+  "level": 10,
+  ...
+}
+```
+
+---
+
 ### POST `/encounters`
 Creates a new encounter.
 

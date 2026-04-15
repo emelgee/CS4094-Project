@@ -63,6 +63,44 @@ describe("GET /api/encounters/:user_id", () => {
   });
 });
 
+// ─── GET /api/encounters/encounter/:id ─────────────────────────────────────────────
+
+describe("GET /api/encounters/encounter/:id", () => {
+  it("returns an encounter based on given encounter id", async () => {
+    const mockJson = 
+      { ...mockEncounter, id: 1, pokemon_name: "charmander", type1: "fire", type2: null }
+    ;
+    db.pool.query.mockResolvedValueOnce([mockJson]);
+
+    const res = await request(app).get("/api/encounters/encounter/1");
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual(mockJson);
+    expect(db.pool.query).toHaveBeenCalledWith(
+      expect.stringContaining("JOIN pokemon"),
+      ["1"]
+    );
+  });
+
+  it("returns empty array when user has no encounters", async () => {
+    db.pool.query.mockResolvedValueOnce([[]]);
+
+    const res = await request(app).get("/api/encounters/999");
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual([]);
+  });
+
+  it("returns 500 on database error", async () => {
+    db.pool.query.mockRejectedValueOnce(new Error("DB error"));
+
+    const res = await request(app).get("/api/encounters/1");
+
+    expect(res.statusCode).toBe(500);
+    expect(res.body).toEqual({ error: "Database error" });
+  });
+});
+
 // ─── POST /api/encounters ─────────────────────────────────────────────────────
 
 describe("POST /api/encounters", () => {
