@@ -408,14 +408,15 @@ export default function App() {
               onUpdate={handleUpdateEncounter}
             />
           )}
-          {screen === "calculator" && (
+          <div style={{ display: screen === "calculator" ? "" : "none" }}>
             <CalculatorScreen
               onNavigate={navigate}
               encounters={encounters}
               party={party}
               onRefreshEncounters={fetchEncounters}
+              visible={screen === "calculator"}
             />
-          )}
+          </div>
           {screen === "ivev" && <IvEvScreen />}
           {screen === "trainer" && <TrainerScreen />}
           {screen === "boss" && <BossScreen onNavigate={navigate} />}

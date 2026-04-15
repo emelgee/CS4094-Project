@@ -8,11 +8,20 @@ router.get("/", async (req, res) => {
   try {
     const { search } = req.query;
 
-    let query = "SELECT * FROM pokemon ORDER BY id ASC";
+    const baseQuery = `
+      SELECT p.id, p.name, p.hp, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed, p.type1, p.type2,
+             a1.name AS ability1, a2.name AS ability2, ah.name AS ability_hidden
+      FROM pokemon p
+      LEFT JOIN ability a1 ON p.ability1 = a1.id
+      LEFT JOIN ability a2 ON p.ability2 = a2.id
+      LEFT JOIN ability ah ON p.ability_hidden = ah.id
+    `;
+
+    let query = baseQuery + "ORDER BY p.id ASC";
     let params = [];
 
     if (search && search.trim()) {
-      query = "SELECT * FROM pokemon WHERE name LIKE ? ORDER BY id ASC";
+      query = baseQuery + "WHERE p.name LIKE ? ORDER BY p.id ASC";
       params = [`${search.trim()}%`];
     }
 
@@ -28,7 +37,13 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const [rows] = await db.pool.query(
-      "SELECT * FROM pokemon WHERE id = ?",
+      `SELECT p.id, p.name, p.hp, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed, p.type1, p.type2,
+              a1.name AS ability1, a2.name AS ability2, ah.name AS ability_hidden
+       FROM pokemon p
+       LEFT JOIN ability a1 ON p.ability1 = a1.id
+       LEFT JOIN ability a2 ON p.ability2 = a2.id
+       LEFT JOIN ability ah ON p.ability_hidden = ah.id
+       WHERE p.id = ?`,
       [req.params.id]
     );
 
@@ -49,7 +64,10 @@ router.get("/:id/moves", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const [pokemon] = await db.pool.query("SELECT id, name FROM pokemon WHERE id = ?", [id]);
+    const [pokemon] = await db.pool.query(
+      "SELECT id, name FROM pokemon WHERE id = ?",
+      [id]
+    );
     if (pokemon.length === 0) {
       return res.status(404).json({ error: "Pokemon not found" });
     }
@@ -84,7 +102,10 @@ router.get("/:id/locations", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const [pokemon] = await db.pool.query("SELECT id, name FROM pokemon WHERE id = ?", [id]);
+    const [pokemon] = await db.pool.query(
+      "SELECT id, name FROM pokemon WHERE id = ?",
+      [id]
+    );
     if (pokemon.length === 0) {
       return res.status(404).json({ error: "Pokemon not found" });
     }

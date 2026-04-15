@@ -23,7 +23,7 @@ describe("GET /api/pokemon", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual(mockPokemon);
     expect(db.pool.query).toHaveBeenCalledWith(
-      "SELECT * FROM pokemon ORDER BY id ASC",
+      expect.stringContaining("FROM pokemon p"),
       []
     );
   });
@@ -35,7 +35,7 @@ describe("GET /api/pokemon", () => {
 
     expect(res.statusCode).toBe(200);
     expect(db.pool.query).toHaveBeenCalledWith(
-      "SELECT * FROM pokemon WHERE name LIKE ? ORDER BY id ASC",
+      expect.stringContaining("WHERE p.name LIKE ?"),
       ["bulb%"]
     );
   });
@@ -54,7 +54,12 @@ describe("GET /api/pokemon", () => {
 
 describe("GET /api/pokemon/:id", () => {
   it("returns a single pokemon by id", async () => {
-    const mockPokemon = { id: 1, name: "bulbasaur", type1: "grass", type2: "poison" };
+    const mockPokemon = {
+      id: 1,
+      name: "bulbasaur",
+      type1: "grass",
+      type2: "poison",
+    };
     db.pool.query.mockResolvedValueOnce([[mockPokemon]]);
 
     const res = await request(app).get("/api/pokemon/1");
