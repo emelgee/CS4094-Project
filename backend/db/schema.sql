@@ -1,10 +1,14 @@
 DROP TABLE IF EXISTS team_pokemon;
 DROP TABLE IF EXISTS encounter;
-DROP TABLE IF EXISTS ability;
+DROP TABLE IF EXISTS pokemon_move;
 DROP TABLE IF EXISTS move;
 DROP TABLE IF EXISTS item;
 DROP TABLE IF EXISTS trainer;
+DROP TABLE IF EXISTS area_encounter;
+DROP TABLE IF EXISTS area;
+DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS pokemon;
+DROP TABLE IF EXISTS ability;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
@@ -13,6 +17,13 @@ CREATE TABLE users (
   email VARCHAR(100) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ability(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  effect TEXT,
+  flavor_text TEXT
 );
 
 CREATE TABLE pokemon (
@@ -26,14 +37,48 @@ CREATE TABLE pokemon (
   speed INT NOT NULL,
   type1 VARCHAR(20) NOT NULL,
   type2 VARCHAR(20) NULL,
-  ability1 VARCHAR(50) NULL,
-  ability2 VARCHAR(50) NULL,
-  ability_hidden VARCHAR(50) NULL
+  ability1 INT NULL,
+  ability2 INT NULL,
+  ability_hidden INT NULL,
+
+  FOREIGN KEY (ability1) REFERENCES ability(id),
+  FOREIGN KEY (ability2) REFERENCES ability(id),
+  FOREIGN KEY (ability_hidden) REFERENCES ability(id)
+);
+
+CREATE TABLE location (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE area (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  loc_id INT NOT NULL,
+  name VARCHAR(50) NOT NULL,
+
+  FOREIGN KEY (loc_id) REFERENCES location(id)
+);
+
+CREATE TABLE area_encounter (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  area_id INT NOT NULL,
+  pokemon_id INT NOT NULL,
+  encounter_rate INT NOT NULL CHECK(encounter_rate > 0 && encounter_rate < 101),
+  encounter_method VARCHAR(50),
+  max_level INT CHECK(max_level > 0 && max_level < 101),
+  min_level INT CHECK(min_level > 0 && min_level < 101),
+
+  FOREIGN KEY (area_id) REFERENCES area(id),
+  FOREIGN KEY (pokemon_id) REFERENCES pokemon(id)
 );
 
 CREATE TABLE item (
-  id INT PRIMARY KEY,
-  name VARCHAR(20) NOT NULL
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  category VARCHAR(50),
+  effect TEXT NULL,
+  effect_long TEXT NULL,
+  flavor_text TEXT NULL
 );
 
 CREATE TABLE trainer (
@@ -56,20 +101,24 @@ CREATE TABLE move (
   pp INT NOT NULL
 );
 
-CREATE TABLE ability(
-  id INT PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
-  effect JSON NOT NULL,
-  flavorText VARCHAR(255)
+CREATE TABLE pokemon_move (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  pokemon_id INT NOT NULL,
+  move_id INT NOT NULL,
+  learn_method VARCHAR(50) NOT NULL,
+  level INT NULL,
+
+  FOREIGN KEY (pokemon_id) REFERENCES pokemon(id),
+  FOREIGN KEY (move_id) REFERENCES move(id)
 );
 
 CREATE TABLE encounter (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   pokemon_id INT NOT NULL,
-  location VARCHAR(50),
+  location_id INT,
   nickname VARCHAR(20),
-  ability VARCHAR(50),
+  ability_id INT NULL,
   nature VARCHAR(20) NOT NULL DEFAULT 'hardy',
   level INT NOT NULL DEFAULT 50 CHECK (level BETWEEN 1 and 100),
 
@@ -104,6 +153,8 @@ CREATE TABLE encounter (
   UNIQUE (user_id, team_slot),
 
   FOREIGN KEY (item_id) REFERENCES item(id),
+  FOREIGN KEY (ability_id) REFERENCES ability(id),
+  FOREIGN KEY (location_id) REFERENCES location(id),
   FOREIGN KEY (move1_id) REFERENCES move(id),
   FOREIGN KEY (move2_id) REFERENCES move(id),
   FOREIGN KEY (move3_id) REFERENCES move(id),

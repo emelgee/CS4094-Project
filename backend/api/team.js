@@ -14,16 +14,19 @@ router.get("/:user_id", async (req, res) => {
         e.status, e.item_id,
         p.id AS pokemon_id, p.name, p.type1, p.type2,
         p.hp, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed,
-        p.ability1, p.ability2, p.ability_hidden,
+        a1.name AS ability1, a2.name AS ability2, ah.name AS ability_hidden,
         m1.name AS move1, m2.name AS move2, m3.name AS move3, m4.name AS move4
-       FROM encounter e
-       JOIN pokemon p ON e.pokemon_id = p.id
-       LEFT JOIN move m1 ON e.move1_id = m1.id
-       LEFT JOIN move m2 ON e.move2_id = m2.id
-       LEFT JOIN move m3 ON e.move3_id = m3.id
-       LEFT JOIN move m4 ON e.move4_id = m4.id
-       WHERE e.user_id = ?
-       ORDER BY e.team_slot ASC, e.id ASC`,
+       FROM team_pokemon t
+       JOIN pokemon p ON t.pokemon_id = p.id
+       LEFT JOIN ability a1 ON p.ability1 = a1.id
+       LEFT JOIN ability a2 ON p.ability2 = a2.id
+       LEFT JOIN ability ah ON p.ability_hidden = ah.id
+       LEFT JOIN move m1 ON t.move1_id = m1.id
+       LEFT JOIN move m2 ON t.move2_id = m2.id
+       LEFT JOIN move m3 ON t.move3_id = m3.id
+       LEFT JOIN move m4 ON t.move4_id = m4.id
+       WHERE t.user_id = ?
+       ORDER BY t.slot ASC, t.id ASC`,
       [req.params.user_id]
     );
     res.json(rows);

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --verbose",
     "db:init": "node scripts/initDatabase.js",
     "db:seed": "node scripts/seedFromJson.js",
     "db:load": "npm run db:init && npm run db:seed"
@@ -26,5 +26,9 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "mysql2": "^3.18.1"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "supertest": "^7.2.2"
   }
 }

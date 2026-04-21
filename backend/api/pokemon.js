@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
-const { calculateDamage } = require("../calc/damageFormula");
 
 // GET /api/pokemon
 // Optional: ?search=bre
@@ -9,11 +8,20 @@ router.get("/", async (req, res) => {
   try {
     const { search } = req.query;
 
-    let query = "SELECT * FROM pokemon ORDER BY id ASC";
+    const baseQuery = `
+      SELECT p.id, p.name, p.hp, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed, p.type1, p.type2,
+             a1.name AS ability1, a2.name AS ability2, ah.name AS ability_hidden
+      FROM pokemon p
+      LEFT JOIN ability a1 ON p.ability1 = a1.id
+      LEFT JOIN ability a2 ON p.ability2 = a2.id
+      LEFT JOIN ability ah ON p.ability_hidden = ah.id
+    `;
+
+    let query = baseQuery + "ORDER BY p.id ASC";
     let params = [];
 
     if (search && search.trim()) {
-      query = "SELECT * FROM pokemon WHERE name LIKE ? ORDER BY id ASC";
+      query = baseQuery + "WHERE p.name LIKE ? ORDER BY p.id ASC";
       params = [`${search.trim()}%`];
     }
 
@@ -25,68 +33,17 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/pokemon/moves — must be registered before /:id so "moves" is not captured as an id
-// Optional: ?search=thunder ?type=fire ?orderBy=power
-router.get("/moves", async (req, res) => {
-  try {
-    const { search, type, orderBy } = req.query;
-
-    let query = "SELECT * FROM move";
-    let params = [];
-    let conditions = [];
-
-    if (search && search.trim()) {
-      conditions.push("name LIKE ?");
-      params.push(`${search.trim()}%`);
-    }
-
-    if (type && type.trim()) {
-      conditions.push("type = ?");
-      params.push(type.trim().toLowerCase());
-    }
-
-    if (conditions.length > 0) {
-      query += " WHERE " + conditions.join(" AND ");
-    }
-
-    if (orderBy === "power") {
-      query += " ORDER BY power DESC";
-    } else {
-      query += " ORDER BY id ASC";
-    }
-
-    const [rows] = await db.pool.query(query, params);
-    res.json(rows);
-  } catch (err) {
-    console.error("GET /api/moves error:", err);
-    res.status(500).json({ error: "Database error" });
-  }
-});
-
-// GET /api/pokemon/moves/:id
-router.get("/moves/:id", async (req, res) => {
-  try {
-    const [rows] = await db.pool.query(
-      "SELECT * FROM move WHERE id = ?",
-      [req.params.id]
-    );
-
-    if (rows.length === 0) {
-      return res.status(404).json({ error: "Move not found" });
-    }
-
-    res.json(rows[0]);
-  } catch (err) {
-    console.error("GET /api/moves/:id error:", err);
-    res.status(500).json({ error: "Database error" });
-  }
-});
-
 // GET /api/pokemon/:id
 router.get("/:id", async (req, res) => {
   try {
     const [rows] = await db.pool.query(
-      "SELECT * FROM pokemon WHERE id = ?",
+      `SELECT p.id, p.name, p.hp, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed, p.type1, p.type2,
+              a1.name AS ability1, a2.name AS ability2, ah.name AS ability_hidden
+       FROM pokemon p
+       LEFT JOIN ability a1 ON p.ability1 = a1.id
+       LEFT JOIN ability a2 ON p.ability2 = a2.id
+       LEFT JOIN ability ah ON p.ability_hidden = ah.id
+       WHERE p.id = ?`,
       [req.params.id]
     );
 
@@ -101,6 +58,84 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// GET /api/pokemon/:id/moves
+// Returns all moves a pokemon can learn, with learn method and level
+router.get("/:id/moves", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [pokemon] = await db.pool.query(
+      "SELECT id, name FROM pokemon WHERE id = ?",
+      [id]
+    );
+    if (pokemon.length === 0) {
+      return res.status(404).json({ error: "Pokemon not found" });
+    }
+
+    const query = `
+      SELECT
+        m.id AS move_id,
+        m.name AS move_name,
+        m.type,
+        m.power,
+        m.accuracy,
+        m.pp,
+        pm.learn_method,
+        pm.level
+      FROM pokemon_move pm
+      JOIN move m ON pm.move_id = m.id
+      WHERE pm.pokemon_id = ?
+      ORDER BY pm.learn_method ASC, pm.level ASC
+    `;
+
+    const [rows] = await db.pool.query(query, [id]);
+    res.json(rows);
+  } catch (err) {
+    console.error("GET /api/pokemon/:id/moves error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
+// GET /api/pokemon/:id/locations
+// Returns all locations (and areas) where a given pokemon can be found
+router.get("/:id/locations", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [pokemon] = await db.pool.query(
+      "SELECT id, name FROM pokemon WHERE id = ?",
+      [id]
+    );
+    if (pokemon.length === 0) {
+      return res.status(404).json({ error: "Pokemon not found" });
+    }
+
+    const query = `
+      SELECT
+        l.id AS location_id,
+        l.name AS location_name,
+        a.id AS area_id,
+        a.name AS area_name,
+        ae.encounter_rate,
+        ae.encounter_method,
+        ae.min_level,
+        ae.max_level
+      FROM area_encounter ae
+      JOIN area a ON ae.area_id = a.id
+      JOIN location l ON a.loc_id = l.id
+      WHERE ae.pokemon_id = ?
+      ORDER BY l.name ASC, a.name ASC
+    `;
+
+    const [rows] = await db.pool.query(query, [id]);
+    res.json(rows);
+  } catch (err) {
+    console.error("GET /api/pokemon/:id/locations error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
+/* COMMENTED OUT BECAUSE NOT USED
 // POST /api/pokemon/damage
 // Body: { attacker_id, defender_id, move_id, conditions }
 router.post("/damage", async (req, res) => {
@@ -179,5 +214,6 @@ router.post("/damage", async (req, res) => {
 function calculateStat(base, iv, ev) {
   return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * 50) / 100 + 5);
 }
+*/
 
 module.exports = router;

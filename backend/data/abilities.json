@@ -1,0 +1,458 @@
+[
+  {
+    "id": 1,
+    "name": "stench",
+    "flavor_text": "Helps repel wild POKéMON.",
+    "effect": "Has no effect in battle."
+  },
+  {
+    "id": 2,
+    "name": "drizzle",
+    "flavor_text": "Summons rain in battle.",
+    "effect": "The weather changes to rain when this Pokémon enters battle and does not end unless replaced by another weather condition.\n\nIf multiple Pokémon with this ability, drought, sand stream, or snow warning are sent out at the same time, the abilities will activate in order of Speed, respecting trick room.  Each ability's weather will cancel the previous weather, and only the weather summoned by the slowest of the Pokémon will stay."
+  },
+  {
+    "id": 3,
+    "name": "speed-boost",
+    "flavor_text": "Gradually boosts SPEED.",
+    "effect": "This Pokémon's Speed rises one stage after each turn."
+  },
+  {
+    "id": 4,
+    "name": "battle-armor",
+    "flavor_text": "Blocks critical hits.",
+    "effect": "Moves cannot score critical hits against this Pokémon.\n\nThis ability functions identically to shell armor."
+  },
+  {
+    "id": 5,
+    "name": "sturdy",
+    "flavor_text": "Negates 1-hit KO attacks.",
+    "effect": "Does not prevent regular KOs from full HP."
+  },
+  {
+    "id": 6,
+    "name": "damp",
+    "flavor_text": "Prevents self-destruction.",
+    "effect": "While this Pokémon is in battle, self destruct and explosion will fail and aftermath will not take effect."
+  },
+  {
+    "id": 7,
+    "name": "limber",
+    "flavor_text": "Prevents paralysis.",
+    "effect": "This Pokémon cannot be paralyzed.\n\nIf a Pokémon is paralyzed and acquires this ability, its paralysis is healed; this includes when regaining a lost ability upon leaving battle."
+  },
+  {
+    "id": 8,
+    "name": "sand-veil",
+    "flavor_text": "Ups evasion in a sandstorm.",
+    "effect": "During a sandstorm, this Pokémon has 1.25× its evasion, and it does not take sandstorm damage regardless of type.\n\nThe evasion bonus does not count as a stat modifier.\n\nOverworld: If the lead Pokémon has this ability, the wild encounter rate is halved in a sandstorm."
+  },
+  {
+    "id": 9,
+    "name": "static",
+    "flavor_text": "Paralyzes on contact.",
+    "effect": "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being paralyzed.\n\nPokémon that are immune to electric-type moves can still be paralyzed by this ability.\n\nOverworld: If the lead Pokémon has this ability, there is a 50% chance that encounters will be with an electric Pokémon, if applicable."
+  },
+  {
+    "id": 10,
+    "name": "volt-absorb",
+    "flavor_text": "Turns electricity into HP.",
+    "effect": "Does not absorb non-damaging electric moves, i.e. thunder wave."
+  },
+  {
+    "id": 11,
+    "name": "water-absorb",
+    "flavor_text": "Changes water into HP.",
+    "effect": "Whenever a water-type move hits this Pokémon, it heals for 1/4 of its maximum HP, negating any other effect on it.\n\nWater moves will ignore this Pokémon's substitute."
+  },
+  {
+    "id": 12,
+    "name": "oblivious",
+    "flavor_text": "Prevents attraction.",
+    "effect": "This Pokémon cannot be infatuated and is immune to captivate.\n\nIf a Pokémon is infatuated and acquires this ability, its infatuation is cleared."
+  },
+  {
+    "id": 13,
+    "name": "cloud-nine",
+    "flavor_text": "Negates weather effects.",
+    "effect": "While this Pokémon is in battle, weather can still be in play, but will not have any of its effects.\n\nThis ability functions identically to air lock."
+  },
+  {
+    "id": 14,
+    "name": "compound-eyes",
+    "flavor_text": "Raises accuracy.",
+    "effect": "This Pokémon's moves have 1.3× their accuracy.\n\nThis ability has no effect on the one-hit KO moves (fissure, guillotine, horn drill, and sheer cold).\n\nOverworld: If the first Pokémon in the party has this ability, the chance of a wild Pokémon holding a particular item is raised from 50%, 5%, or 1% to 60%, 20%, or 5%, respectively."
+  },
+  {
+    "id": 15,
+    "name": "insomnia",
+    "flavor_text": "Prevents sleep.",
+    "effect": "This Pokémon cannot be asleep.\n\nThis causes rest to fail altogether.  If a Pokémon is asleep and acquires this ability, it will immediately wake up; this includes when regaining a lost ability upon leaving battle.\n\nThis ability functions identically to vital spirit in battle."
+  },
+  {
+    "id": 16,
+    "name": "color-change",
+    "flavor_text": "Changes type to foe’s move.",
+    "effect": "Triggers on every hit of multiple-hit moves."
+  },
+  {
+    "id": 17,
+    "name": "immunity",
+    "flavor_text": "Prevents poisoning.",
+    "effect": "This Pokémon cannot be poisoned.  This includes bad poison.\n\nIf a Pokémon is poisoned and acquires this ability, its poison is healed; this includes when regaining a lost ability upon leaving battle."
+  },
+  {
+    "id": 18,
+    "name": "flash-fire",
+    "flavor_text": "Powers up if hit by fire.",
+    "effect": "will o wisp does not trigger this ability for Pokémon immune to burns."
+  },
+  {
+    "id": 19,
+    "name": "shield-dust",
+    "flavor_text": "Prevents added effects.",
+    "effect": "This Pokémon is immune to the extra effects of moves used against it.\n\nAn extra effect is a move's chance, listed as an \"effect chance\", to inflict a status ailment, cause a stat change, or make the target flinch in addition to the move's main effect.  For example, thunder shock's paralysis is an extra effect, but thunder wave's is not, nor are knock off's item removal and air cutter's increased critical hit rate."
+  },
+  {
+    "id": 20,
+    "name": "own-tempo",
+    "flavor_text": "Prevents confusion.",
+    "effect": "This Pokémon cannot be confused.\n\nIf a Pokémon is confused and acquires this ability, its confusion will immediately be healed."
+  },
+  {
+    "id": 21,
+    "name": "suction-cups",
+    "flavor_text": "Firmly anchors the body.",
+    "effect": "This Pokémon cannot be forced out of battle by moves such as whirlwind.\n\ndragon tail and circle throw still inflict damage against this Pokémon.\n\nOverworld: If the lead Pokémon has this ability, the success rate while fishing is increased."
+  },
+  {
+    "id": 22,
+    "name": "intimidate",
+    "flavor_text": "Lowers the foe’s ATTACK.",
+    "effect": "Does not take effect if acquired after entering battle."
+  },
+  {
+    "id": 23,
+    "name": "shadow-tag",
+    "flavor_text": "Prevents the foe’s escape.",
+    "effect": "Affects other Pokémon with this ability."
+  },
+  {
+    "id": 24,
+    "name": "rough-skin",
+    "flavor_text": "Hurts to touch.",
+    "effect": "Inflicts only 1/16 of the attacker's maximum HP in damage."
+  },
+  {
+    "id": 25,
+    "name": "wonder-guard",
+    "flavor_text": "“Super effective” hits.",
+    "effect": "fire fang and moves that inflict typeless damage ignore this ability regardless of type."
+  },
+  {
+    "id": 26,
+    "name": "levitate",
+    "flavor_text": "Not hit by GROUND attacks.",
+    "effect": "This Pokémon is immune to ground-type moves, spikes, toxic spikes, and arena trap.\n\nThis ability is disabled during gravity or ingrain, or while holding an iron ball.  This ability is not disabled during roost."
+  },
+  {
+    "id": 27,
+    "name": "effect-spore",
+    "flavor_text": "Leaves spores on contact.",
+    "effect": "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being paralyzed, poisoned, or put to sleep, chosen at random.\n\nNothing is done to compensate if the move's user is immune to one of these ailments; there is simply a lower chance that the move's user will be affected."
+  },
+  {
+    "id": 28,
+    "name": "synchronize",
+    "flavor_text": "Passes on status problems.",
+    "effect": "Cannot influence the natures of Pokémon encountered by interacting with them on the overworld."
+  },
+  {
+    "id": 29,
+    "name": "clear-body",
+    "flavor_text": "Prevents ability reduction.",
+    "effect": "This Pokémon cannot have its stats lowered by other Pokémon.\n\nThis ability does not prevent any stat losses other than stat modifiers, such as the Speed cut from paralysis.  This Pokémon can still be passed negative stat modifiers through guard swap, heart swap, or power swap.\n\nThis ability functions identically to white smoke in battle."
+  },
+  {
+    "id": 30,
+    "name": "natural-cure",
+    "flavor_text": "Heals upon switching out.",
+    "effect": "This Pokémon is cured of any major status ailment when it is switched out for another Pokémon.\n\nIf this ability is acquired during battle, the Pokémon is cured upon leaving battle before losing the temporary ability."
+  },
+  {
+    "id": 31,
+    "name": "lightning-rod",
+    "flavor_text": "Draws electrical moves.",
+    "effect": "Does not affect non-damaging electric moves, i.e. thunder wave.  Increases the frequency of Match Call calls on the overworld if any party Pokémon has this ability."
+  },
+  {
+    "id": 32,
+    "name": "serene-grace",
+    "flavor_text": "Promotes added effects.",
+    "effect": "This Pokémon's moves have twice their usual effect chance.\n\nAn effect chance is a move's chance to inflict a status ailment, cause a stat change, or make the target flinch in addition to the move's main effect.  For example, flamethrower's chance of burning the target is doubled, but protect's chance of success and air cutter's increased critical hit rate are unaffected.\n\nsecret power is unaffected."
+  },
+  {
+    "id": 33,
+    "name": "swift-swim",
+    "flavor_text": "Raises SPEED in rain.",
+    "effect": "This Pokémon's Speed is doubled during rain.\n\nThis bonus does not count as a stat modifier."
+  },
+  {
+    "id": 34,
+    "name": "chlorophyll",
+    "flavor_text": "Raises SPEED in sunshine.",
+    "effect": "This Pokémon's Speed is doubled during strong sunlight.\n\nThis bonus does not count as a stat modifier."
+  },
+  {
+    "id": 35,
+    "name": "illuminate",
+    "flavor_text": "Encounter rate increases.",
+    "effect": "Overworld: If the lead Pokémon has this ability, the wild encounter rate is doubled.\n\nThis ability has no effect in battle."
+  },
+  {
+    "id": 36,
+    "name": "trace",
+    "flavor_text": "Copies special ability.",
+    "effect": "Can copy forecast and trace."
+  },
+  {
+    "id": 37,
+    "name": "huge-power",
+    "flavor_text": "Raises ATTACK.",
+    "effect": "This Pokémon's Attack is doubled while in battle.\n\nThis bonus does not count as a stat modifier.\n\nThis ability functions identically to pure power."
+  },
+  {
+    "id": 38,
+    "name": "poison-point",
+    "flavor_text": "Poisons foe on contact.",
+    "effect": "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being poisoned."
+  },
+  {
+    "id": 39,
+    "name": "inner-focus",
+    "flavor_text": "Prevents flinching.",
+    "effect": "This Pokémon cannot flinch."
+  },
+  {
+    "id": 40,
+    "name": "magma-armor",
+    "flavor_text": "Prevents freezing.",
+    "effect": "This Pokémon cannot be frozen.\n\nIf a Pokémon is frozen and acquires this ability, it will immediately thaw out; this includes when regaining a lost ability upon leaving battle.\n\nOverworld: If any Pokémon in the party has this ability, each egg in the party has its hatch counter decreased by 2 (rather than 1) each step cycle, making eggs hatch roughly twice as quickly.  This effect does not stack if multiple Pokémon have this ability or flame body."
+  },
+  {
+    "id": 41,
+    "name": "water-veil",
+    "flavor_text": "Prevents burns.",
+    "effect": "This Pokémon cannot be burned.\n\nIf a Pokémon is burned and acquires this ability, its burn is healed; this includes when regaining a lost ability upon leaving battle."
+  },
+  {
+    "id": 42,
+    "name": "magnet-pull",
+    "flavor_text": "Traps STEEL-type POKéMON.",
+    "effect": "While this Pokémon is in battle, opposing steel-type Pokémon cannot flee or switch out.\n\nPokémon with run away can still flee.  Pokémon can still switch out with the use of a move or item.\n\nOverworld: If the lead Pokémon has this ability, Steel-type Pokémon have a higher encounter rate."
+  },
+  {
+    "id": 43,
+    "name": "soundproof",
+    "flavor_text": "Avoids sound-based moves.",
+    "effect": "Prevents heal bell from curing the Pokémon, whether or not it is in battle."
+  },
+  {
+    "id": 44,
+    "name": "rain-dish",
+    "flavor_text": "Slight HP recovery in rain.",
+    "effect": "This Pokémon heals for 1/16 of its maximum HP after each turn during rain."
+  },
+  {
+    "id": 45,
+    "name": "sand-stream",
+    "flavor_text": "Summons a sandstorm.",
+    "effect": "The weather changes to a sandstorm when this Pokémon enters battle and does not end unless cancelled by another weather condition.\n\nIf multiple Pokémon with this ability, drizzle, drought, or snow warning are sent out at the same time, the abilities will activate in order of Speed, respecting trick room.  Each ability's weather will cancel the previous weather, and only the weather summoned by the slowest of the Pokémon will stay.\n\nOverworld: If the lead Pokémon has this ability, the wild encounter rate is halved in a sandstorm."
+  },
+  {
+    "id": 46,
+    "name": "pressure",
+    "flavor_text": "Raises foe’s PP usage.",
+    "effect": "Does not affect friendly Pokémon's moves that target all other Pokémon.  This ability's presence is not announced upon entering battle."
+  },
+  {
+    "id": 47,
+    "name": "thick-fat",
+    "flavor_text": "Heat-and-cold protection.",
+    "effect": "This Pokémon takes half as much damage from fire- and ice-type moves."
+  },
+  {
+    "id": 48,
+    "name": "early-bird",
+    "flavor_text": "Awakens quickly from sleep.",
+    "effect": "This Pokémon's remaining sleep turn count falls by 2 rather than 1.\n\nIf this Pokémon's sleep counter is at 1, it will fall to 0 and then the Pokémon will wake up."
+  },
+  {
+    "id": 49,
+    "name": "flame-body",
+    "flavor_text": "Burns the foe on contact.",
+    "effect": "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being burned.\n\nOverworld: If any Pokémon in the party has this ability, each egg in the party has its hatch counter decreased by 2 (rather than 1) each step cycle, making eggs hatch roughly twice as quickly.  This effect does not stack if multiple Pokémon have this ability or magma armor."
+  },
+  {
+    "id": 50,
+    "name": "run-away",
+    "flavor_text": "Makes escaping easier.",
+    "effect": "This Pokémon is always successful fleeing from wild battles, even if trapped by a move or ability."
+  },
+  {
+    "id": 51,
+    "name": "keen-eye",
+    "flavor_text": "Prevents loss of accuracy.",
+    "effect": "This Pokémon cannot have its accuracy lowered.\n\nThis ability does not prevent any accuracy losses other than stat modifiers, such as the accuracy cut from fog; nor does it prevent other Pokémon's evasion from making this Pokémon's moves less accurate.  This Pokémon can still be passed negative accuracy modifiers through heart swap.\n\nOverworld: If the first Pokémon in the party has this ability, any random encounter with a Pokémon five or more levels lower than it has a 50% chance of being skipped."
+  },
+  {
+    "id": 52,
+    "name": "hyper-cutter",
+    "flavor_text": "Prevents ATTACK reduction.",
+    "effect": "Doubles cut's grass-cutting radius on the overworld if any party Pokémon has this ability."
+  },
+  {
+    "id": 53,
+    "name": "pickup",
+    "flavor_text": "May pick up items.",
+    "effect": "Has no effect in battle."
+  },
+  {
+    "id": 54,
+    "name": "truant",
+    "flavor_text": "Moves only every two turns.",
+    "effect": "Every second turn on which this Pokémon should attempt to use a move, it will instead do nothing (\"loaf around\").\n\nLoafing around interrupts moves that take multiple turns the same way paralysis, flinching, etc do.  Most such moves, for example bide or rollout, are simply cut off upon loafing around.  Attacks with a recharge turn, such as hyper beam, do not have to recharge; attacks with a preparation turn, such as fly, do not end up being used.  Moves that are forced over multiple turns and keep going through failure, such as outrage, uproar, or any move forced by encore, keep going as usual.\n\nIf this Pokémon is confused, its confusion is not checked when loafing around; the Pokémon cannot hurt itself, and its confusion does not end or come closer to ending.\n\nIf this Pokémon attempts to move but fails, e.g. because of paralysis or gravity, it still counts as having moved and will loaf around the next turn.  If it does not attempt to move, e.g. because it is asleep or frozen, whatever it would have done will be postponed until its next attempt; that is, it will either loaf around or move as usual, depending on what it last did.\n\nThis ability cannot be changed with worry seed, but it can be disabled with gastro acid, changed with role play, or traded away with skill swap."
+  },
+  {
+    "id": 55,
+    "name": "hustle",
+    "flavor_text": "Trades accuracy for power.",
+    "effect": "This Pokémon's physical moves do 1.5× as much regular damage, but have 0.8× their usual accuracy.\n\nSpecial moves are unaffected.  Moves that do set damage, such as seismic toss, have their accuracy affected, but not their damage.\n\nOverworld: If the lead Pokémon has this ability, higher-levelled Pokémon have their encounter rate increased."
+  },
+  {
+    "id": 56,
+    "name": "cute-charm",
+    "flavor_text": "Infatuates on contact.",
+    "effect": "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being infatuated.\n\nOverworld: If the first Pokémon in the party has this ability, any wild Pokémon whose species can be either gender has a 2/3 chance of being set to the opposite gender, and a 1/3 chance of having a random gender as usual."
+  },
+  {
+    "id": 57,
+    "name": "plus",
+    "flavor_text": "Powers up with MINUS.",
+    "effect": "Powers up only when paired with minus."
+  },
+  {
+    "id": 58,
+    "name": "minus",
+    "flavor_text": "Powers up with PLUS.",
+    "effect": "Powers up only when paired with plus."
+  },
+  {
+    "id": 59,
+    "name": "forecast",
+    "flavor_text": "Changes with the weather.",
+    "effect": "During rain, strong sunlight, or hail, this Pokémon's type changes to water, fire, or ice, respectively, and its form changes to match.\n\nThis ability has no effect for any Pokémon other than castform.\n\nIf the weather ends or becomes anything that does not trigger this ability, or a Pokémon with air lock or cloud nine enters battle, this Pokémon's type and form revert to their default.  If this ability is lost or disabled, this Pokémon cannot change its current type and form until it regains its ability."
+  },
+  {
+    "id": 60,
+    "name": "sticky-hold",
+    "flavor_text": "Prevents item theft.",
+    "effect": "This Pokémon's hold item cannot be removed by other Pokémon.\n\nDamaging moves that would remove this Pokémon's item can still inflict damage against this Pokémon, e.g. knock off or pluck.  This Pokémon can still use moves that involve the loss of its own item, e.g. fling or trick.\n\nOverworld: If the lead Pokémon has this ability, the encounter rate while fishing is increased."
+  },
+  {
+    "id": 61,
+    "name": "shed-skin",
+    "flavor_text": "Heals the body by shedding.",
+    "effect": "Chance of taking effect is 33%."
+  },
+  {
+    "id": 62,
+    "name": "guts",
+    "flavor_text": "Ups ATTACK if suffering.",
+    "effect": "Does not take effect during sleep."
+  },
+  {
+    "id": 63,
+    "name": "marvel-scale",
+    "flavor_text": "Ups DEFENSE if suffering.",
+    "effect": "Whenever this Pokémon has a major status ailment, it has 1.5× its Defense.\n\nThis bonus does not count as a stat modifier."
+  },
+  {
+    "id": 64,
+    "name": "liquid-ooze",
+    "flavor_text": "Draining causes injury.",
+    "effect": "Whenever a Pokémon would heal after hitting this Pokémon with a leeching move like absorb, it instead loses as many HP as it would usually gain.\n\ndream eater is unaffected."
+  },
+  {
+    "id": 65,
+    "name": "overgrow",
+    "flavor_text": "Ups GRASS moves in a pinch.",
+    "effect": "When this Pokémon has 1/3 or less of its HP remaining, its grass-type moves inflict 1.5× as much regular damage."
+  },
+  {
+    "id": 66,
+    "name": "blaze",
+    "flavor_text": "Ups FIRE moves in a pinch.",
+    "effect": "When this Pokémon has 1/3 or less of its HP remaining, its fire-type moves inflict 1.5× as much regular damage."
+  },
+  {
+    "id": 67,
+    "name": "torrent",
+    "flavor_text": "Ups WATER moves in a pinch.",
+    "effect": "When this Pokémon has 1/3 or less of its HP remaining, its water-type moves inflict 1.5× as much regular damage."
+  },
+  {
+    "id": 68,
+    "name": "swarm",
+    "flavor_text": "Ups BUG moves in a pinch.",
+    "effect": "Increases the frequency of cries heard on the overworld if any party Pokémon has this ability."
+  },
+  {
+    "id": 69,
+    "name": "rock-head",
+    "flavor_text": "Prevents recoil damage.",
+    "effect": "This Pokémon does not receive recoil damage from its recoil moves.\n\nstruggle's recoil is unaffected.  This ability does not prevent crash damage from missing with jump kick or high jump kick."
+  },
+  {
+    "id": 70,
+    "name": "drought",
+    "flavor_text": "Summons sunlight in battle.",
+    "effect": "The weather changes to strong sunlight when this Pokémon enters battle and does not end unless cancelled by another weather condition.\n\nIf multiple Pokémon with this ability, drizzle, sand stream, or snow warning are sent out at the same time, the abilities will activate in order of Speed, respecting trick room.  Each ability's weather will cancel the previous weather, and only the weather summoned by the slowest of the Pokémon will stay."
+  },
+  {
+    "id": 71,
+    "name": "arena-trap",
+    "flavor_text": "Prevents fleeing.",
+    "effect": "While this Pokémon is in battle, opposing Pokémon cannot flee or switch out.  flying-type Pokémon and Pokémon in the air, e.g. due to levitate or magnet rise, are unaffected.\n\nPokémon with run away can still flee.  Pokémon can still switch out with the use of a move or item.\n\nOverworld: If the lead Pokémon has this ability, the wild encounter rate is doubled."
+  },
+  {
+    "id": 72,
+    "name": "vital-spirit",
+    "flavor_text": "Prevents sleep.",
+    "effect": "This Pokémon cannot be asleep.\n\nThis causes rest to fail altogether.  If a Pokémon is asleep and acquires this ability, it will immediately wake up; this includes when regaining a lost ability upon leaving battle.\n\nThis ability functions identically to insomnia in battle.\n\nOverworld: If the lead Pokémon has this ability, higher-levelled Pokémon have their encounter rate increased."
+  },
+  {
+    "id": 73,
+    "name": "white-smoke",
+    "flavor_text": "Prevents ability reduction.",
+    "effect": "This Pokémon cannot have its stats lowered by other Pokémon.\n\nThis ability does not prevent any stat losses other than stat modifiers, such as the Speed cut from paralysis; nor self-inflicted stat drops, such as the Special Attack drop from overheat; nor opponent-triggered stat boosts, such as the Attack boost from swagger.  This Pokémon can still be passed negative stat modifiers through guard swap, heart swap, or power swap.\n\nThis ability functions identically to clear body in battle.\n\nOverworld: If the lead Pokémon has this ability, the wild encounter rate is halved."
+  },
+  {
+    "id": 74,
+    "name": "pure-power",
+    "flavor_text": "Raises ATTACK.",
+    "effect": "This Pokémon's Attack is doubled in battle.\n\nThis bonus does not count as a stat modifier.\n\nThis ability functions identically to huge power."
+  },
+  {
+    "id": 75,
+    "name": "shell-armor",
+    "flavor_text": "Blocks critical hits.",
+    "effect": "Moves cannot score critical hits against this Pokémon.\n\nThis ability functions identically to battle armor."
+  },
+  {
+    "id": 76,
+    "name": "air-lock",
+    "flavor_text": "Negates weather effects.",
+    "effect": "While this Pokémon is in battle, weather can still be in play, but will not have any of its effects.\n\nThis ability functions identically to cloud nine."
+  }
+]

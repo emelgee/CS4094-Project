@@ -6,6 +6,10 @@ const { insertTrainers } = require("./insertTrainer");
 const { closePool } = require("../db/connection");
 const { waitForDatabase } = require("../db/waitForDatabase");
 const { insertEncounterBasic } = require("./encounters");
+const { insertItems } = require("./insertItem");
+const { insertLocations } = require("./insertLocations");
+const { insertPokemonMoves } = require("./insertLearnsets");
+const { insertAbilities }    = require("./insertAbility");
 
 const BASE_PATH = path.join(__dirname, "../data");
 
@@ -33,6 +37,18 @@ async function readMovesJson() {
   return parsed;
 }
 
+async function readPokemonMovesJson() {
+  const INPUT_PATH = path.join(BASE_PATH, "/learnsets.json");
+  const raw = await fs.readFile(INPUT_PATH, "utf8");
+  const parsed = JSON.parse(raw);
+
+  if (!Array.isArray(parsed)) {
+    throw new Error("learnsets.json must contain an array.");
+  }
+
+  return parsed;
+}
+
 async function readTrainerJson() {
   const INPUT_PATH = path.join(BASE_PATH, "/trainerData.json");
   const raw = await fs.readFile(INPUT_PATH, "utf8");
@@ -45,8 +61,48 @@ async function readTrainerJson() {
   return parsed.trainerList;
 }
 
+async function readItemJson() {
+  const INPUT_PATH = path.join(BASE_PATH, "/items.json");
+  const raw = await fs.readFile(INPUT_PATH, "utf8");
+  const parsed = JSON.parse(raw);
+
+  if (!Array.isArray(parsed)) {
+    throw new Error("items.json must contain an array.");
+  }
+
+  return parsed;
+}
+
+async function readAbilityJson() {
+  const INPUT_PATH = path.join(BASE_PATH, "/abilities.json");
+  const raw = await fs.readFile(INPUT_PATH, "utf8");
+  const parsed = JSON.parse(raw);
+
+  if (!Array.isArray(parsed)) {
+    throw new Error("abilities.json must contain an array.");
+  }
+
+  return parsed;
+}
+
+async function readLocationJson() {
+  const INPUT_PATH = path.join(BASE_PATH, "/location.json");
+  const raw = await fs.readFile(INPUT_PATH, "utf8");
+  const parsed = JSON.parse(raw);
+
+  if (!Array.isArray(parsed)) {
+    throw new Error("items.json must contain an array.");
+  }
+
+  return parsed;
+}
+
 async function seedFromJson() {
   await waitForDatabase();
+
+  const ability_rows = await readAbilityJson();
+  await insertAbilities(ability_rows);
+  console.log(`Inserted/updated ${ability_rows.length} ability rows from JSON.`);
 
   const pokemon_rows = await readPokemonJson();
   await insertPokemon(pokemon_rows);
@@ -56,9 +112,21 @@ async function seedFromJson() {
   await insertMoves(move_rows);
   console.log(`Inserted/updated ${move_rows.length} move rows from JSON.`);
 
+  const pokemon_move_rows = await readPokemonMovesJson();
+  await insertPokemonMoves(pokemon_move_rows);
+  console.log(`Inserted/updated ${pokemon_move_rows.length} learnset rows from JSON.`);
+
   const trainer_rows = await readTrainerJson();
   await insertTrainers(trainer_rows);
   console.log(`Inserted/updated ${trainer_rows.length} trainer rows from JSON.`);
+
+  const item_rows = await readItemJson();
+  await insertItems(item_rows);
+  console.log(`Inserted/updated ${item_rows.length} item rows from JSON.`);
+
+  const location_rows = await readLocationJson();
+  await insertLocations(location_rows);
+  console.log(`Inserted/updated ${location_rows.length} location rows from JSON.`);
 
   //Test Encounters for Admin Account (REMOVE UPON DEPLOYING)
   await insertEncounterBasic(1, 258, "Littleroot Town", "Muddy", "Torrent", "Bold", "Alive", 11, 1);
