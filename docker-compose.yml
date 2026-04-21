@@ -35,7 +35,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: sh -c "npm run db:load && node server.js"
+    command: sh -c "npm run db:load && node index.js"
 
   frontend:
     build: ./frontend

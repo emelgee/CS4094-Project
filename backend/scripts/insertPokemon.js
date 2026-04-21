@@ -21,6 +21,12 @@ const INSERT_POKEMON_SQL = `
     ability_hidden = VALUES(ability_hidden)
 `;
 
+const GET_ABILITY_ID = `
+  SELECT id
+  FROM ability
+  WHERE name = ?
+`;
+
 async function insertPokemon(pokemonRows) {
   if (!Array.isArray(pokemonRows) || pokemonRows.length === 0) {
     return;
@@ -31,6 +37,13 @@ async function insertPokemon(pokemonRows) {
     await connection.beginTransaction();
 
     for (const pokemon of pokemonRows) {
+      const [rows1] = await connection.execute(GET_ABILITY_ID, [pokemon.ability1]);
+        const [rows2] = await connection.execute(GET_ABILITY_ID, [pokemon.ability2]);
+        const [rows3] = await connection.execute(GET_ABILITY_ID, [pokemon.ability_hidden]);
+
+        const ability1_id = rows1[0]?.id ?? null;
+        const ability2_id = rows2[0]?.id ?? null;
+        const ability_hidden_id = rows3[0]?.id ?? null;
       await connection.execute(INSERT_POKEMON_SQL, [
         pokemon.id,
         pokemon.name,
@@ -42,9 +55,9 @@ async function insertPokemon(pokemonRows) {
         pokemon.speed,
         pokemon.type1,
         pokemon.type2 ?? null,
-        pokemon.ability1 ?? null,
-        pokemon.ability2 ?? null,
-        pokemon.ability_hidden ?? null
+        ability1_id,
+        ability2_id,
+        ability_hidden_id
       ]);
     }
 

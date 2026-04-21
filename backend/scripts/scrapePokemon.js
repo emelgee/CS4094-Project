@@ -1,5 +1,5 @@
 const BASE_URL = "https://pokeapi.co/api/v2/pokemon";
-const SPECIES_URL = "https://pokeapi.co/api/v2/pokemon-species";
+//const SPECIES_URL = "https://pokeapi.co/api/v2/pokemon-species";
 const fs = require("fs/promises");
 const path = require("path");
 
@@ -69,38 +69,48 @@ function resolveGen3Types(pastTypes, currentTypes) {
  * so always null.
  */
 function resolveGen3Abilities(pastAbilities, currentAbilities) {
-  const postGen3Entries = (pastAbilities || [])
+  // Find the earliest post-Gen 3 change for each slot
+  const postGen3 = (pastAbilities || [])
     .filter((pa) => POST_GEN3_GENERATIONS.has(pa.generation?.name))
     .sort((a, b) => generationIndex(a.generation.name) - generationIndex(b.generation.name));
 
-  const abilityList = postGen3Entries.length > 0
-    ? postGen3Entries[0].abilities
-    : currentAbilities;
+  // Build a map of slot -> what it was BEFORE the earliest post-Gen3 change
+  // null ability in a past entry means the slot didn't exist yet
+  const slotOverrides = new Map();
+  for (const entry of postGen3) {
+    for (const a of entry.abilities) {
+      if (!slotOverrides.has(a.slot)) {
+        // First (earliest) post-Gen3 change for this slot — its value is
+        // what Gen 3 had (null means the slot didn't exist in Gen 3)
+        slotOverrides.set(a.slot, a.ability?.name ?? null);
+      }
+    }
+  }
 
-  const normal = abilityList
-    .filter((entry) => !entry.is_hidden)
-    .sort((a, b) => a.slot - b.slot)
-    .map((entry) => entry.ability?.name)
-    .filter(Boolean);
+  // For slots not mentioned in past_abilities, current value is correct
+  const resolveSlot = (slot) => {
+    if (slotOverrides.has(slot)) return slotOverrides.get(slot);
+    const current = currentAbilities.find((a) => a.slot === slot && !a.is_hidden);
+    return current?.ability?.name ?? null;
+  };
+
+  const ability1 = resolveSlot(1);
+  const ability2 = resolveSlot(2);
 
   return {
-    ability1: normal[0] || null,
-    ability2: normal[1] || null,
-    ability_hidden: null, // Hidden abilities did not exist in Gen 3
+    ability1,
+    ability2, // will be null if past_abilities shows slot 2 was null pre-Gen4
+    ability_hidden: null,
   };
 }
 
 async function fetchPokemon(id) {
   try {
-    const [pokeRes, speciesRes] = await Promise.all([
-      fetch(`${BASE_URL}/${id}`),
-      fetch(`${SPECIES_URL}/${id}`),
-    ]);
+    const pokeRes = await fetch(`${BASE_URL}/${id}`);
 
     if (!pokeRes.ok) throw new Error(`Pokemon HTTP ${pokeRes.status}`);
-    if (!speciesRes.ok) throw new Error(`Species HTTP ${speciesRes.status}`);
 
-    const [data, species] = await Promise.all([pokeRes.json(), speciesRes.json()]);
+    const data = await pokeRes.json();
 
     // Resolve stats via past_values
     const pastStats = data.past_stats || [];
@@ -120,7 +130,7 @@ async function fetchPokemon(id) {
 
     // Resolve abilities via past_abilities on the species endpoint
     const { ability1, ability2, ability_hidden } = resolveGen3Abilities(
-      species.past_abilities || [],
+      data.past_abilities || [],
       data.abilities || []
     );
 

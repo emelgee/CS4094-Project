@@ -581,7 +581,7 @@
     "type1": "normal",
     "type2": null,
     "ability1": "cute-charm",
-    "ability2": "competitive",
+    "ability2": null,
     "ability_hidden": null
   },
   {
@@ -596,7 +596,7 @@
     "type1": "normal",
     "type2": null,
     "ability1": "cute-charm",
-    "ability2": "competitive",
+    "ability2": null,
     "ability_hidden": null
   },
   {
@@ -1405,7 +1405,7 @@
     "speed": 110,
     "type1": "ghost",
     "type2": "poison",
-    "ability1": "cursed-body",
+    "ability1": "levitate",
     "ability2": null,
     "ability_hidden": null
   },
@@ -1631,7 +1631,7 @@
     "type1": "poison",
     "type2": null,
     "ability1": "levitate",
-    "ability2": "neutralizing-gas",
+    "ability2": null,
     "ability_hidden": null
   },
   {
@@ -1646,7 +1646,7 @@
     "type1": "poison",
     "type2": null,
     "ability1": "levitate",
-    "ability2": "neutralizing-gas",
+    "ability2": null,
     "ability_hidden": null
   },
   {
@@ -2606,7 +2606,7 @@
     "type1": "normal",
     "type2": null,
     "ability1": "cute-charm",
-    "ability2": "competitive",
+    "ability2": null,
     "ability_hidden": null
   },
   {
@@ -4121,7 +4121,7 @@
     "type1": "grass",
     "type2": "dark",
     "ability1": "chlorophyll",
-    "ability2": "wind-rider",
+    "ability2": "early-bird",
     "ability_hidden": null
   },
   {
@@ -4166,7 +4166,7 @@
     "type1": "water",
     "type2": "flying",
     "ability1": "keen-eye",
-    "ability2": "hydration",
+    "ability2": null,
     "ability_hidden": null
   },
   {
@@ -4181,7 +4181,7 @@
     "type1": "water",
     "type2": "flying",
     "ability1": "keen-eye",
-    "ability2": "drizzle",
+    "ability2": null,
     "ability_hidden": null
   },
   {
@@ -4856,7 +4856,7 @@
     "type1": "fire",
     "type2": null,
     "ability1": "white-smoke",
-    "ability2": "drought",
+    "ability2": null,
     "ability_hidden": null
   },
   {
@@ -5231,7 +5231,7 @@
     "type1": "water",
     "type2": null,
     "ability1": "swift-swim",
-    "ability2": "oblivious",
+    "ability2": null,
     "ability_hidden": null
   },
   {
@@ -5246,7 +5246,7 @@
     "type1": "water",
     "type2": null,
     "ability1": "marvel-scale",
-    "ability2": "competitive",
+    "ability2": null,
     "ability_hidden": null
   },
   {

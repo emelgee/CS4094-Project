@@ -7,6 +7,10 @@ const fs = require("fs/promises");
 const pokemonRoutes = require("./api/pokemon");
 const encounterRoutes = require("./api/encounter");
 const teamRoutes = require("./api/team");
+const abilityRoutes = require("./api/ability");
+const itemRoutes = require("./api/item");
+const routeRoutes = require("./api/route");
+const moveRoutes = require("./api/move");
 
 const app = express();
 
@@ -17,9 +21,13 @@ app.get("/", (req, res) => {
   res.json({ message: "Server is running" });
 });
 
+app.use("/api/abilities", abilityRoutes)
 app.use("/api/pokemon", pokemonRoutes);
 app.use("/api/encounters", encounterRoutes);
 app.use("/api/team", teamRoutes);
+app.use("/api/items", itemRoutes);
+app.use("/api/locations", routeRoutes);
+app.use("/api/moves", moveRoutes);
 
 // GET /api/trainers
 app.get("/api/trainers", async (req, res) => {
@@ -99,6 +107,4 @@ function parseJsonField(value) {
   return [];
 }
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
-});
+module.exports = app;

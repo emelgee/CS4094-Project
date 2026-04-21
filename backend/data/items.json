@@ -1,0 +1,466 @@
+[
+  {
+    "id": 136,
+    "name": "figy-berry",
+    "category": "picky-healing",
+    "effect": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokémon that dislike spicy flavor.",
+    "effect_long": "Held in battle\n:   When the holder has 1/2 its max HP remaining or less, it consumes this item to restore 1/8 its max HP.  If the holder dislikes spicy flavors (i.e., has a nature that lowers Attack), it will also become confused.",
+    "flavor_text": "A hold item that restores HP but may cause confusion when used."
+  },
+  {
+    "id": 137,
+    "name": "wiki-berry",
+    "category": "picky-healing",
+    "effect": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokémon that dislike dry flavor.",
+    "effect_long": "Held in battle\n:   When the holder has 1/2 its max HP remaining or less, it consumes this item to restore 1/8 its max HP.  If the holder dislikes dry flavors (i.e., has a nature that lowers Special Attack), it will also become confused.",
+    "flavor_text": "A hold item that restores HP but may cause confusion when used."
+  },
+  {
+    "id": 138,
+    "name": "mago-berry",
+    "category": "picky-healing",
+    "effect": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokémon that dislike sweet flavor.",
+    "effect_long": "Held in battle\n:   When the holder has 1/2 its max HP remaining or less, it consumes this item to restore 1/8 its max HP.  If the holder dislikes sweet flavors (i.e., has a nature that lowers Speed), it will also become confused.",
+    "flavor_text": "A hold item that restores HP but may cause confusion when used."
+  },
+  {
+    "id": 139,
+    "name": "aguav-berry",
+    "category": "picky-healing",
+    "effect": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokémon that dislike bitter flavor.",
+    "effect_long": "Held in battle\n:   When the holder has 1/2 its max HP remaining or less, it consumes this item to restore 1/8 its max HP.  If the holder dislikes bitter flavors (i.e., has a nature that lowers Special Defense), it will also become confused.",
+    "flavor_text": "A hold item that restores HP but may cause confusion when used."
+  },
+  {
+    "id": 140,
+    "name": "iapapa-berry",
+    "category": "picky-healing",
+    "effect": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pokémon that dislike sour flavor.",
+    "effect_long": "Held in battle\n:   When the holder has 1/2 its max HP remaining or less, it consumes this item to restore 1/8 its max HP.  If the holder dislikes sour flavors (i.e., has a nature that lowers Defense), it will also become confused.",
+    "flavor_text": "A hold item that restores HP but may cause confusion when used."
+  },
+  {
+    "id": 146,
+    "name": "pomeg-berry",
+    "category": "effort-drop",
+    "effect": "Drops HP Effort Values by 10 and raises happiness.",
+    "effect_long": "Used on a party Pokémon\n:   Increases happiness by 10/5/2.  Lowers HP effort by 10.",
+    "flavor_text": "Can be ground up into a powder as an ingredient for medicine."
+  },
+  {
+    "id": 147,
+    "name": "kelpsy-berry",
+    "category": "effort-drop",
+    "effect": "Drops Attack Effort Values by 10 and raises happiness.",
+    "effect_long": "Used on a party Pokémon\n:   Increases happiness by 10/5/2.  Lowers Attack effort by 10.",
+    "flavor_text": "Can be ground up into a powder as an ingredient for medicine."
+  },
+  {
+    "id": 148,
+    "name": "qualot-berry",
+    "category": "effort-drop",
+    "effect": "Drops Defense Effort Values by 10 and raises happiness.",
+    "effect_long": "Used on a party Pokémon\n:   Increases happiness by 10/5/2.  Lowers Defense effort by 10.",
+    "flavor_text": "Can be ground up into a powder as an ingredient for medicine."
+  },
+  {
+    "id": 149,
+    "name": "hondew-berry",
+    "category": "effort-drop",
+    "effect": "Drops Special Attack Effort Values by 10 and raises happiness.",
+    "effect_long": "Used on a party Pokémon\n:   Increases happiness by 10/5/2.  Lowers Special Attack effort by 10.",
+    "flavor_text": "Can be ground up into a powder as an ingredient for medicine."
+  },
+  {
+    "id": 150,
+    "name": "grepa-berry",
+    "category": "effort-drop",
+    "effect": "Drops Special Defense Effort Values by 10 and raises happiness.",
+    "effect_long": "Used on a party Pokémon\n:   Increases happiness by 10/5/2.  Lowers Special Defense effort by 10.",
+    "flavor_text": "Can be ground up into a powder as an ingredient for medicine."
+  },
+  {
+    "id": 151,
+    "name": "tamato-berry",
+    "category": "effort-drop",
+    "effect": "Drops Speed Effort Values by 10 and raises happiness.",
+    "effect_long": "Used on a party Pokémon\n:   Increases happiness by 10/5/2.  Lowers Speed effort by 10.",
+    "flavor_text": "Can be ground up into a powder as an ingredient for medicine."
+  },
+  {
+    "id": 178,
+    "name": "liechi-berry",
+    "category": "in-a-pinch",
+    "effect": "Held: Consumed at 1/4 max HP to boost Attack.",
+    "effect_long": "Held in battle\n:   When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its Attack by one stage.",
+    "flavor_text": "When held by a POKéMON, it raises the ATTACK stat in a pinch."
+  },
+  {
+    "id": 179,
+    "name": "ganlon-berry",
+    "category": "in-a-pinch",
+    "effect": "Held: Consumed at 1/4 max HP to boost Defense.",
+    "effect_long": "Held in battle\n:   When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its Defense by one stage.",
+    "flavor_text": "When held by a POKéMON, it raises the DEFENSE stat in a pinch."
+  },
+  {
+    "id": 180,
+    "name": "salac-berry",
+    "category": "in-a-pinch",
+    "effect": "Held: Consumed at 1/4 max HP to boost Speed.",
+    "effect_long": "Held in battle\n:   When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its Speed by one stage.",
+    "flavor_text": "When held by a POKéMON, it raises the SPEED stat in a pinch."
+  },
+  {
+    "id": 181,
+    "name": "petaya-berry",
+    "category": "in-a-pinch",
+    "effect": "Held: Consumed at 1/4 max HP to boost Special Attack.",
+    "effect_long": "Held in battle\n:   When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its Special Attack by one stage.",
+    "flavor_text": "When held by a POKéMON, it raises the SP. ATK stat in a pinch."
+  },
+  {
+    "id": 182,
+    "name": "apicot-berry",
+    "category": "in-a-pinch",
+    "effect": "Held: Consumed at 1/4 max HP to boost Special Defense.",
+    "effect_long": "Held in battle\n:   When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its Special Defense by one stage.",
+    "flavor_text": "When held by a POKéMON, it raises the SP. DEF stat in a pinch."
+  },
+  {
+    "id": 183,
+    "name": "lansat-berry",
+    "category": "in-a-pinch",
+    "effect": "Held: Consumed at 1/4 max HP to boost critical hit ratio by two stages.",
+    "effect_long": "Held in battle\n:   When the holder has 1/4 its max HP remaining or less, it consumes this item to raise its critical hit chance by one stage.",
+    "flavor_text": "When held by a POKéMON, it raises the critical-hit ratio in a pinch."
+  },
+  {
+    "id": 184,
+    "name": "starf-berry",
+    "category": "in-a-pinch",
+    "effect": "Held: Consumed at 1/4 max HP to boost a random stat by two stages.",
+    "effect_long": "Held in battle\n:   When the holder has 1/4 its max HP remaining or less, it consumes this item to raise a random stat by two stages.",
+    "flavor_text": "When held by a POKéMON, it sharply raises one stat in a pinch."
+  },
+  {
+    "id": 185,
+    "name": "enigma-berry",
+    "category": "other",
+    "effect": "Held: Consumed when struck by a super-effective attack to restore 1/4 max HP.",
+    "effect_long": "Held in battle\n:   When the holder takes super-effective damage, it consumes this item to restore 1/4 its max HP.",
+    "flavor_text": "Can be ground up into a powder as an ingredient for medicine."
+  },
+  {
+    "id": 190,
+    "name": "bright-powder",
+    "category": "held-items",
+    "effect": "Held: Increases the holder’s evasion by 1/9 (11 1/9%).",
+    "effect_long": "Held in battle\n:   Moves targeting the holder have 0.9× chance to hit.",
+    "flavor_text": "An item to be held by a POKéMON. It casts a tricky glare that lowers the opponent’s accuracy."
+  },
+  {
+    "id": 191,
+    "name": "white-herb",
+    "category": "held-items",
+    "effect": "Held: Resets all lowered stats to normal at end of turn. Consumed after use.",
+    "effect_long": "Held in battle\n:   At the end of each turn, if any of the holder’s stats have a negative stat modifier, the holder consumes this item to remove the modifiers from those stats.",
+    "flavor_text": "An item to be held by a POKéMON. It restores any lowered stat in battle. It can be used only once."
+  },
+  {
+    "id": 192,
+    "name": "macho-brace",
+    "category": "effort-training",
+    "effect": "Held: Holder gains double effort values from battles, but has halved Speed in battle.",
+    "effect_long": "Held\n:   When the holder would gain effort due to battle, it gains double that effort instead.\n\nHeld in battle\n:   Holder has half its Speed.",
+    "flavor_text": "An item to be held by a POKéMON. It promotes strong growth but lowers SPEED while it is held."
+  },
+  {
+    "id": 194,
+    "name": "quick-claw",
+    "category": "held-items",
+    "effect": "Held: Holder has a 3/16 (18.75%) chance to move first.",
+    "effect_long": "Held in battle\n:   Whenever the holder attempts to use a move, it has a 3/16 chance to act first among moves with the same priority.  If multiple Pokémon have this effect at the same time, Speed is the tie-breaker as normal, but the effect of trick room is ignored.",
+    "flavor_text": "An item to be held by a POKéMON. A light and sharp claw. The holder may be able to strike first."
+  },
+  {
+    "id": 196,
+    "name": "mental-herb",
+    "category": "held-items",
+    "effect": "Held: Consumed to cure infatuation. Gen V: Also removes Taunt, Encore, Torment, Disable, and Cursed Body.",
+    "effect_long": "Held in battle\n:   When the holder is attracted, it consumes this item to cure the attraction.",
+    "flavor_text": "An item to be held by a POKéMON. It snaps the holder out of infatuation. It can be used once."
+  },
+  {
+    "id": 197,
+    "name": "choice-band",
+    "category": "choice",
+    "effect": "Held: Increases Attack by 50%, but restricts the holder to only one move.",
+    "effect_long": "Held in battle\n:   Holder has 1.5× its Attack.  When the holder attempts to use a move, all its other moves are disabled until it leaves battle or loses this item.\n\n    The restriction ends even if this item is swapped for another Choice item\nvia trick or switcheroo.",
+    "flavor_text": "An item to be held by a POKéMON. It powers up one move, which becomes the only usable one."
+  },
+  {
+    "id": 198,
+    "name": "kings-rock",
+    "category": "held-items",
+    "effect": "Held: Damaging moves gain a 10% chance to make their target flinch. Traded on a Poliwhirl: Holder evolves into Politoed. Traded on a Slowpoke: Holder evolves into Slowking.",
+    "effect_long": "Held in battle\n:   Holder’s damaging moves have a 10% chance to make their target flinch.  This chance applies independently to each hit of a multi-hit move.\n\n    This item’s chance is rolled independently of any other move effects;\ne.g., a move with a 30% chance to flinch normally will have a 37% total chance to flinch when used with this item, because 3% of the time, both effects activate.\n\nHeld by poliwhirl or slowbro\n:   Holder evolves into politoed or slowking, respectively, when traded.",
+    "flavor_text": "An item to be held by a POKéMON. It may cause the foe to flinch upon taking damage."
+  },
+  {
+    "id": 199,
+    "name": "silver-powder",
+    "category": "type-enhancement",
+    "effect": "Held: Bug-Type moves from holder do 10% more damage.",
+    "effect_long": "Held in battle\n:   Holder’s bug-type moves have 1.1× their power.\n",
+    "flavor_text": "An item to be held by a POKéMON. A shiny silver powder that boosts the power of BUG-type moves."
+  },
+  {
+    "id": 202,
+    "name": "soul-dew",
+    "category": "species-specific",
+    "effect": "Raises Latias and Latios’s Special Attack and Special Defense by 50%.",
+    "effect_long": "Held by Latias or Latios: Increases the holder’s Special Attack and Special Defense by 50%.",
+    "flavor_text": "An orb to be held by a LATIOS or LATIAS. It raises the SP. ATK and SP. DEF stats."
+  },
+  {
+    "id": 203,
+    "name": "deep-sea-tooth",
+    "category": "species-specific",
+    "effect": "Doubles Clamperl’s Special Attack. Traded on a Clamperl: Holder evolves into Huntail.",
+    "effect_long": "Held by Clamperl: Doubles the holder’s Special Attack.  Evolves the holder into Huntail when traded.",
+    "flavor_text": "An item to be held by a POKéMON. A fang that gleams a sharp silver. It raises the SP. ATK stat."
+  },
+  {
+    "id": 204,
+    "name": "deep-sea-scale",
+    "category": "species-specific",
+    "effect": "Doubles Clamperl’s Special Defense. Traded on a Clamperl: Holder evolves into Gorebyss.",
+    "effect_long": "Held by Clamperl: Doubles the holder’s Special Defense.  Evolves the holder into Gorebyss when traded.",
+    "flavor_text": "An item to be held by a POKéMON. A scale that shines a faint pink. It raises the SP. DEF stat."
+  },
+  {
+    "id": 205,
+    "name": "smoke-ball",
+    "category": "held-items",
+    "effect": "Held: Allows the Holder to escape from any wild battle.",
+    "effect_long": "Held: In wild battles, attempts to run away on the holder’s turn will always succeed.",
+    "flavor_text": "An item to be held by a POKéMON. The holding POKéMON can flee from any wild POKéMON for sure."
+  },
+  {
+    "id": 207,
+    "name": "focus-band",
+    "category": "held-items",
+    "effect": "Held: Holder has 10% chance to survive attacks or self-inflicted damage at 1 HP.",
+    "effect_long": "Held: If the holder is attacked for regular damage that would faint it, this item has a 10% chance to prevent the holder’s HP from lowering below 1.",
+    "flavor_text": "An item to be held by a POKéMON. The holding POKéMON may endure an attack, leaving just 1 HP."
+  },
+  {
+    "id": 209,
+    "name": "scope-lens",
+    "category": "held-items",
+    "effect": "Held: Raises the holder’s critical hit ratio by one stage.",
+    "effect_long": "Held: Raises the holder’s critical hit counter by 1.",
+    "flavor_text": "An item to be held by a POKéMON. A lens that boosts the critical-hit ratio of the holding POKéMON."
+  },
+  {
+    "id": 210,
+    "name": "metal-coat",
+    "category": "type-enhancement",
+    "effect": "Held: Steel-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Steel moves by 10%.\nHeld by Onix or Scyther: Evolves the holder into Steelix or Scizor when traded, respectively.",
+    "flavor_text": "An item to be held by a POKéMON. A special metallic film that boosts the power of STEEL-type moves."
+  },
+  {
+    "id": 211,
+    "name": "leftovers",
+    "category": "held-items",
+    "effect": "Held: Restores 1/16 (6.25%) holder’s max HP at the end of each turn.",
+    "effect_long": "Held: Heals the holder by 1/16 its max HP at the end of each turn.",
+    "flavor_text": "An item to be held by a POKéMON. The holding POKéMON gradually regains HP during battle."
+  },
+  {
+    "id": 213,
+    "name": "light-ball",
+    "category": "species-specific",
+    "effect": "Doubles Pikachu’s Attack and Special Attack. Breed on Pikachu or Raichu: Pichu Egg will have Volt Tackle.",
+    "effect_long": "Held by Pikachu: Doubles the holder’s initial Attack and Special Attack.",
+    "flavor_text": "An orb to be held by a PIKACHU that raises the SP. ATK stat. Touching it may cause a shock."
+  },
+  {
+    "id": 214,
+    "name": "soft-sand",
+    "category": "type-enhancement",
+    "effect": "Held: Ground-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Ground moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A loose, silky sand that boosts the power of GROUND-type moves."
+  },
+  {
+    "id": 215,
+    "name": "hard-stone",
+    "category": "type-enhancement",
+    "effect": "Held: Rock-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Rock moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. An unbreakable stone that boosts the power of ROCK-type moves."
+  },
+  {
+    "id": 216,
+    "name": "miracle-seed",
+    "category": "type-enhancement",
+    "effect": "Held: Grass-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Grass moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A seed imbued with life that boosts the power of GRASS-type moves."
+  },
+  {
+    "id": 217,
+    "name": "black-glasses",
+    "category": "type-enhancement",
+    "effect": "Held: Dark-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Dark moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A shady-looking pair of glasses that boosts DARK-type moves."
+  },
+  {
+    "id": 218,
+    "name": "black-belt",
+    "category": "type-enhancement",
+    "effect": "Held: Fighting-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Fighting moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A belt that boosts determination and FIGHTING-type moves."
+  },
+  {
+    "id": 219,
+    "name": "magnet",
+    "category": "type-enhancement",
+    "effect": "Held: Electric-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Electric moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A powerful magnet that boosts the power of ELECTRIC-type moves."
+  },
+  {
+    "id": 220,
+    "name": "mystic-water",
+    "category": "type-enhancement",
+    "effect": "Held: Water-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Water moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A teardrop-shaped gem that boosts the power of WATER-type moves."
+  },
+  {
+    "id": 221,
+    "name": "sharp-beak",
+    "category": "type-enhancement",
+    "effect": "Held: Flying-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Flying moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A long, sharp beak that boosts the power of FLYING-type moves."
+  },
+  {
+    "id": 222,
+    "name": "poison-barb",
+    "category": "type-enhancement",
+    "effect": "Held: Poison-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Poison moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A small, poisonous barb that boosts the power of POISON-type moves."
+  },
+  {
+    "id": 223,
+    "name": "never-melt-ice",
+    "category": "type-enhancement",
+    "effect": "Held: Ice-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Ice moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A piece of ice that repels heat and boosts ICE-type moves."
+  },
+  {
+    "id": 224,
+    "name": "spell-tag",
+    "category": "type-enhancement",
+    "effect": "Held: Ghost-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Ghost moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A sinister, eerie tag that boosts GHOST-type moves."
+  },
+  {
+    "id": 225,
+    "name": "twisted-spoon",
+    "category": "type-enhancement",
+    "effect": "Held: Psychic-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Psychic moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A spoon imbued with telekinetic power boosts PSYCHIC-type moves."
+  },
+  {
+    "id": 226,
+    "name": "charcoal",
+    "category": "type-enhancement",
+    "effect": "Held: Fire-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Fire moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A combustible fuel that boosts the power of FIRE-type moves."
+  },
+  {
+    "id": 227,
+    "name": "dragon-fang",
+    "category": "type-enhancement",
+    "effect": "Held: Dragon-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Dragon moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A hard and sharp fang that boosts the power of DRAGON-type moves."
+  },
+  {
+    "id": 228,
+    "name": "silk-scarf",
+    "category": "type-enhancement",
+    "effect": "Held: Normal-Type moves from holder do 10% more damage.",
+    "effect_long": "Held: Increases the power of the holder’s Normal moves by 10%.",
+    "flavor_text": "An item to be held by a POKéMON. A sumptuous scarf that boosts the power of NORMAL-type moves."
+  },
+  {
+    "id": 230,
+    "name": "shell-bell",
+    "category": "held-items",
+    "effect": "Held: Holder receives 1/8 of the damage it deals when attacking.",
+    "effect_long": "Held: Heals the holder by 1/8 of any damage it inflicts.",
+    "flavor_text": "An item to be held by a POKéMON. The holding POKéMON regains some HP upon striking the foe."
+  },
+  {
+    "id": 231,
+    "name": "sea-incense",
+    "category": "type-enhancement",
+    "effect": "Held: Water-Type moves from holder do 5% more damage. Breeding: Marill or Azumarill beget an Azurill Egg.",
+    "effect_long": "Held: Increases the power of the holder’s Water moves by 5%.",
+    "flavor_text": "An item to be held by a POKéMON. It slightly boosts the power of WATER-type moves."
+  },
+  {
+    "id": 232,
+    "name": "lax-incense",
+    "category": "held-items",
+    "effect": "Held: Holder’s evasion is increased by 5%. Breeding: Wobbuffet begets a Wynaut Egg.",
+    "effect_long": "Held: Increases the holder’s Evasion by 5%.",
+    "flavor_text": "An item to be held by a POKéMON. Its tricky aroma slightly reduces the foe’s accuracy."
+  },
+  {
+    "id": 233,
+    "name": "lucky-punch",
+    "category": "species-specific",
+    "effect": "Raises Chansey’s critical hit ratio by two stages.",
+    "effect_long": "Held by Chansey: Raises the holder’s critical hit counter by 2.",
+    "flavor_text": "A glove to be held by a CHANSEY. It raises CHANSEY’s critical-hit ratio."
+  },
+  {
+    "id": 234,
+    "name": "metal-powder",
+    "category": "species-specific",
+    "effect": "Raises Ditto’s Defense and Special Defense by 50%. The boost is lost after transforming.",
+    "effect_long": "Held by Ditto: Increases the holder’s initial Defense and Special Defense by 50%.",
+    "flavor_text": "A fine, hard powder to be held by a DITTO. It raises DITTO’s DEFENSE stat."
+  },
+  {
+    "id": 235,
+    "name": "thick-club",
+    "category": "species-specific",
+    "effect": "Doubles Cubone or Marowak’s Attack.",
+    "effect_long": "Held by Cubone or Marowak: Doubles the holder’s Attack.",
+    "flavor_text": "A hard bone of some sort to be held by a CUBONE or MAROWAK. It raises the ATTACK stat."
+  },
+  {
+    "id": 236,
+    "name": "stick",
+    "category": "species-specific",
+    "effect": "Raises Farfetch’d’s critical hit ratio by two stages.",
+    "effect_long": "Held by Farfetch’d: Raises the holder’s critical hit counter by 2.",
+    "flavor_text": "A stick of leek to be held by a FARFETCH’D. It raises FARFETCH’D’s critical-hit ratio."
+  }
+]
