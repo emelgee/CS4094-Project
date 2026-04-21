@@ -30,7 +30,7 @@ services:
       DB_PASS: ${DB_PASS}
       DB_NAME: ${DB_NAME}
     volumes:
-    - ./backend:/app     #delete these upon final product, this is for development convenience.
+    - ./backend:/app     # delete these upon final product, this is for development convenience.
     - /app/node_modules  # keeps the container's node_modules, doesn't overwrite with host
     depends_on:
       db:
@@ -45,6 +45,11 @@ services:
     command: npm run dev
     depends_on:
       - backend
+    volumes:
+      - ./frontend/src:/app/src  # delete these upon final product, this is for development convenience.
+    environment:
+      - CHOKIDAR_USEPOLLING=true # delete these upon final product, this is for development convenience.
+      - WATCHPACK_POLLING=true   # delete these upon final product, this is for development convenience.
 
 volumes:
   mysql_data:

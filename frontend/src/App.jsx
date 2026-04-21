@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import AddPokemonModal from "./components/AddPokemonModal";
 import AddEncounterModal from "./components/AddEncounterModal";
 import GenScreen from "./screens/GenScreen";
 import DashboardScreen from "./screens/DashboardScreen";
@@ -50,7 +49,7 @@ export default function App() {
         name: row.name.charAt(0).toUpperCase() + row.name.slice(1),
         nickname: row.nickname,
         level: row.level,
-        nature: row.nature,
+        nature: row.nature.charAt(0).toUpperCase() + row.nature.slice(1),
         ability: row.ability,
         types: [row.type1, row.type2]
           .filter(Boolean)
@@ -70,7 +69,7 @@ export default function App() {
           row.move3 || "",
           row.move4 || "",
         ],
-        slot: row.slot,
+        slot: row.team_slot,
         dbData: {
           ability1: row.ability1,
           ability2: row.ability2,
@@ -88,34 +87,6 @@ export default function App() {
     fetchTeam();
   }, []);
 
-  const handleAddPokemon = async (mon) => {
-    if (party.length >= 6) {
-      alert("Party is full (6/6)! Send a Pokémon to PC Box first.");
-      return;
-    }
-    try {
-      // assign the next available slot
-      const usedSlots = party.map((m) => m.slot);
-      const slot = [0, 1, 2, 3, 4, 5].find((s) => !usedSlots.includes(s));
-      await fetch("http://localhost:5000/api/team", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: 1,
-          pokemon_id: mon.dbData.id,
-          nickname: mon.name,
-          level: mon.level,
-          nature: "hardy",
-          ability: mon.ability || null,
-          slot,
-        }),
-      });
-      await fetchTeam();
-    } catch (err) {
-      console.error("Add pokemon failed:", err);
-    }
-  };
-
   const handleSendToBox = async (id) => {
     if (party.length <= 1) {
       alert("You need at least 1 Pokémon in your party!");
@@ -125,28 +96,11 @@ export default function App() {
       await fetch(`http://localhost:5000/api/team/${id}/slot`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slot: null }),
+        body: JSON.stringify({ team_slot: null, user_id: 1 }),
       });
       await fetchTeam();
     } catch (err) {
       console.error("Send to box failed:", err);
-    }
-  };
-
-  const handleRemove = async (id) => {
-    if (party.length <= 1) {
-      alert("Party can't be empty!");
-      return;
-    }
-    if (window.confirm("Remove this Pokémon from your team entirely?")) {
-      try {
-        await fetch(`http://localhost:5000/api/team/${id}`, {
-          method: "DELETE",
-        });
-        await fetchTeam();
-      } catch (err) {
-        console.error("Remove failed:", err);
-      }
     }
   };
 
@@ -157,30 +111,15 @@ export default function App() {
     }
     try {
       const usedSlots = party.map((m) => m.slot);
-      const slot = [0, 1, 2, 3, 4, 5].find((s) => !usedSlots.includes(s));
+      const slot = [1, 2, 3, 4, 5, 6].find((s) => !usedSlots.includes(s));
       await fetch(`http://localhost:5000/api/team/${id}/slot`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slot }),
+        body: JSON.stringify({ team_slot: slot, user_id: 1 }),
       });
       await fetchTeam();
     } catch (err) {
       console.error("Withdraw failed:", err);
-    }
-  };
-
-  const handleRelease = async (id) => {
-    const mon = pcBox.find((m) => m.id === id);
-    if (!mon) return;
-    if (window.confirm(`Release ${mon.nickname || mon.name} permanently?`)) {
-      try {
-        await fetch(`http://localhost:5000/api/team/${id}`, {
-          method: "DELETE",
-        });
-        await fetchTeam();
-      } catch (err) {
-        console.error("Release failed:", err);
-      }
     }
   };
 
@@ -202,11 +141,13 @@ export default function App() {
   }, []);
 
   const handleDeleteEncounter = async (id) => {
+    if (!window.confirm("Release this Pokémon? This cannot be undone.")) return;
     try {
       await fetch(`http://localhost:5000/api/encounters/${id}`, {
         method: "DELETE",
       });
-      fetchEncounters();
+      await fetchEncounters(); 
+      await fetchTeam(); 
     } catch (err) {
       console.error("Delete failed:", err);
     }
@@ -230,65 +171,66 @@ export default function App() {
   };
 
   // ── Modals ───────────────────────────────────────────────────────────
-  const [showAddModal, setShowAddModal] = useState(false);
   const [showEncounterModal, setShowEncounterModal] = useState(false);
 
-  const handleOpenAdd = () => {
-    setScreen("team");
-    setShowAddModal(true);
-  };
-
   const handleAddEncounter = async (enc) => {
-    try {
-      const res = await fetch("http://localhost:5000/api/encounters", {
-        method: "POST",
+  try {
+    const res = await fetch("http://localhost:5000/api/encounters", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_id: 1,
+        pokemon_id: enc.pokemon_id,
+        location: enc.location,
+        nickname: enc.nickname,
+        ability: enc.ability,
+        nature: "serious",
+        level: 50,
+        hp_iv: 31,
+        attack_iv: 31,
+        defense_iv: 31,
+        sp_attack_iv: 31,
+        sp_defense_iv: 31,
+        speed_iv: 31,
+        hp_ev: 0,
+        attack_ev: 0,
+        defense_ev: 0,
+        sp_attack_ev: 0,
+        sp_defense_ev: 0,
+        speed_ev: 0,
+        move1_id: null,
+        move2_id: null,
+        move3_id: null,
+        move4_id: null,
+        item_id: null,
+        status: enc.outcome?.toLowerCase() || "caught",
+      }),
+    });
+    if (!res.ok) throw new Error("Failed to create encounter");
+
+    // Auto-assign to team if there's a free slot
+    const newEncounter = await res.json();
+    if (party.length < 6) {
+      const usedSlots = party.map((m) => m.slot);
+      const slot = [1, 2, 3, 4, 5, 6].find((s) => !usedSlots.includes(s));
+      await fetch(`http://localhost:5000/api/team/${newEncounter.id}/slot`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: 1,
-          pokemon_id: enc.pokemon_id,
-          location: enc.location,
-          nickname: enc.nickname,
-          ability: enc.ability,
-          nature: "serious",
-          level: 50,
-          hp_iv: 31,
-          attack_iv: 31,
-          defense_iv: 31,
-          sp_attack_iv: 31,
-          sp_defense_iv: 31,
-          speed_iv: 31,
-          hp_ev: 0,
-          attack_ev: 0,
-          defense_ev: 0,
-          sp_attack_ev: 0,
-          sp_defense_ev: 0,
-          speed_ev: 0,
-          move1_id: null,
-          move2_id: null,
-          move3_id: null,
-          move4_id: null,
-          item_id: null,
-          status: enc.outcome?.toLowerCase() || "caught",
-        }),
+        body: JSON.stringify({ team_slot: slot, user_id: 1 }),
       });
-      if (!res.ok) throw new Error("Failed to create encounter");
-      await fetchEncounters();
-      setShowEncounterModal(false);
-    } catch (err) {
-      console.error("Add encounter failed:", err);
     }
-  };
+
+    await fetchEncounters();
+    await fetchTeam();
+    setShowEncounterModal(false);
+  } catch (err) {
+    console.error("Add encounter failed:", err);
+  }
+};
 
   // ── Render ───────────────────────────────────────────────────────────
   return (
     <>
-      {showAddModal && (
-        <AddPokemonModal
-          onClose={() => setShowAddModal(false)}
-          onAdd={handleAddPokemon}
-        />
-      )}
-
       {showEncounterModal && (
         <AddEncounterModal
           onClose={() => setShowEncounterModal(false)}
@@ -384,7 +326,6 @@ export default function App() {
               party={party}
               encounters={encounters}
               onNavigate={navigate}
-              onOpenAdd={handleOpenAdd}
             />
           )}
           {screen === "team" && (
@@ -392,11 +333,10 @@ export default function App() {
               party={party}
               pcBox={pcBox}
               onSendToBox={handleSendToBox}
-              onRemove={handleRemove}
               onWithdraw={handleWithdraw}
-              onRelease={handleRelease}
-              onOpenAdd={() => setShowAddModal(true)}
               onNavigate={navigate}
+              onRemove={handleDeleteEncounter}
+              onRelease={handleDeleteEncounter}
             />
           )}
           {screen === "encounters" && (

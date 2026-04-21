@@ -7,7 +7,11 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) 
         <div className={`poke-type-pip type-${mon.primaryType}`}></div>
         <div style={{ flex: 1 }}>
           <div className="rowBetween">
-            <strong className="poke-name">{mon.name}</strong>
+            <strong className="poke-name">
+              {mon.nickname && mon.nickname !== mon.name
+                ? `${mon.nickname} - ${mon.name}`
+                : mon.name}
+            </strong>
             <span className="badge">Lv {mon.level}</span>
           </div>
           <div className="poke-meta">
@@ -33,7 +37,7 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) 
           </div>
         </details>
 
-        <details>
+        <details open>
           <summary>Nature &amp; Ability</summary>
           <div className="formGrid tight">
             <label>
@@ -60,7 +64,7 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) 
           </div>
         </details>
 
-        <details>
+        <details open>
           <summary>Moves (4)</summary>
           <div className="formGrid tight">
             {[0, 1, 2, 3].map((i) => (

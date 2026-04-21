@@ -5,6 +5,7 @@ const { insertMoves } = require("./insertMove");
 const { insertTrainers } = require("./insertTrainer");
 const { closePool } = require("../db/connection");
 const { waitForDatabase } = require("../db/waitForDatabase");
+const { insertEncounterBasic } = require("./encounters");
 const { insertItems } = require("./insertItem");
 const { insertLocations } = require("./insertLocations");
 const { insertPokemonMoves } = require("./insertLearnsets");
@@ -126,6 +127,14 @@ async function seedFromJson() {
   const location_rows = await readLocationJson();
   await insertLocations(location_rows);
   console.log(`Inserted/updated ${location_rows.length} location rows from JSON.`);
+
+  //Test Encounters for Admin Account (REMOVE UPON DEPLOYING)
+  await insertEncounterBasic(1, 258, "Littleroot Town", "Muddy", "Torrent", "Bold", "Alive", 11, 1);
+  await insertEncounterBasic(1, 261, "Route 101", "Stitch", "Run Away", "Adamant", "Alive", 7, 2);
+  await insertEncounterBasic(1, 263, "Route 102", "Ziggy", "Pickup", "Quiet", "Alive", 8, 3);
+  await insertEncounterBasic(1, 278, "Route 103", "Bird", "Keen Eye", "Modest", "Alive", 9, 4);
+  await insertEncounterBasic(1, 265, "Petalburg Woods", "Chud", "Shield Dust", "Adamant", "Alive", 1, null);
+  console.log(`Inserted 5 encounters for Admin.`);
 }
 
 if (require.main === module) {
