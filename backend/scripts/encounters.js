@@ -2,13 +2,13 @@ const { pool, closePool } = require("../db/connection");
 
 const INSERT_ENCOUNTER_BASIC_SQL = `
   INSERT INTO encounter (
-  user_id, pokemon_id, location, nickname, ability, nature, status, level, team_slot)
+  user_id, pokemon_id, location_id nickname, ability_id, nature, status, level, team_slot)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   ON DUPLICATE KEY UPDATE
     pokemon_id = VALUES(pokemon_id),
-    location   = VALUES(location),
+    location_id   = VALUES(location_id),
     nickname   = VALUES(nickname),
-    ability    = VALUES(ability),
+    ability_id    = VALUES(ability_id),
     nature     = VALUES(nature),
     status     = VALUES(status),
     level      = VALUES(level),
@@ -21,7 +21,19 @@ async function insertEncounterBasic(user_id, pokemon_id, location, nickname, abi
   try {
     await connection.beginTransaction();
 
-    if (nickname == null || ability == null) {
+    const [abilityRows] = await connection.execute(
+      'SELECT id FROM ability WHERE name LIKE ?',
+      [ability]
+    );
+    let ability_id = abilityRows[0]?.id ?? null;
+
+    const [locationRows] = await connection.execute(
+      'SELECT id FROM location WHERE name LIKE ?',
+      [location]
+    );
+    const location_id = locationRows[0]?.id ?? null;
+
+    if (nickname == null || ability_id == null) {
       const [rows] = await connection.execute(
         `SELECT name, ability1 FROM pokemon WHERE id = ?`,
         [pokemon_id]
@@ -29,25 +41,25 @@ async function insertEncounterBasic(user_id, pokemon_id, location, nickname, abi
 
       if (rows.length === 0) throw new Error(`Pokemon ${pokemon_id} not found`);
 
-      if (nickname == null) nickname = rows[0].name;
-      if (ability == null)  ability  = rows[0].ability1;
+      if (nickname == null)   nickname   = rows[0].name;
+      if (ability_id == null) ability_id = rows[0].ability1;
     }
 
-    if (nature == null)   nature = "serious";
-    if (status == null)   status = "healthy";
-    if (level == null)    level  = 50;
+    if (nature == null) nature = "serious";
+    if (status == null) status = "healthy";
+    if (level == null)  level  = 50;
 
     await connection.execute(INSERT_ENCOUNTER_BASIC_SQL, [
-    user_id,
-    pokemon_id,
-    location ?? null,
-    nickname, 
-    ability, 
-    nature, 
-    status,
-    level,
-    team_slot
-      ]);
+      user_id,
+      pokemon_id,
+      location_id ?? 1,
+      nickname,
+      ability_id,
+      nature,
+      status,
+      level,
+      team_slot
+    ]);
 
     await connection.commit();
   } catch (error) {
