@@ -2,7 +2,7 @@ const { pool, closePool } = require("../db/connection");
 
 const INSERT_ENCOUNTER_BASIC_SQL = `
   INSERT INTO encounter (
-  user_id, pokemon_id, location_id nickname, ability_id, nature, status, level, team_slot)
+  user_id, pokemon_id, location_id, nickname, ability_id, nature, status, level, team_slot)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   ON DUPLICATE KEY UPDATE
     pokemon_id = VALUES(pokemon_id),

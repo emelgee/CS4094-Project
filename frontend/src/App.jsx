@@ -141,11 +141,13 @@ export default function App() {
   }, []);
 
   const handleDeleteEncounter = async (id) => {
+    if (!window.confirm("Release this Pokémon? This cannot be undone.")) return;
     try {
       await fetch(`http://localhost:5000/api/encounters/${id}`, {
         method: "DELETE",
       });
-      fetchEncounters();
+      await fetchEncounters(); 
+      await fetchTeam(); 
     } catch (err) {
       console.error("Delete failed:", err);
     }
@@ -333,6 +335,8 @@ export default function App() {
               onSendToBox={handleSendToBox}
               onWithdraw={handleWithdraw}
               onNavigate={navigate}
+              onRemove={handleDeleteEncounter}
+              onRelease={handleDeleteEncounter}
             />
           )}
           {screen === "encounters" && (
