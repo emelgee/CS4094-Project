@@ -248,66 +248,6 @@ export default function CalculatorScreen({
     }
   };
 
-  const handleAddLookupAsDefender = async () => {
-    if (!preview || defMode !== "lookup" || !selectedTrainer) return;
-    setLookupAddError(null);
-    setLookupAddBusy(true);
-    try {
-      const search = encodeURIComponent(preview.species.trim());
-      const pres = await fetch(`${API_BASE}/api/pokemon?search=${search}`);
-      const rows = await pres.json();
-      if (!Array.isArray(rows) || rows.length === 0) {
-        setLookupAddError(`No database Pokémon matching "${preview.species}".`);
-        return;
-      }
-      const needle = preview.species.trim().toLowerCase();
-      const poke =
-        rows.find((r) => (r.name || "").toLowerCase() === needle) || rows[0];
-      const res = await fetch(`${API_BASE}/api/encounters`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: 1,
-          pokemon_id: poke.id,
-          location: `${trainerRouteLabel} · ${selectedTrainer.name || selectedTrainer.id}`,
-          nickname: preview.species.slice(0, 20),
-          ability: poke.ability1 || "",
-          nature: "serious",
-          level: preview.level,
-          hp_iv: 31,
-          attack_iv: 31,
-          defense_iv: 31,
-          sp_attack_iv: 31,
-          sp_defense_iv: 31,
-          speed_iv: 31,
-          hp_ev: 0,
-          attack_ev: 0,
-          defense_ev: 0,
-          sp_attack_ev: 0,
-          sp_defense_ev: 0,
-          speed_ev: 0,
-          move1_id: null,
-          move2_id: null,
-          move3_id: null,
-          move4_id: null,
-          item_id: null,
-          status: "caught",
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setLookupAddError(data.error || "Failed to create encounter");
-        return;
-      }
-      if (onRefreshEncounters) await onRefreshEncounters();
-      setDefenderId(String(data.id));
-    } catch (e) {
-      setLookupAddError(e.message || "Could not add defender");
-    } finally {
-      setLookupAddBusy(false);
-    }
-  };
-
   const handleReset = () => {
     setAttackerPartyMonId("");
     setDefenderId("");
@@ -568,7 +508,6 @@ export default function CalculatorScreen({
                           <button
                             className="btn small"
                             disabled={lookupAddBusy}
-                            onClick={handleAddLookupAsDefender}
                           >
                             {lookupAddBusy ? "Adding…" : "+ Add as Defender"}
                           </button>
