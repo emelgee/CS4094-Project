@@ -211,6 +211,19 @@ textarea { resize: vertical; }
    ===================================================================== */
 .boss-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
 .boss-poke-card { background: #0b0e14; border: 1px solid #1f2638; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.boss-poke-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.boss-poke-head strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.boss-poke-sprite {
+   width: 40px;
+   height: 40px;
+   object-fit: contain;
+   image-rendering: pixelated;
+   border-radius: 6px;
+   background: #0b0e14;
+   border: 1px solid #1f2638;
+   padding: 2px;
+   flex-shrink: 0;
+}
 .boss-stats { display: flex; gap: 10px; flex-wrap: wrap; font-size: 12px; color: #7a82a0; }
 .boss-stats strong { color: #c8cde0; }
 .boss-moves { display: flex; gap: 6px; flex-wrap: wrap; }
