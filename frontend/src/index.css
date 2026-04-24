@@ -177,6 +177,18 @@ textarea { resize: vertical; }
 .caught  { background: #0d2a1a; color: #4ade80; border: 1px solid #1a5235; }
 .missed  { background: #1a1a1a; color: #7a82a0; border: 1px solid #2b3246; }
 .fainted { background: #2a0e0e; color: #f87171; border: 1px solid #5a1a1a; }
+.enc-sprite {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  border-radius: 6px;
+  background: #0b0e14;
+  border: 1px solid #1f2638;
+  padding: 2px;
+  flex-shrink: 0;
+}
+
 
 /* =====================================================================
    CALCULATOR
@@ -214,8 +226,8 @@ textarea { resize: vertical; }
 .boss-poke-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .boss-poke-head strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .boss-poke-sprite {
-   width: 40px;
-   height: 40px;
+   width: 64px;
+   height: 64px;
    object-fit: contain;
    image-rendering: pixelated;
    border-radius: 6px;

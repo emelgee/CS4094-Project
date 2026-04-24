@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { API_BASE, HOENN_LOCATIONS } from "../data/constants";
-import { capitalize } from "../utils/helpers";
+import { capitalize, getPokemonSpriteUrl } from "../utils/helpers";
 
 export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdate }) {
   const [activeId, setActiveId] = useState(null);
@@ -88,7 +88,13 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                   onClick={() => handleSelectEncounter(enc)}
                   style={{ cursor: "pointer" }}
                 >
-                  <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <img
+                      src={getPokemonSpriteUrl(enc.pokemon_id, enc.pokemon_name)}
+                      alt={enc.pokemon_name || ""}
+                      className="enc-sprite"
+                    />
+                    <div>
                     <strong>{enc.location}</strong>
                     <div className="muted" style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                       <span>#{String(enc.pokemon_id).padStart(3, "0")}</span>
@@ -96,8 +102,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                       {[enc.type1, enc.type2].filter(Boolean).map((t) => (
                         <span key={t} className={`type-chip type-${t}`}>{capitalize(t)}</span>
                       ))}
-                    </div>
-                  </div>
+                    </div>                    </div>                  </div>
                   <div className="row">
                     <span className={`outcome-tag ${(enc.status || "unknown").toLowerCase()}`}>
                       {enc.status || "unknown"}
