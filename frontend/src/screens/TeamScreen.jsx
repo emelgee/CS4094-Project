@@ -1,4 +1,5 @@
 import PokemonCard from "../components/PokemonCard";
+import { getPokemonSpriteUrl } from "../utils/helpers";
 
 export default function TeamScreen({
   party,
@@ -77,7 +78,15 @@ export default function TeamScreen({
             pcBox.map((mon, idx) => (
               <div key={idx} className="pc-box-card">
                 <div className="pc-mon-header">
-                  <strong>{mon.name}</strong>
+                  <div className="pc-mon-name-wrap">
+                    <img
+                      className="pc-mon-sprite"
+                      src={getPokemonSpriteUrl(mon.pokemonId, mon.name)}
+                      alt={`${mon.name} sprite`}
+                      loading="lazy"
+                    />
+                    <strong>{mon.name}</strong>
+                  </div>
                   <span className="badge">Lv {mon.level}</span>
                 </div>
                 <div className="pc-mon-meta" style={{ margin: "4px 0" }}>

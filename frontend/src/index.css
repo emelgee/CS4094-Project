@@ -135,8 +135,31 @@ textarea { resize: vertical; }
 .poke-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
 .pokemon-card { display: flex; flex-direction: column; gap: 10px; }
 .pokemon-mini { display: flex; flex-direction: column; gap: 4px; }
+.team-top-row { display: flex; align-items: center; gap: 8px; }
+.team-sprite {
+   width: 64px;
+   height: 64px;
+   object-fit: contain;
+   image-rendering: pixelated;
+   border-radius: 8px;
+   background: #0b0e14;
+   border: 1px solid #1f2638;
+   padding: 4px;
+}
+.team-mini-types { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .poke-header { display: flex; gap: 10px; align-items: flex-start; }
 .poke-type-pip { width: 4px; min-height: 40px; border-radius: 999px; flex-shrink: 0; }
+.poke-sprite {
+   width: 56px;
+   height: 56px;
+   object-fit: contain;
+   image-rendering: pixelated;
+   border-radius: 8px;
+   background: #0b0e14;
+   border: 1px solid #1f2638;
+   padding: 4px;
+   flex-shrink: 0;
+}
 .poke-name { font-size: 16px; }
 .poke-sections { display: flex; flex-direction: column; gap: 4px; }
 .stat-bars { display: grid; gap: 6px; margin-top: 8px; }
@@ -213,6 +236,19 @@ textarea { resize: vertical; }
 .pc-box-card { background: #0e1120; border: 1px solid #1f2638; border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
 .pc-box-card .pc-mon-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .pc-box-card .pc-mon-meta { font-size: 12px; color: #7a82a0; }
+.pc-mon-name-wrap { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.pc-mon-name-wrap strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pc-mon-sprite {
+   width: 32px;
+   height: 32px;
+   object-fit: contain;
+   image-rendering: pixelated;
+   border-radius: 6px;
+   background: #0b0e14;
+   border: 1px solid #1f2638;
+   padding: 2px;
+   flex-shrink: 0;
+}
 .pc-box-actions { display: flex; gap: 6px; margin-top: 4px; }
 
 /* =====================================================================

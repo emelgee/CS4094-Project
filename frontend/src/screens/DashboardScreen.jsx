@@ -1,3 +1,5 @@
+import { getPokemonSpriteUrl } from "../utils/helpers";
+
 export default function DashboardScreen({
   party,
   encounters,
@@ -24,13 +26,31 @@ export default function DashboardScreen({
                   style={{ cursor: "pointer" }}
                   onClick={() => onNavigate("team")}
                 >
-                  <div
-                    className={`poke-type-pip type-${mon.primaryType}`}
-                  ></div>
-                  <strong>{mon.name}</strong>
-                  <div className="muted">
-                    Lv {mon.level} · {mon.types.join("/")}
+                  <div className="team-top-row">
+                    <div
+                      className={`poke-type-pip type-${mon.primaryType}`}
+                    ></div>
+                    <img
+                      className="team-sprite"
+                      src={getPokemonSpriteUrl(mon.pokemonId, mon.name)}
+                      alt={`${mon.name} sprite`}
+                      loading="lazy"
+                    />
+                    <div className="team-mini-types">
+                      {(mon.types || []).filter(Boolean).map((type) => (
+                        <span
+                          key={`${mon.id}-${type}`}
+                          className={`type-chip type-${type
+                            .toLowerCase()
+                            .split("/")[0]}`}
+                        >
+                          {type}
+                        </span>
+                      ))}
+                    </div>
                   </div>
+                  <strong>{mon.name}</strong>
+                  <div className="muted">Lv {mon.level}</div>
                 </div>
               ))}
               {Array.from({ length: Math.max(0, 6 - party.length) }).map(

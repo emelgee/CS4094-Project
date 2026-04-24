@@ -69,6 +69,22 @@ export function formatSpeciesName(species) {
   return String(species).toLowerCase().split("_").map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join(" ");
 }
 
+export function getPokemonSpriteUrl(pokemonId, pokemonName) {
+  const numericId = Number(pokemonId);
+  if (Number.isFinite(numericId) && numericId > 0) {
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${numericId}.png`;
+  }
+
+  const slug = String(pokemonName || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  if (!slug) return "";
+  return `https://img.pokemondb.net/sprites/home/normal/${slug}.png`;
+}
+
 // =====================================================================
 // STAT CALCULATIONS
 // =====================================================================

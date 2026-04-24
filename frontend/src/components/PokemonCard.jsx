@@ -1,10 +1,18 @@
-import { capitalize } from "../utils/helpers";
+import { capitalize, getPokemonSpriteUrl } from "../utils/helpers";
 
 export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) {
+  const spriteUrl = getPokemonSpriteUrl(mon.pokemonId, mon.name);
+
   return (
     <div className="card pokemon-card">
       <div className="poke-header">
         <div className={`poke-type-pip type-${mon.primaryType}`}></div>
+        <img
+          className="poke-sprite"
+          src={spriteUrl}
+          alt={`${mon.name} sprite`}
+          loading="lazy"
+        />
         <div style={{ flex: 1 }}>
           <div className="rowBetween">
             <strong className="poke-name">
