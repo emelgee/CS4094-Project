@@ -39,6 +39,7 @@ export default function CalculatorScreen({
   const [weather, setWeather] = useState("");
   const [lookupDefender, setLookupDefender] = useState(null);
   const [lookupAddError, setLookupAddError] = useState(null);
+  const [defenderHp, setDefenderHp] = useState(null);
 
   // Load moves when calculator becomes visible
   useEffect(() => {
@@ -184,7 +185,7 @@ export default function CalculatorScreen({
 
     setCalcLoading(true);
     try {
-      let defStat, spdStat, type1, type2;
+      let defStat, spdStat, type1, type2, hpStat;
 
       if (defenderId) {
         const enc = encounters.find((e) => String(e.id) === String(defenderId));
@@ -206,11 +207,15 @@ export default function CalculatorScreen({
           enc.sp_defense_ev,
           lv
         );
+        hpStat = Math.floor(
+          ((2 * (Number(p.hp) || 0) + (enc.hp_iv ?? 31) + Math.floor((enc.hp_ev ?? 0) / 4)) * lv) / 100
+        ) + lv + 10;
         type1 = p.type1;
         type2 = p.type2;
       } else {
         defStat = lookupDefender.battleStats?.Def;
         spdStat = lookupDefender.battleStats?.SpD;
+        hpStat = lookupDefender.battleStats?.HP ?? null;
         type1 = lookupDefender.basePokemon?.type1 || "normal";
         type2 = lookupDefender.basePokemon?.type2 || null;
       }
@@ -241,6 +246,7 @@ export default function CalculatorScreen({
         conditions
       );
       setDamageResult(out);
+      setDefenderHp(hpStat ?? null);
     } catch (err) {
       setCalcError(err.message || "Calculation failed");
     } finally {
@@ -263,6 +269,7 @@ export default function CalculatorScreen({
     setBurned(false);
     setWeather("");
     setDamageResult(null);
+    setDefenderHp(null);
     setCalcError(null);
     setDefMode("lookup");
     setSelectedPokemonIndex("");
@@ -604,7 +611,11 @@ export default function CalculatorScreen({
             <div className="stack mt8">
               <div className="statRow">
                 <span>% of HP</span>
-                <strong>—</strong>
+                <strong>
+                  {damageResult && defenderHp
+                    ? `${((damageResult.min / defenderHp) * 100).toFixed(1)}% – ${((damageResult.max / defenderHp) * 100).toFixed(1)}%`
+                    : "—"}
+                </strong>
               </div>
               <div className="statRow">
                 <span>KO Estimate</span>

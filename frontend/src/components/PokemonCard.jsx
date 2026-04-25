@@ -1,7 +1,25 @@
-import { capitalize, getPokemonSpriteUrl } from "../utils/helpers";
+import { capitalize, getPokemonSpriteUrl, gen3CombatStat } from "../utils/helpers";
+
+function calcInGame(mon) {
+  const lv = mon.level || 1;
+  const iv = mon.ivs || {};
+  const ev = mon.evs || {};
+  const b  = mon.stats || {};
+  const hp = Math.floor(((2 * (b.hp ?? 0) + (iv.hp ?? 31) + Math.floor((ev.hp ?? 0) / 4)) * lv) / 100) + lv + 10;
+  return {
+    hp,
+    atk: gen3CombatStat(b.atk ?? 0, iv.atk ?? 31, ev.atk ?? 0, lv),
+    def: gen3CombatStat(b.def ?? 0, iv.def ?? 31, ev.def ?? 0, lv),
+    spa: gen3CombatStat(b.spa ?? 0, iv.spa ?? 31, ev.spa ?? 0, lv),
+    spd: gen3CombatStat(b.spd ?? 0, iv.spd ?? 31, ev.spd ?? 0, lv),
+    spe: gen3CombatStat(b.spe ?? 0, iv.spe ?? 31, ev.spe ?? 0, lv),
+  };
+}
 
 export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) {
   const spriteUrl = getPokemonSpriteUrl(mon.pokemonId, mon.name);
+  const inGame = calcInGame(mon);
+  const STAT_KEYS = [["HP", "hp"], ["Atk", "atk"], ["Def", "def"], ["SpA", "spa"], ["SpD", "spd"], ["Spe", "spe"]];
 
   return (
     <div className="card pokemon-card">
@@ -38,9 +56,18 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) 
       <div className="poke-sections">
         <details open>
           <summary>Core Stats</summary>
-          <div className="formGrid tight">
-            {[["HP", "hp"], ["Atk", "atk"], ["Def", "def"], ["SpA", "spa"], ["SpD", "spd"], ["Spe", "spe"]].map(([lbl, key]) => (
-              <label key={key}>{lbl}<input defaultValue={mon.stats[key]} type="number" /></label>
+          <div style={{ marginTop: 6 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "36px 1fr 56px", gap: "2px 8px", alignItems: "center", marginBottom: 4 }}>
+              <span />
+              <span className="muted small">Base</span>
+              <span className="muted small" style={{ textAlign: "right" }}>In-game</span>
+            </div>
+            {STAT_KEYS.map(([lbl, key]) => (
+              <div key={key} style={{ display: "grid", gridTemplateColumns: "36px 1fr 56px", gap: "2px 8px", alignItems: "center", marginBottom: 2 }}>
+                <span className="muted small" style={{ textTransform: "uppercase", fontSize: 10, whiteSpace: "nowrap" }}>{lbl}</span>
+                <input defaultValue={mon.stats[key]} type="number" style={{ width: "100%", padding: "2px 6px", fontSize: 12 }} />
+                <span style={{ textAlign: "right", fontWeight: 600, fontSize: 13, color: "#e4e6ef" }}>{inGame[key]}</span>
+              </div>
             ))}
           </div>
         </details>

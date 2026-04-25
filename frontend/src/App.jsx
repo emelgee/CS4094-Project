@@ -64,6 +64,22 @@ export default function App() {
           spd: row.sp_defense,
           spe: row.speed,
         },
+        ivs: {
+          hp: row.hp_iv ?? 31,
+          atk: row.attack_iv ?? 31,
+          def: row.defense_iv ?? 31,
+          spa: row.sp_attack_iv ?? 31,
+          spd: row.sp_defense_iv ?? 31,
+          spe: row.speed_iv ?? 31,
+        },
+        evs: {
+          hp: row.hp_ev ?? 0,
+          atk: row.attack_ev ?? 0,
+          def: row.defense_ev ?? 0,
+          spa: row.sp_attack_ev ?? 0,
+          spd: row.sp_defense_ev ?? 0,
+          spe: row.speed_ev ?? 0,
+        },
         moves: [
           row.move1 || "",
           row.move2 || "",
