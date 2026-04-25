@@ -9,6 +9,45 @@ import {
 } from "../data/constants";
 
 // =====================================================================
+// NATURE MODIFIERS
+// =====================================================================
+export const NATURES = {
+  hardy:   { up: null,  down: null  },
+  lonely:  { up: "atk", down: "def" },
+  brave:   { up: "atk", down: "spe" },
+  adamant: { up: "atk", down: "spa" },
+  naughty: { up: "atk", down: "spd" },
+  bold:    { up: "def", down: "atk" },
+  docile:  { up: null,  down: null  },
+  relaxed: { up: "def", down: "spe" },
+  impish:  { up: "def", down: "spa" },
+  lax:     { up: "def", down: "spd" },
+  timid:   { up: "spe", down: "atk" },
+  hasty:   { up: "spe", down: "def" },
+  serious: { up: null,  down: null  },
+  jolly:   { up: "spe", down: "spa" },
+  naive:   { up: "spe", down: "spd" },
+  modest:  { up: "spa", down: "atk" },
+  mild:    { up: "spa", down: "def" },
+  quiet:   { up: "spa", down: "spe" },
+  bashful: { up: null,  down: null  },
+  rash:    { up: "spa", down: "spd" },
+  calm:    { up: "spd", down: "atk" },
+  gentle:  { up: "spd", down: "def" },
+  sassy:   { up: "spd", down: "spe" },
+  careful: { up: "spd", down: "spa" },
+  quirky:  { up: null,  down: null  },
+};
+
+export function applyNatureModifier(stat, statKey, nature) {
+  const natureMod = NATURES[String(nature || "hardy").toLowerCase()];
+  if (!natureMod) return stat;
+  if (natureMod.up === statKey) return Math.floor(stat * 1.1);
+  if (natureMod.down === statKey) return Math.floor(stat * 0.9);
+  return stat;
+}
+
+// =====================================================================
 // STRING HELPERS
 // =====================================================================
 export function capitalize(str) {

@@ -6,6 +6,8 @@ import {
   formatSpeciesName,
   buildTrainerPokemonView,
   gen3CombatStat,
+  applyNatureModifier,
+  NATURES,
   capitalize,
 } from "../utils/helpers";
 import { calculateDamage } from "../utils/calc";
@@ -40,6 +42,7 @@ export default function CalculatorScreen({
   const [lookupDefender, setLookupDefender] = useState(null);
   const [lookupAddError, setLookupAddError] = useState(null);
   const [defenderHp, setDefenderHp] = useState(null);
+  const [atkNature, setAtkNature] = useState("hardy");
 
   // Load moves when calculator becomes visible
   useEffect(() => {
@@ -222,12 +225,14 @@ export default function CalculatorScreen({
 
       const atkTypes = (atkMon.types || []).map((t) => String(t).toLowerCase());
       const conditions = { isCrit: crit, isBurned: burned, weather: weather || "" };
+      const atkStat = gen3CombatStat(atkMon.stats.atk, atkMon.ivs?.atk ?? 31, atkMon.evs?.atk ?? 0, atkMon.level);
+      const spaStat = gen3CombatStat(atkMon.stats.spa, atkMon.ivs?.spa ?? 31, atkMon.evs?.spa ?? 0, atkMon.level);
 
       const out = calculateDamage(
         {
           level: atkMon.level,
-          attack: atkMon.stats.atk,
-          sp_attack: atkMon.stats.spa,
+          attack: applyNatureModifier(atkStat, "atk", atkNature),
+          sp_attack: applyNatureModifier(spaStat, "spa", atkNature),
           type1: atkTypes[0] || null,
           type2: atkTypes[1] || null,
           item: atkMon.item || null,
@@ -268,6 +273,7 @@ export default function CalculatorScreen({
     setCrit(false);
     setBurned(false);
     setWeather("");
+    setAtkNature("hardy");
     setDamageResult(null);
     setDefenderHp(null);
     setCalcError(null);
@@ -317,7 +323,11 @@ export default function CalculatorScreen({
                 Attacker (from party)
                 <select
                   value={attackerPartyMonId}
-                  onChange={(e) => setAttackerPartyMonId(e.target.value)}
+                  onChange={(e) => {
+                    setAttackerPartyMonId(e.target.value);
+                    const mon = party.find((m) => String(m.id) === e.target.value);
+                    setAtkNature(mon ? String(mon.nature || "hardy").toLowerCase() : "hardy");
+                  }}
                 >
                   <option value="">
                     {party.length
@@ -377,6 +387,22 @@ export default function CalculatorScreen({
                   <option value="">None</option>
                   <option value="sun">Sun</option>
                   <option value="rain">Rain</option>
+                </select>
+              </label>
+              <label>
+                Nature (attacker)
+                <select
+                  value={atkNature}
+                  onChange={(e) => setAtkNature(e.target.value)}
+                >
+                  {Object.keys(NATURES).map((n) => {
+                    const { up, down } = NATURES[n];
+                    const STAT_LABEL = { atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe" };
+                    const label = up
+                      ? `${capitalize(n)} (+${STAT_LABEL[up]} / -${STAT_LABEL[down]})`
+                      : capitalize(n);
+                    return <option key={n} value={n}>{label}</option>;
+                  })}
                 </select>
               </label>
             </div>

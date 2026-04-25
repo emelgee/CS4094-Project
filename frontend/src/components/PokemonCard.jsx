@@ -1,24 +1,27 @@
-import { capitalize, getPokemonSpriteUrl, gen3CombatStat } from "../utils/helpers";
+import { useState } from "react";
+import { capitalize, getPokemonSpriteUrl, gen3CombatStat, applyNatureModifier, NATURES } from "../utils/helpers";
 
-function calcInGame(mon) {
+function calcInGame(mon, nature) {
   const lv = mon.level || 1;
   const iv = mon.ivs || {};
   const ev = mon.evs || {};
   const b  = mon.stats || {};
+  const nat = nature || "hardy";
   const hp = Math.floor(((2 * (b.hp ?? 0) + (iv.hp ?? 31) + Math.floor((ev.hp ?? 0) / 4)) * lv) / 100) + lv + 10;
   return {
     hp,
-    atk: gen3CombatStat(b.atk ?? 0, iv.atk ?? 31, ev.atk ?? 0, lv),
-    def: gen3CombatStat(b.def ?? 0, iv.def ?? 31, ev.def ?? 0, lv),
-    spa: gen3CombatStat(b.spa ?? 0, iv.spa ?? 31, ev.spa ?? 0, lv),
-    spd: gen3CombatStat(b.spd ?? 0, iv.spd ?? 31, ev.spd ?? 0, lv),
-    spe: gen3CombatStat(b.spe ?? 0, iv.spe ?? 31, ev.spe ?? 0, lv),
+    atk: applyNatureModifier(gen3CombatStat(b.atk ?? 0, iv.atk ?? 31, ev.atk ?? 0, lv), "atk", nat),
+    def: applyNatureModifier(gen3CombatStat(b.def ?? 0, iv.def ?? 31, ev.def ?? 0, lv), "def", nat),
+    spa: applyNatureModifier(gen3CombatStat(b.spa ?? 0, iv.spa ?? 31, ev.spa ?? 0, lv), "spa", nat),
+    spd: applyNatureModifier(gen3CombatStat(b.spd ?? 0, iv.spd ?? 31, ev.spd ?? 0, lv), "spd", nat),
+    spe: applyNatureModifier(gen3CombatStat(b.spe ?? 0, iv.spe ?? 31, ev.spe ?? 0, lv), "spe", nat),
   };
 }
 
 export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) {
+  const [nature, setNature] = useState(String(mon.nature || "hardy").toLowerCase());
   const spriteUrl = getPokemonSpriteUrl(mon.pokemonId, mon.name);
-  const inGame = calcInGame(mon);
+  const inGame = calcInGame(mon, nature);
   const STAT_KEYS = [["HP", "hp"], ["Atk", "atk"], ["Def", "def"], ["SpA", "spa"], ["SpD", "spd"], ["Spe", "spe"]];
 
   return (
@@ -77,13 +80,15 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate }) 
           <div className="formGrid tight">
             <label>
               Nature
-              <select defaultValue={mon.nature}>
-                <option>{mon.nature}</option>
-                <option>Adamant (+Atk, -SpA)</option>
-                <option>Jolly (+Spe, -SpA)</option>
-                <option>Modest (+SpA, -Atk)</option>
-                <option>Timid (+Spe, -Atk)</option>
-                <option>Bold (+Def, -Atk)</option>
+              <select value={nature} onChange={(e) => setNature(e.target.value)}>
+                {Object.keys(NATURES).map((n) => {
+                  const { up, down } = NATURES[n];
+                  const STAT_LABEL = { atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe" };
+                  const label = up
+                    ? `${capitalize(n)} (+${STAT_LABEL[up]} / -${STAT_LABEL[down]})`
+                    : capitalize(n);
+                  return <option key={n} value={n}>{label}</option>;
+                })}
               </select>
             </label>
             <label>
