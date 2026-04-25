@@ -8,6 +8,7 @@ export default function TeamScreen({
   onRemove,
   onWithdraw,
   onRelease,
+  onOpenAdd,
   onNavigate,
 }) {
   const emptySlots = Math.max(1, 6 - party.length);
@@ -38,6 +39,7 @@ export default function TeamScreen({
         <strong>
           Active Party <span className="muted small">({party.length} / 6)</span>
         </strong>
+        <button className="btn small" onClick={onOpenAdd}>+ Add Pokemon</button>
       </div>
 
       <div className="grid">
@@ -51,7 +53,9 @@ export default function TeamScreen({
           />
         ))}
         {Array.from({ length: emptySlots }).map((_, i) => (
-          <div key={i} className="card empty big"></div>
+          <div key={i} className="card empty big" onClick={onOpenAdd}>
+            + Add
+          </div>
         ))}
       </div>
 

@@ -288,8 +288,8 @@ textarea { resize: vertical; }
 /* =====================================================================
    MODAL
    ===================================================================== */
-.modal-backdrop { position: fixed; inset: 0; background: #000000bb; display: flex; align-items: center; justify-content: center; z-index: 999; padding: 16px; }
-.modal { background: #111520; border: 1px solid #1f2638; border-radius: 16px; padding: 20px; width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 14px; max-height: 90vh; overflow-y: auto; }
+.modal-backdrop { position: fixed; inset: 0; background: #000000bb; display: flex; align-items: center; justify-content: center; z-index: 999; padding: 24px; overflow-y: auto; }
+.modal { background: #111520; border: 1px solid #1f2638; border-radius: 16px; padding: 20px; width: min(980px, 35%); display: flex; flex-direction: column; gap: 14px; max-height: none; overflow: visible; }
 .modal h2 { margin: 0; font-size: 18px; }
 .search-wrap { position: relative; }
 .search-input { width: 100%; }
@@ -306,3 +306,8 @@ textarea { resize: vertical; }
 .preview-stat span { color: #5a6380; font-size: 10px; text-transform: uppercase; }
 .preview-stat strong { color: #e4e6ef; }
 .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+@media (max-width: 900px) {
+   .modal-backdrop { padding: 12px; }
+   .modal { width: 100%; }
+}
