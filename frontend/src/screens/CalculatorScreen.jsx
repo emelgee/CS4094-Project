@@ -37,7 +37,7 @@ export default function CalculatorScreen({
   const [crit, setCrit] = useState(false);
   const [burned, setBurned] = useState(false);
   const [weather, setWeather] = useState("");
-  const [lookupAddBusy, setLookupAddBusy] = useState(false);
+  const [lookupDefender, setLookupDefender] = useState(null);
   const [lookupAddError, setLookupAddError] = useState(null);
 
   // Load moves when calculator becomes visible
@@ -174,10 +174,10 @@ export default function CalculatorScreen({
       return;
     }
 
-    const usePreviewDef = !defenderId && defMode === "lookup" && preview;
+    const usePreviewDef = !defenderId && lookupDefender;
     if (!defenderId && !usePreviewDef) {
       setCalcError(
-        "Choose a defender encounter, or pick a Pokémon in route / trainer lookup."
+        "Choose a defender encounter, or use the lookup to Add as Defender."
       );
       return;
     }
@@ -209,10 +209,10 @@ export default function CalculatorScreen({
         type1 = p.type1;
         type2 = p.type2;
       } else {
-        defStat = preview.battleStats?.Def;
-        spdStat = preview.battleStats?.SpD;
-        type1 = preview.basePokemon?.type1 || "normal";
-        type2 = preview.basePokemon?.type2 || null;
+        defStat = lookupDefender.battleStats?.Def;
+        spdStat = lookupDefender.battleStats?.SpD;
+        type1 = lookupDefender.basePokemon?.type1 || "normal";
+        type2 = lookupDefender.basePokemon?.type2 || null;
       }
 
       const atkTypes = (atkMon.types || []).map((t) => String(t).toLowerCase());
@@ -248,6 +248,13 @@ export default function CalculatorScreen({
     }
   };
 
+  const handleAddLookupAsDefender = () => {
+    if (!preview) return;
+    setLookupAddError(null);
+    setLookupDefender(preview);
+    setDefenderId("");
+  };
+
   const handleReset = () => {
     setAttackerPartyMonId("");
     setDefenderId("");
@@ -260,6 +267,7 @@ export default function CalculatorScreen({
     setDefMode("lookup");
     setSelectedPokemonIndex("");
     setPreview(null);
+    setLookupDefender(null);
     setLookupAddError(null);
   };
 
@@ -274,7 +282,7 @@ export default function CalculatorScreen({
     attackerPartyMonId &&
     moveId &&
     moves.length &&
-    (defenderId || (defMode === "lookup" && preview))
+    (defenderId || lookupDefender)
   );
 
   return (
@@ -319,10 +327,19 @@ export default function CalculatorScreen({
               <label>
                 Defender (opponent)
                 <select
-                  value={defenderId}
-                  onChange={(e) => setDefenderId(e.target.value)}
+                  value={lookupDefender && !defenderId ? "__lookup__" : defenderId}
+                  onChange={(e) => {
+                    if (e.target.value === "__lookup__") return;
+                    setDefenderId(e.target.value);
+                    setLookupDefender(null);
+                  }}
                 >
                   <option value="">Select encounter…</option>
+                  {lookupDefender && (
+                    <option value="__lookup__">
+                      {lookupDefender.displayName} · Lv.{lookupDefender.level} — from lookup
+                    </option>
+                  )}
                   {encounters.map((e) => (
                     <option key={e.id} value={e.id}>
                       {encounterOptionLabel(e)}
@@ -507,9 +524,9 @@ export default function CalculatorScreen({
                           )}
                           <button
                             className="btn small"
-                            disabled={lookupAddBusy}
+                            onClick={handleAddLookupAsDefender}
                           >
-                            {lookupAddBusy ? "Adding…" : "+ Add as Defender"}
+                            + Add as Defender
                           </button>
                         </div>
                       )}
