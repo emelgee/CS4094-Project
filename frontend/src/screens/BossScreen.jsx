@@ -5,6 +5,7 @@ import {
   getBossVariantLabel,
   formatTrainerMaps,
   formatSpeciesName,
+  getPokemonSpriteUrl,
   capitalize,
 } from "../utils/helpers";
 
@@ -183,7 +184,18 @@ export default function BossScreen({ onNavigate }) {
               {activeTeamDetails.map((p, index) => (
                 <div key={`${activeGroup ? activeGroup.key : "boss"}-${index}-${p.species}-${p.level}`} className="boss-poke-card">
                   <div className="rowBetween">
-                    <strong>{p.displayName}</strong>
+                    <div className="boss-poke-head">
+                      <img
+                        className="boss-poke-sprite"
+                        src={getPokemonSpriteUrl(p.pokemon?.id, p.species || p.displayName)}
+                        alt={`${p.displayName} sprite`}
+                        loading="lazy"
+                        onError={(event) => {
+                          event.currentTarget.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png";
+                        }}
+                      />
+                      <strong>{p.displayName}</strong>
+                    </div>
                     <div>
                       <span className="badge">Lv {p.level}</span>
                       {p.types.map((t) => <span key={t} className={`type-chip type-${t.toLowerCase()}`}>{t}</span>)}

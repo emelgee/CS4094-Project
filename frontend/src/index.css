@@ -135,8 +135,31 @@ textarea { resize: vertical; }
 .poke-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
 .pokemon-card { display: flex; flex-direction: column; gap: 10px; }
 .pokemon-mini { display: flex; flex-direction: column; gap: 4px; }
+.team-top-row { display: flex; align-items: center; gap: 8px; }
+.team-sprite {
+   width: 64px;
+   height: 64px;
+   object-fit: contain;
+   image-rendering: pixelated;
+   border-radius: 8px;
+   background: #0b0e14;
+   border: 1px solid #1f2638;
+   padding: 4px;
+}
+.team-mini-types { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .poke-header { display: flex; gap: 10px; align-items: flex-start; }
 .poke-type-pip { width: 4px; min-height: 40px; border-radius: 999px; flex-shrink: 0; }
+.poke-sprite {
+   width: 56px;
+   height: 56px;
+   object-fit: contain;
+   image-rendering: pixelated;
+   border-radius: 8px;
+   background: #0b0e14;
+   border: 1px solid #1f2638;
+   padding: 4px;
+   flex-shrink: 0;
+}
 .poke-name { font-size: 16px; }
 .poke-sections { display: flex; flex-direction: column; gap: 4px; }
 .stat-bars { display: grid; gap: 6px; margin-top: 8px; }
@@ -154,6 +177,18 @@ textarea { resize: vertical; }
 .caught  { background: #0d2a1a; color: #4ade80; border: 1px solid #1a5235; }
 .missed  { background: #1a1a1a; color: #7a82a0; border: 1px solid #2b3246; }
 .fainted { background: #2a0e0e; color: #f87171; border: 1px solid #5a1a1a; }
+.enc-sprite {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  border-radius: 6px;
+  background: #0b0e14;
+  border: 1px solid #1f2638;
+  padding: 2px;
+  flex-shrink: 0;
+}
+
 
 /* =====================================================================
    CALCULATOR
@@ -188,6 +223,19 @@ textarea { resize: vertical; }
    ===================================================================== */
 .boss-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
 .boss-poke-card { background: #0b0e14; border: 1px solid #1f2638; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.boss-poke-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.boss-poke-head strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.boss-poke-sprite {
+   width: 64px;
+   height: 64px;
+   object-fit: contain;
+   image-rendering: pixelated;
+   border-radius: 6px;
+   background: #0b0e14;
+   border: 1px solid #1f2638;
+   padding: 2px;
+   flex-shrink: 0;
+}
 .boss-stats { display: flex; gap: 10px; flex-wrap: wrap; font-size: 12px; color: #7a82a0; }
 .boss-stats strong { color: #c8cde0; }
 .boss-moves { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -213,6 +261,19 @@ textarea { resize: vertical; }
 .pc-box-card { background: #0e1120; border: 1px solid #1f2638; border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
 .pc-box-card .pc-mon-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .pc-box-card .pc-mon-meta { font-size: 12px; color: #7a82a0; }
+.pc-mon-name-wrap { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.pc-mon-name-wrap strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pc-mon-sprite {
+   width: 32px;
+   height: 32px;
+   object-fit: contain;
+   image-rendering: pixelated;
+   border-radius: 6px;
+   background: #0b0e14;
+   border: 1px solid #1f2638;
+   padding: 2px;
+   flex-shrink: 0;
+}
 .pc-box-actions { display: flex; gap: 6px; margin-top: 4px; }
 
 /* =====================================================================
@@ -227,8 +288,8 @@ textarea { resize: vertical; }
 /* =====================================================================
    MODAL
    ===================================================================== */
-.modal-backdrop { position: fixed; inset: 0; background: #000000bb; display: flex; align-items: center; justify-content: center; z-index: 999; padding: 16px; }
-.modal { background: #111520; border: 1px solid #1f2638; border-radius: 16px; padding: 20px; width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 14px; max-height: 90vh; overflow-y: auto; }
+.modal-backdrop { position: fixed; inset: 0; background: #000000bb; display: flex; align-items: center; justify-content: center; z-index: 999; padding: 24px; overflow-y: auto; }
+.modal { background: #111520; border: 1px solid #1f2638; border-radius: 16px; padding: 20px; width: min(980px, 35%); display: flex; flex-direction: column; gap: 14px; max-height: none; overflow: visible; }
 .modal h2 { margin: 0; font-size: 18px; }
 .search-wrap { position: relative; }
 .search-input { width: 100%; }
@@ -245,3 +306,8 @@ textarea { resize: vertical; }
 .preview-stat span { color: #5a6380; font-size: 10px; text-transform: uppercase; }
 .preview-stat strong { color: #e4e6ef; }
 .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+@media (max-width: 900px) {
+   .modal-backdrop { padding: 12px; }
+   .modal { width: 100%; }
+}

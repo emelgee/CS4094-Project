@@ -6,6 +6,8 @@ import {
   formatSpeciesName,
   buildTrainerPokemonView,
   gen3CombatStat,
+  applyNatureModifier,
+  NATURES,
   capitalize,
 } from "../utils/helpers";
 import { calculateDamage } from "../utils/calc";
@@ -37,8 +39,10 @@ export default function CalculatorScreen({
   const [crit, setCrit] = useState(false);
   const [burned, setBurned] = useState(false);
   const [weather, setWeather] = useState("");
-  const [lookupAddBusy, setLookupAddBusy] = useState(false);
+  const [lookupDefender, setLookupDefender] = useState(null);
   const [lookupAddError, setLookupAddError] = useState(null);
+  const [defenderHp, setDefenderHp] = useState(null);
+  const [atkNature, setAtkNature] = useState("hardy");
 
   // Load moves when calculator becomes visible
   useEffect(() => {
@@ -174,17 +178,17 @@ export default function CalculatorScreen({
       return;
     }
 
-    const usePreviewDef = !defenderId && defMode === "lookup" && preview;
+    const usePreviewDef = !defenderId && lookupDefender;
     if (!defenderId && !usePreviewDef) {
       setCalcError(
-        "Choose a defender encounter, or pick a Pokémon in route / trainer lookup."
+        "Choose a defender encounter, or use the lookup to Add as Defender."
       );
       return;
     }
 
     setCalcLoading(true);
     try {
-      let defStat, spdStat, type1, type2;
+      let defStat, spdStat, type1, type2, hpStat;
 
       if (defenderId) {
         const enc = encounters.find((e) => String(e.id) === String(defenderId));
@@ -206,23 +210,29 @@ export default function CalculatorScreen({
           enc.sp_defense_ev,
           lv
         );
+        hpStat = Math.floor(
+          ((2 * (Number(p.hp) || 0) + (enc.hp_iv ?? 31) + Math.floor((enc.hp_ev ?? 0) / 4)) * lv) / 100
+        ) + lv + 10;
         type1 = p.type1;
         type2 = p.type2;
       } else {
-        defStat = preview.battleStats?.Def;
-        spdStat = preview.battleStats?.SpD;
-        type1 = preview.basePokemon?.type1 || "normal";
-        type2 = preview.basePokemon?.type2 || null;
+        defStat = lookupDefender.battleStats?.Def;
+        spdStat = lookupDefender.battleStats?.SpD;
+        hpStat = lookupDefender.battleStats?.HP ?? null;
+        type1 = lookupDefender.basePokemon?.type1 || "normal";
+        type2 = lookupDefender.basePokemon?.type2 || null;
       }
 
       const atkTypes = (atkMon.types || []).map((t) => String(t).toLowerCase());
       const conditions = { isCrit: crit, isBurned: burned, weather: weather || "" };
+      const atkStat = gen3CombatStat(atkMon.stats.atk, atkMon.ivs?.atk ?? 31, atkMon.evs?.atk ?? 0, atkMon.level);
+      const spaStat = gen3CombatStat(atkMon.stats.spa, atkMon.ivs?.spa ?? 31, atkMon.evs?.spa ?? 0, atkMon.level);
 
       const out = calculateDamage(
         {
           level: atkMon.level,
-          attack: atkMon.stats.atk,
-          sp_attack: atkMon.stats.spa,
+          attack: applyNatureModifier(atkStat, "atk", atkNature),
+          sp_attack: applyNatureModifier(spaStat, "spa", atkNature),
           type1: atkTypes[0] || null,
           type2: atkTypes[1] || null,
           item: atkMon.item || null,
@@ -241,6 +251,7 @@ export default function CalculatorScreen({
         conditions
       );
       setDamageResult(out);
+      setDefenderHp(hpStat ?? null);
     } catch (err) {
       setCalcError(err.message || "Calculation failed");
     } finally {
@@ -248,64 +259,11 @@ export default function CalculatorScreen({
     }
   };
 
-  const handleAddLookupAsDefender = async () => {
-    if (!preview || defMode !== "lookup" || !selectedTrainer) return;
+  const handleAddLookupAsDefender = () => {
+    if (!preview) return;
     setLookupAddError(null);
-    setLookupAddBusy(true);
-    try {
-      const search = encodeURIComponent(preview.species.trim());
-      const pres = await fetch(`${API_BASE}/api/pokemon?search=${search}`);
-      const rows = await pres.json();
-      if (!Array.isArray(rows) || rows.length === 0) {
-        setLookupAddError(`No database Pokémon matching "${preview.species}".`);
-        return;
-      }
-      const needle = preview.species.trim().toLowerCase();
-      const poke =
-        rows.find((r) => (r.name || "").toLowerCase() === needle) || rows[0];
-      const res = await fetch(`${API_BASE}/api/encounters`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: 1,
-          pokemon_id: poke.id,
-          location: `${trainerRouteLabel} · ${selectedTrainer.name || selectedTrainer.id}`,
-          nickname: preview.species.slice(0, 20),
-          ability: poke.ability1 || "",
-          nature: "serious",
-          level: preview.level,
-          hp_iv: 31,
-          attack_iv: 31,
-          defense_iv: 31,
-          sp_attack_iv: 31,
-          sp_defense_iv: 31,
-          speed_iv: 31,
-          hp_ev: 0,
-          attack_ev: 0,
-          defense_ev: 0,
-          sp_attack_ev: 0,
-          sp_defense_ev: 0,
-          speed_ev: 0,
-          move1_id: null,
-          move2_id: null,
-          move3_id: null,
-          move4_id: null,
-          item_id: null,
-          status: "caught",
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setLookupAddError(data.error || "Failed to create encounter");
-        return;
-      }
-      if (onRefreshEncounters) await onRefreshEncounters();
-      setDefenderId(String(data.id));
-    } catch (e) {
-      setLookupAddError(e.message || "Could not add defender");
-    } finally {
-      setLookupAddBusy(false);
-    }
+    setLookupDefender(preview);
+    setDefenderId("");
   };
 
   const handleReset = () => {
@@ -315,11 +273,14 @@ export default function CalculatorScreen({
     setCrit(false);
     setBurned(false);
     setWeather("");
+    setAtkNature("hardy");
     setDamageResult(null);
+    setDefenderHp(null);
     setCalcError(null);
     setDefMode("lookup");
     setSelectedPokemonIndex("");
     setPreview(null);
+    setLookupDefender(null);
     setLookupAddError(null);
   };
 
@@ -334,7 +295,7 @@ export default function CalculatorScreen({
     attackerPartyMonId &&
     moveId &&
     moves.length &&
-    (defenderId || (defMode === "lookup" && preview))
+    (defenderId || lookupDefender)
   );
 
   return (
@@ -362,7 +323,11 @@ export default function CalculatorScreen({
                 Attacker (from party)
                 <select
                   value={attackerPartyMonId}
-                  onChange={(e) => setAttackerPartyMonId(e.target.value)}
+                  onChange={(e) => {
+                    setAttackerPartyMonId(e.target.value);
+                    const mon = party.find((m) => String(m.id) === e.target.value);
+                    setAtkNature(mon ? String(mon.nature || "hardy").toLowerCase() : "hardy");
+                  }}
                 >
                   <option value="">
                     {party.length
@@ -379,10 +344,19 @@ export default function CalculatorScreen({
               <label>
                 Defender (opponent)
                 <select
-                  value={defenderId}
-                  onChange={(e) => setDefenderId(e.target.value)}
+                  value={lookupDefender && !defenderId ? "__lookup__" : defenderId}
+                  onChange={(e) => {
+                    if (e.target.value === "__lookup__") return;
+                    setDefenderId(e.target.value);
+                    setLookupDefender(null);
+                  }}
                 >
                   <option value="">Select encounter…</option>
+                  {lookupDefender && (
+                    <option value="__lookup__">
+                      {lookupDefender.displayName} · Lv.{lookupDefender.level} — from lookup
+                    </option>
+                  )}
                   {encounters.map((e) => (
                     <option key={e.id} value={e.id}>
                       {encounterOptionLabel(e)}
@@ -413,6 +387,22 @@ export default function CalculatorScreen({
                   <option value="">None</option>
                   <option value="sun">Sun</option>
                   <option value="rain">Rain</option>
+                </select>
+              </label>
+              <label>
+                Nature (attacker)
+                <select
+                  value={atkNature}
+                  onChange={(e) => setAtkNature(e.target.value)}
+                >
+                  {Object.keys(NATURES).map((n) => {
+                    const { up, down } = NATURES[n];
+                    const STAT_LABEL = { atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe" };
+                    const label = up
+                      ? `${capitalize(n)} (+${STAT_LABEL[up]} / -${STAT_LABEL[down]})`
+                      : capitalize(n);
+                    return <option key={n} value={n}>{label}</option>;
+                  })}
                 </select>
               </label>
             </div>
@@ -567,10 +557,9 @@ export default function CalculatorScreen({
                           )}
                           <button
                             className="btn small"
-                            disabled={lookupAddBusy}
                             onClick={handleAddLookupAsDefender}
                           >
-                            {lookupAddBusy ? "Adding…" : "+ Add as Defender"}
+                            + Add as Defender
                           </button>
                         </div>
                       )}
@@ -648,7 +637,11 @@ export default function CalculatorScreen({
             <div className="stack mt8">
               <div className="statRow">
                 <span>% of HP</span>
-                <strong>—</strong>
+                <strong>
+                  {damageResult && defenderHp
+                    ? `${((damageResult.min / defenderHp) * 100).toFixed(1)}% – ${((damageResult.max / defenderHp) * 100).toFixed(1)}%`
+                    : "—"}
+                </strong>
               </div>
               <div className="statRow">
                 <span>KO Estimate</span>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import AddEncounterModal from "./components/AddEncounterModal";
+import AddPokemonModal from "./components/AddPokemonModal";
 import GenScreen from "./screens/GenScreen";
 import DashboardScreen from "./screens/DashboardScreen";
 import TeamScreen from "./screens/TeamScreen";
@@ -62,6 +63,22 @@ export default function App() {
           spa: row.sp_attack,
           spd: row.sp_defense,
           spe: row.speed,
+        },
+        ivs: {
+          hp: row.hp_iv ?? 31,
+          atk: row.attack_iv ?? 31,
+          def: row.defense_iv ?? 31,
+          spa: row.sp_attack_iv ?? 31,
+          spd: row.sp_defense_iv ?? 31,
+          spe: row.speed_iv ?? 31,
+        },
+        evs: {
+          hp: row.hp_ev ?? 0,
+          atk: row.attack_ev ?? 0,
+          def: row.defense_ev ?? 0,
+          spa: row.sp_attack_ev ?? 0,
+          spd: row.sp_defense_ev ?? 0,
+          spe: row.speed_ev ?? 0,
         },
         moves: [
           row.move1 || "",
@@ -172,6 +189,36 @@ export default function App() {
 
   // ── Modals ───────────────────────────────────────────────────────────
   const [showEncounterModal, setShowEncounterModal] = useState(false);
+  const [showAddPokemonModal, setShowAddPokemonModal] = useState(false);
+
+  const handleAddPokemonToTeam = async (mon) => {
+    try {
+      const usedSlots = party.map((m) => m.slot).filter((s) => s != null);
+      const nextSlot = [1, 2, 3, 4, 5, 6].find((s) => !usedSlots.includes(s));
+
+      const res = await fetch("http://localhost:5000/api/team", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: 1,
+          pokemon_id: mon?.dbData?.id,
+          nickname: null,
+          level: Number(mon?.level) || 5,
+          nature: "hardy",
+          ability_id: null,
+          team_slot: nextSlot ?? null,
+          location_id: null,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to add Pokemon to team");
+
+      await fetchTeam();
+      setShowAddPokemonModal(false);
+    } catch (err) {
+      console.error("Add Pokemon failed:", err);
+    }
+  };
 
   const handleAddEncounter = async (enc) => {
   try {
@@ -235,6 +282,12 @@ export default function App() {
         <AddEncounterModal
           onClose={() => setShowEncounterModal(false)}
           onAdd={handleAddEncounter}
+        />
+      )}
+      {showAddPokemonModal && (
+        <AddPokemonModal
+          onClose={() => setShowAddPokemonModal(false)}
+          onAdd={handleAddPokemonToTeam}
         />
       )}
 
@@ -326,6 +379,7 @@ export default function App() {
               party={party}
               encounters={encounters}
               onNavigate={navigate}
+              onOpenAdd={() => setShowAddPokemonModal(true)}
             />
           )}
           {screen === "team" && (
@@ -335,6 +389,7 @@ export default function App() {
               onSendToBox={handleSendToBox}
               onWithdraw={handleWithdraw}
               onNavigate={navigate}
+              onOpenAdd={() => setShowAddPokemonModal(true)}
               onRemove={handleDeleteEncounter}
               onRelease={handleDeleteEncounter}
             />
