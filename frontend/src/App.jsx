@@ -407,6 +407,7 @@ export default function App() {
             <CalculatorScreen
               onNavigate={navigate}
               encounters={encounters}
+              pcBox={pcBox}
               party={party}
               onRefreshEncounters={fetchEncounters}
               visible={screen === "calculator"}
