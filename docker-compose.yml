@@ -29,6 +29,8 @@ services:
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       DB_NAME: ${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET:-change-me-to-a-long-random-string}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
     volumes:
     - ./backend:/app     # delete these upon final product, this is for development convenience.
     - /app/node_modules  # keeps the container's node_modules, doesn't overwrite with host

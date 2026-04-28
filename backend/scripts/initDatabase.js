@@ -1,5 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
+const bcrypt = require("bcryptjs");
 const { pool, closePool } = require("../db/connection");
 const { waitForDatabase } = require("../db/waitForDatabase");
 const { insertUser } = require("./users");
@@ -30,7 +31,9 @@ async function initDatabase() {
 async function run() {
   try {
     await initDatabase();
-    await insertUser("admin", "admin", "admin");
+    const adminPassword = process.env.ADMIN_PASSWORD || "admin1234";
+    const adminHash = await bcrypt.hash(adminPassword, 10);
+    await insertUser("admin", "admin@example.com", adminHash);
     console.log("Database schema initialized successfully.");
   } catch (error) {
     console.error("Failed to initialize database schema:", error.message);
