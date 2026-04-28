@@ -1440,12 +1440,13 @@ export default function CalculatorScreen({
         </div>
       </div>
 
-      {/* ── Route / Trainer Lookup (under enemy) ── */}
+      {/* TODO: Commented out to determine if necessary*/}
+      {/* {/* ── Route / Trainer Lookup (under enemy) ── }
       <div style={{marginTop:12}}>
         <details className="panel">
           <summary>Route / Trainer Lookup</summary>
 
-          {/* Mode toggle */}
+          {/* Mode toggle }
           <div style={{display:"flex",gap:4,marginTop:8,marginBottom:8}}>
             {[["lookup","Game Lookup"],["manual","Manual"]].map(([m,lbl])=>(
               <button key={m} className={`def-mode-btn${defMode===m?" active":""}`}
@@ -1552,8 +1553,8 @@ export default function CalculatorScreen({
             TODO: auto-populate based on selected move type
           </div>
         </details>
-        */}
-      </div>
+        }
+      </div> */}
     </section>
   );
 }
