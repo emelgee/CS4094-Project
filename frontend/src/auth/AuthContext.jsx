@@ -62,9 +62,16 @@ export function AuthProvider({ children }) {
     setStatus("anonymous");
   }, []);
 
+  const deleteAccount = useCallback(async () => {
+    await authApi.deleteAccount();
+    clearToken();
+    setUser(null);
+    setStatus("anonymous");
+  }, []);
+
   const value = useMemo(
-    () => ({ user, status, login, signup, logout }),
-    [user, status, login, signup, logout]
+    () => ({ user, status, login, signup, logout, deleteAccount }),
+    [user, status, login, signup, logout, deleteAccount]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

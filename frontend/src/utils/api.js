@@ -105,4 +105,7 @@ export const auth = {
   async me() {
     return apiJson("/api/auth/me");
   },
+  async deleteAccount() {
+    return apiJson("/api/auth/delete", { method: "DELETE" });
+  },
 };
