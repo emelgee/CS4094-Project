@@ -11,6 +11,7 @@ import TrainerScreen from "./screens/TrainerScreen";
 import BossScreen from "./screens/BossScreen";
 import LookupScreen from "./screens/LookupScreen";
 import AuthScreen from "./screens/AuthScreen";
+import UserMenu from "./components/UserMenu";
 import { useAuth } from "./auth/AuthContext";
 import { apiFetch } from "./utils/api";
 
@@ -27,7 +28,7 @@ const NAV_ITEMS = [
 ];
 
 export default function App() {
-  const { user, status, logout } = useAuth();
+  const { status } = useAuth();
 
   // ── Navigation ──────────────────────────────────────────────────────
   const [screen, setScreen] = useState("gen");
@@ -308,12 +309,7 @@ export default function App() {
             </button>
           ))}
         </nav>
-        <div className="user-menu">
-          <span className="user-name">{user?.username}</span>
-          <button className="ghost small" onClick={logout} title="Sign out">
-            Logout
-          </button>
-        </div>
+        <UserMenu />
         <button
           className="ghost icon-btn"
           onClick={() => setSidebarOpen((o) => !o)}
