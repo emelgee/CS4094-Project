@@ -100,6 +100,41 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// DELETE /api/auth/delete — permanently delete the authenticated user
+// and all of their user-owned data. Atomic: if anything fails, nothing
+// is removed.
+router.delete("/delete", requireAuth, async (req, res) => {
+  const userId = req.user.id;
+  const connection = await db.pool.getConnection();
+  try {
+    await connection.beginTransaction();
+
+    // All user-scoped data lives in `encounter` (team is just encounter
+    // rows with a non-null team_slot). Delete owned rows first to satisfy
+    // the FK from encounter.user_id -> users.id.
+    await connection.query("DELETE FROM encounter WHERE user_id = ?", [userId]);
+
+    const [result] = await connection.query(
+      "DELETE FROM users WHERE id = ?",
+      [userId]
+    );
+
+    if (result.affectedRows === 0) {
+      await connection.rollback();
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    await connection.commit();
+    return res.json({ success: true });
+  } catch (err) {
+    try { await connection.rollback(); } catch { /* ignore */ }
+    console.error("DELETE /api/auth/delete error:", err);
+    res.status(500).json({ error: "Database error" });
+  } finally {
+    connection.release();
+  }
+});
+
 // GET /api/auth/me — returns the currently-authenticated user
 router.get("/me", requireAuth, async (req, res) => {
   try {

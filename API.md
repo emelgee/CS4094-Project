@@ -73,6 +73,22 @@ Returns the user identified by the supplied token.
 
 ---
 
+### DELETE `/auth/delete`
+Permanently deletes the authenticated user and all of their user-owned
+data (encounters, party, PC box). Atomic — either everything is removed
+or nothing is. Requires a valid Bearer token.
+
+**Response** `200 OK`
+```json
+{ "success": true }
+```
+
+**Errors**
+- `401 Unauthorized` — missing or invalid token
+- `404 Not Found` — user already deleted
+
+---
+
 ## Abilities
 
 ### GET `/abilities`
