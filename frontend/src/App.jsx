@@ -10,6 +10,8 @@ import IvEvScreen from "./screens/IvEvScreen";
 import TrainerScreen from "./screens/TrainerScreen";
 import BossScreen from "./screens/BossScreen";
 import LookupScreen from "./screens/LookupScreen";
+import AuthScreen from "./screens/AuthScreen";
+import { useAuth } from "./auth/AuthContext";
 
 const NAV_ITEMS = [
   { key: "gen", label: "Generation" },
@@ -24,6 +26,8 @@ const NAV_ITEMS = [
 ];
 
 export default function App() {
+  const { user, status, logout } = useAuth();
+
   // ── Navigation ──────────────────────────────────────────────────────
   const [screen, setScreen] = useState("gen");
   const [genBadge, setGenBadge] = useState("—");
@@ -276,6 +280,18 @@ export default function App() {
 };
 
   // ── Render ───────────────────────────────────────────────────────────
+  if (status === "loading") {
+    return (
+      <div className="auth-shell">
+        <div className="muted">Loading…</div>
+      </div>
+    );
+  }
+
+  if (status !== "authenticated") {
+    return <AuthScreen />;
+  }
+
   return (
     <>
       {showEncounterModal && (
@@ -308,6 +324,12 @@ export default function App() {
             </button>
           ))}
         </nav>
+        <div className="user-menu">
+          <span className="user-name">{user?.username}</span>
+          <button className="ghost small" onClick={logout} title="Sign out">
+            Logout
+          </button>
+        </div>
         <button
           className="ghost icon-btn"
           onClick={() => setSidebarOpen((o) => !o)}

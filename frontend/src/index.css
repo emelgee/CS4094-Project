@@ -311,3 +311,18 @@ textarea { resize: vertical; }
    .modal-backdrop { padding: 12px; }
    .modal { width: 100%; }
 }
+
+/* =====================================================================
+   AUTH SCREEN
+   ===================================================================== */
+.auth-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: radial-gradient(circle at top, #181e2e 0%, #0b0e14 60%); }
+.auth-card { width: 100%; max-width: 380px; background: #111520; border: 1px solid #1f2638; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+.auth-card label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #9099b5; }
+.auth-card input { padding: 8px 10px; border-radius: 8px; border: 1px solid #2b3246; background: #0b0e14; color: #e4e6ef; font-size: 13px; }
+.auth-card input:focus { outline: none; border-color: #3348aa; }
+.auth-card .btn.primary { background: #1e2d5a; border-color: #3348aa; }
+.auth-card .btn.primary:hover { background: #243974; }
+.auth-card .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.user-menu { display: flex; align-items: center; gap: 8px; }
+.user-menu .user-name { color: #a0a8c0; font-size: 12px; }
