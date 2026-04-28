@@ -2,6 +2,75 @@
 
 Base URL: `http://localhost:5000/api`
 
+## Authentication
+
+All `/encounters` and `/team` endpoints require a valid JWT, sent as a
+Bearer token in the `Authorization` header:
+
+```
+Authorization: Bearer <token>
+```
+
+Tokens are obtained via `/auth/login` or `/auth/signup`. The user identified
+by the token is the only user whose data the request can read or modify.
+
+### POST `/auth/signup`
+Create a new account.
+
+**Request Body**
+```json
+{ "username": "ash", "email": "ash@example.com", "password": "pikachu123" }
+```
+
+**Response** `201 Created`
+```json
+{
+  "token": "<jwt>",
+  "user": { "id": 2, "username": "ash", "email": "ash@example.com" }
+}
+```
+
+**Errors**
+- `400 Bad Request` — missing or invalid fields
+- `409 Conflict` — username or email already in use
+
+---
+
+### POST `/auth/login`
+Exchange credentials for a JWT.
+
+**Request Body**
+```json
+{ "identifier": "ash", "password": "pikachu123" }
+```
+
+`identifier` may be a username or email. `username` / `email` are also
+accepted as aliases.
+
+**Response** `200 OK`
+```json
+{
+  "token": "<jwt>",
+  "user": { "id": 2, "username": "ash", "email": "ash@example.com" }
+}
+```
+
+**Errors**
+- `401 Unauthorized` — invalid credentials
+
+---
+
+### GET `/auth/me`
+Returns the user identified by the supplied token.
+
+**Response** `200 OK`
+```json
+{ "user": { "id": 2, "username": "ash", "email": "ash@example.com" } }
+```
+
+**Errors**
+- `401 Unauthorized` — missing or invalid token
+
 ---
 
 ## Abilities
@@ -305,9 +374,10 @@ Returns all wild pokemon encounters across all areas within a location.
 ## Encounters
 
 A user's personal encounter log (pokemon caught or seen during a playthrough).
+All endpoints require auth; the user is taken from the JWT.
 
-### GET `/encounters/:user_id`
-Returns all encounters for a given user, including basic pokemon info.
+### GET `/encounters`
+Returns all encounters for the authenticated user, including basic pokemon info.
 
 **Response** `200 OK`
 ```json
@@ -351,12 +421,12 @@ Returns one encounter based on encounter ID:
 ---
 
 ### POST `/encounters`
-Creates a new encounter.
+Creates a new encounter for the authenticated user. Any `user_id` in the
+body is ignored — the user is taken from the JWT.
 
 **Request Body**
 ```json
 {
-  "user_id": 1,
   "pokemon_id": 4,
   "nickname": "Charmy",
   "nature": "adamant",
@@ -429,12 +499,14 @@ Deletes an encounter.
 
 ## Team
 
-A user's active team and PC box.
+A user's active team and PC box. All endpoints require auth; the user is
+taken from the JWT.
 
-> Slot values `0–5` are active party slots. A `null` slot means the pokemon is in the PC box.
+> Slot values `1–6` are active party slots. A `null` slot means the pokemon is in the PC box.
 
-### GET `/team/:user_id`
-Returns all team pokemon for a user (party and PC box), with full pokemon stats and move names.
+### GET `/team`
+Returns all team pokemon for the authenticated user (party and PC box),
+with full pokemon stats and move names.
 
 **Response** `200 OK`
 ```json
@@ -461,12 +533,11 @@ Returns all team pokemon for a user (party and PC box), with full pokemon stats 
 ---
 
 ### POST `/team`
-Adds a pokemon to the team.
+Adds a pokemon to the authenticated user's team.
 
 **Request Body**
 ```json
 {
-  "user_id": 1,
   "pokemon_id": 4,
   "nickname": "Charmy",
   "level": 10,

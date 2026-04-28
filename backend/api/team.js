@@ -1,10 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const { requireAuth } = require("../auth/middleware");
 
-// GET /api/team/:user_id
-// Returns party (team_slot 1-6) and PC box (team_slot NULL) with full pokemon + move data
-router.get("/:user_id", async (req, res) => {
+// All team routes require authentication and operate on the
+// authenticated user's data only.
+router.use(requireAuth);
+
+// GET /api/team
+// Returns party (team_slot 1-6) and PC box (team_slot NULL) with full
+// pokemon + move data for the authenticated user.
+router.get("/", async (req, res) => {
   try {
     const [rows] = await db.pool.query(
       `SELECT
@@ -27,7 +33,7 @@ router.get("/:user_id", async (req, res) => {
        LEFT JOIN move m4 ON e.move4_id = m4.id
        WHERE e.user_id = ?
        ORDER BY e.team_slot ASC, e.id ASC`,
-      [req.params.user_id]
+      [req.user.id]
     );
     res.json(rows);
   } catch (err) {
@@ -37,12 +43,11 @@ router.get("/:user_id", async (req, res) => {
 });
 
 // POST /api/team
-// Body: { user_id, pokemon_id, nickname, level, nature, ability_id, team_slot, location_id }
-// team_slot 1-6 for party, omit/null for PC box
+// Body: { pokemon_id, nickname, level, nature, ability_id, team_slot, location_id }
+// user_id is taken from the auth token. team_slot 1-6 for party, omit/null for PC box.
 router.post("/", async (req, res) => {
   try {
     const {
-      user_id,
       pokemon_id,
       nickname     = null,
       level        = 5,
@@ -52,8 +57,8 @@ router.post("/", async (req, res) => {
       location_id  = null,
     } = req.body;
 
-    if (!user_id || !pokemon_id) {
-      return res.status(400).json({ error: "user_id and pokemon_id are required" });
+    if (!pokemon_id) {
+      return res.status(400).json({ error: "pokemon_id is required" });
     }
 
     if (team_slot !== null && (team_slot < 1 || team_slot > 6)) {
@@ -64,10 +69,9 @@ router.post("/", async (req, res) => {
       `INSERT INTO encounter
         (user_id, pokemon_id, nickname, level, nature, ability_id, team_slot, location_id)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [user_id, pokemon_id, nickname, level, nature, ability_id, team_slot, location_id]
+      [req.user.id, pokemon_id, nickname, level, nature, ability_id, team_slot, location_id]
     );
 
-    // Return the full row with joined data
     const [rows] = await db.pool.query(
       `SELECT
         e.id, e.user_id, e.nickname, e.level, e.nature, e.ability_id, e.team_slot,
@@ -105,10 +109,13 @@ router.patch("/:id/slot", async (req, res) => {
       return res.status(400).json({ error: "team_slot must be between 1 and 6 or null" });
     }
 
-    await db.pool.query(
+    const [result] = await db.pool.query(
       "UPDATE encounter SET team_slot = ? WHERE id = ? AND user_id = ?",
-      [team_slot ?? null, req.params.id, req.body.user_id]
+      [team_slot ?? null, req.params.id, req.user.id]
     );
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Pokemon not found or does not belong to user" });
+    }
     res.json({ ok: true });
   } catch (err) {
     if (err.code === "ER_DUP_ENTRY") {
@@ -120,12 +127,11 @@ router.patch("/:id/slot", async (req, res) => {
 });
 
 // DELETE /api/team/:id
-// Permanently removes the encounter (release pokemon)
 router.delete("/:id", async (req, res) => {
   try {
     const [result] = await db.pool.query(
       "DELETE FROM encounter WHERE id = ? AND user_id = ?",
-      [req.params.id, req.query.user_id]
+      [req.params.id, req.user.id]
     );
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Pokemon not found or does not belong to user" });
