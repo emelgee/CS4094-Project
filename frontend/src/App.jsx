@@ -10,6 +10,10 @@ import IvEvScreen from "./screens/IvEvScreen";
 import TrainerScreen from "./screens/TrainerScreen";
 import BossScreen from "./screens/BossScreen";
 import LookupScreen from "./screens/LookupScreen";
+import AuthScreen from "./screens/AuthScreen";
+import UserMenu from "./components/UserMenu";
+import { useAuth } from "./auth/AuthContext";
+import { apiFetch } from "./utils/api";
 
 const NAV_ITEMS = [
   { key: "gen", label: "Generation" },
@@ -24,6 +28,8 @@ const NAV_ITEMS = [
 ];
 
 export default function App() {
+  const { status } = useAuth();
+
   // ── Navigation ──────────────────────────────────────────────────────
   const [screen, setScreen] = useState("gen");
   const [genBadge, setGenBadge] = useState("—");
@@ -42,7 +48,8 @@ export default function App() {
 
   const fetchTeam = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/team/1");
+      const res = await apiFetch("/api/team");
+      if (!res.ok) return;
       const data = await res.json();
       const mapped = data.map((row) => ({
         id: row.id,
@@ -101,8 +108,9 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (status !== "authenticated") return;
     fetchTeam();
-  }, []);
+  }, [status]);
 
   const handleSendToBox = async (id) => {
     if (party.length <= 1) {
@@ -110,10 +118,9 @@ export default function App() {
       return;
     }
     try {
-      await fetch(`http://localhost:5000/api/team/${id}/slot`, {
+      await apiFetch(`/api/team/${id}/slot`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ team_slot: null, user_id: 1 }),
+        json: { team_slot: null },
       });
       await fetchTeam();
     } catch (err) {
@@ -129,10 +136,9 @@ export default function App() {
     try {
       const usedSlots = party.map((m) => m.slot);
       const slot = [1, 2, 3, 4, 5, 6].find((s) => !usedSlots.includes(s));
-      await fetch(`http://localhost:5000/api/team/${id}/slot`, {
+      await apiFetch(`/api/team/${id}/slot`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ team_slot: slot, user_id: 1 }),
+        json: { team_slot: slot },
       });
       await fetchTeam();
     } catch (err) {
@@ -145,7 +151,8 @@ export default function App() {
 
   const fetchEncounters = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/encounters/1");
+      const res = await apiFetch("/api/encounters");
+      if (!res.ok) return;
       const data = await res.json();
       setEncounters(data);
     } catch (err) {
@@ -154,17 +161,16 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (status !== "authenticated") return;
     fetchEncounters();
-  }, []);
+  }, [status]);
 
   const handleDeleteEncounter = async (id) => {
     if (!window.confirm("Release this Pokémon? This cannot be undone.")) return;
     try {
-      await fetch(`http://localhost:5000/api/encounters/${id}`, {
-        method: "DELETE",
-      });
-      await fetchEncounters(); 
-      await fetchTeam(); 
+      await apiFetch(`/api/encounters/${id}`, { method: "DELETE" });
+      await fetchEncounters();
+      await fetchTeam();
     } catch (err) {
       console.error("Delete failed:", err);
     }
@@ -172,14 +178,13 @@ export default function App() {
 
   const handleUpdateEncounter = async (updatedEnc) => {
     try {
-      await fetch(`http://localhost:5000/api/encounters/${updatedEnc.id}`, {
+      await apiFetch(`/api/encounters/${updatedEnc.id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        json: {
           location: updatedEnc.location,
           nickname: updatedEnc.nickname,
           status: updatedEnc.outcome?.toLowerCase(),
-        }),
+        },
       });
       fetchEncounters();
     } catch (err) {
@@ -196,11 +201,9 @@ export default function App() {
       const usedSlots = party.map((m) => m.slot).filter((s) => s != null);
       const nextSlot = [1, 2, 3, 4, 5, 6].find((s) => !usedSlots.includes(s));
 
-      const res = await fetch("http://localhost:5000/api/team", {
+      const res = await apiFetch("/api/team", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: 1,
+        json: {
           pokemon_id: mon?.dbData?.id,
           nickname: null,
           level: Number(mon?.level) || 5,
@@ -208,7 +211,7 @@ export default function App() {
           ability_id: null,
           team_slot: nextSlot ?? null,
           location_id: null,
-        }),
+        },
       });
 
       if (!res.ok) throw new Error("Failed to add Pokemon to team");
@@ -221,61 +224,59 @@ export default function App() {
   };
 
   const handleAddEncounter = async (enc) => {
-  try {
-    const res = await fetch("http://localhost:5000/api/encounters", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user_id: 1,
-        pokemon_id: enc.pokemon_id,
-        location: enc.location,
-        nickname: enc.nickname,
-        ability: enc.ability,
-        nature: "serious",
-        level: 50,
-        hp_iv: 31,
-        attack_iv: 31,
-        defense_iv: 31,
-        sp_attack_iv: 31,
-        sp_defense_iv: 31,
-        speed_iv: 31,
-        hp_ev: 0,
-        attack_ev: 0,
-        defense_ev: 0,
-        sp_attack_ev: 0,
-        sp_defense_ev: 0,
-        speed_ev: 0,
-        move1_id: null,
-        move2_id: null,
-        move3_id: null,
-        move4_id: null,
-        item_id: null,
-        status: enc.outcome?.toLowerCase() || "caught",
-      }),
-    });
-    if (!res.ok) throw new Error("Failed to create encounter");
-
-    // Auto-assign to team if there's a free slot
-    const newEncounter = await res.json();
-    if (party.length < 6) {
-      const usedSlots = party.map((m) => m.slot);
-      const slot = [1, 2, 3, 4, 5, 6].find((s) => !usedSlots.includes(s));
-      await fetch(`http://localhost:5000/api/team/${newEncounter.id}/slot`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ team_slot: slot, user_id: 1 }),
+    try {
+      const res = await apiFetch("/api/encounters", {
+        method: "POST",
+        json: {
+          pokemon_id: enc.pokemon_id,
+          location: enc.location,
+          nickname: enc.nickname,
+          ability: enc.ability,
+          nature: "serious",
+          level: 50,
+          hp_iv: 31, attack_iv: 31, defense_iv: 31,
+          sp_attack_iv: 31, sp_defense_iv: 31, speed_iv: 31,
+          hp_ev: 0, attack_ev: 0, defense_ev: 0,
+          sp_attack_ev: 0, sp_defense_ev: 0, speed_ev: 0,
+          move1_id: null, move2_id: null, move3_id: null, move4_id: null,
+          item_id: null,
+          status: enc.outcome?.toLowerCase() || "caught",
+        },
       });
-    }
+      if (!res.ok) throw new Error("Failed to create encounter");
 
-    await fetchEncounters();
-    await fetchTeam();
-    setShowEncounterModal(false);
-  } catch (err) {
-    console.error("Add encounter failed:", err);
-  }
-};
+      // Auto-assign to team if there's a free slot
+      const newEncounter = await res.json();
+      if (party.length < 6) {
+        const usedSlots = party.map((m) => m.slot);
+        const slot = [1, 2, 3, 4, 5, 6].find((s) => !usedSlots.includes(s));
+        await apiFetch(`/api/team/${newEncounter.id}/slot`, {
+          method: "PATCH",
+          json: { team_slot: slot },
+        });
+      }
+
+      await fetchEncounters();
+      await fetchTeam();
+      setShowEncounterModal(false);
+    } catch (err) {
+      console.error("Add encounter failed:", err);
+    }
+  };
 
   // ── Render ───────────────────────────────────────────────────────────
+  if (status === "loading") {
+    return (
+      <div className="auth-shell">
+        <div className="muted">Loading…</div>
+      </div>
+    );
+  }
+
+  if (status !== "authenticated") {
+    return <AuthScreen />;
+  }
+
   return (
     <>
       {showEncounterModal && (
@@ -308,6 +309,7 @@ export default function App() {
             </button>
           ))}
         </nav>
+        <UserMenu />
         <button
           className="ghost icon-btn"
           onClick={() => setSidebarOpen((o) => !o)}
