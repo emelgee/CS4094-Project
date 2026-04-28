@@ -5,8 +5,24 @@ const db = require("../db");
 const { signToken } = require("../auth/middleware");
 
 jest.mock("../db", () => ({
-  pool: { query: jest.fn() },
+  pool: {
+    query: jest.fn(),
+    getConnection: jest.fn(),
+  },
 }));
+
+// Factory for a fake transactional connection used by routes that call
+// pool.getConnection() (currently only DELETE /api/auth/delete).
+function mockConnection() {
+  const conn = {
+    query: jest.fn(),
+    beginTransaction: jest.fn().mockResolvedValue(undefined),
+    commit: jest.fn().mockResolvedValue(undefined),
+    rollback: jest.fn().mockResolvedValue(undefined),
+    release: jest.fn(),
+  };
+  return conn;
+}
 
 afterEach(() => jest.clearAllMocks());
 
@@ -136,5 +152,86 @@ describe("GET /api/auth/me", () => {
   it("rejects when no token is supplied", async () => {
     const res = await request(app).get("/api/auth/me");
     expect(res.statusCode).toBe(401);
+  });
+});
+
+// ─── DELETE /api/auth/delete ─────────────────────────────────────────────────
+
+describe("DELETE /api/auth/delete", () => {
+  const TEST_USER_ID = 7;
+  const authHeader = `Bearer ${signToken({ sub: TEST_USER_ID, username: "ash" })}`;
+
+  it("returns 401 without a token", async () => {
+    const res = await request(app).delete("/api/auth/delete");
+    expect(res.statusCode).toBe(401);
+    expect(db.pool.getConnection).not.toHaveBeenCalled();
+  });
+
+  it("deletes the user's encounters then the user, in a transaction", async () => {
+    const conn = mockConnection();
+    conn.query
+      .mockResolvedValueOnce([{ affectedRows: 3 }]) // DELETE FROM encounter
+      .mockResolvedValueOnce([{ affectedRows: 1 }]); // DELETE FROM users
+    db.pool.getConnection.mockResolvedValueOnce(conn);
+
+    const res = await request(app)
+      .delete("/api/auth/delete")
+      .set("Authorization", authHeader);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({ success: true });
+
+    // Encounters cleared first, scoped by user_id
+    expect(conn.query).toHaveBeenNthCalledWith(
+      1,
+      "DELETE FROM encounter WHERE user_id = ?",
+      [TEST_USER_ID]
+    );
+    // Then the user row, scoped by id
+    expect(conn.query).toHaveBeenNthCalledWith(
+      2,
+      "DELETE FROM users WHERE id = ?",
+      [TEST_USER_ID]
+    );
+
+    expect(conn.beginTransaction).toHaveBeenCalledTimes(1);
+    expect(conn.commit).toHaveBeenCalledTimes(1);
+    expect(conn.rollback).not.toHaveBeenCalled();
+    expect(conn.release).toHaveBeenCalledTimes(1);
+  });
+
+  it("returns 404 and rolls back when the user no longer exists", async () => {
+    const conn = mockConnection();
+    conn.query
+      .mockResolvedValueOnce([{ affectedRows: 0 }]) // no encounters
+      .mockResolvedValueOnce([{ affectedRows: 0 }]); // user already gone
+    db.pool.getConnection.mockResolvedValueOnce(conn);
+
+    const res = await request(app)
+      .delete("/api/auth/delete")
+      .set("Authorization", authHeader);
+
+    expect(res.statusCode).toBe(404);
+    expect(conn.rollback).toHaveBeenCalledTimes(1);
+    expect(conn.commit).not.toHaveBeenCalled();
+    expect(conn.release).toHaveBeenCalledTimes(1);
+  });
+
+  it("rolls back and returns 500 if a query fails", async () => {
+    const conn = mockConnection();
+    conn.query
+      .mockResolvedValueOnce([{ affectedRows: 2 }])
+      .mockRejectedValueOnce(new Error("DB down"));
+    db.pool.getConnection.mockResolvedValueOnce(conn);
+
+    const res = await request(app)
+      .delete("/api/auth/delete")
+      .set("Authorization", authHeader);
+
+    expect(res.statusCode).toBe(500);
+    expect(res.body).toEqual({ error: "Database error" });
+    expect(conn.rollback).toHaveBeenCalledTimes(1);
+    expect(conn.commit).not.toHaveBeenCalled();
+    expect(conn.release).toHaveBeenCalledTimes(1);
   });
 });
