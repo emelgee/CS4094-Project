@@ -1,6 +1,7 @@
 const request = require("supertest");
 const app = require("../server");
 const db = require("../db");
+const { authHeader } = require("./helpers/authToken");
 
 jest.mock("../db", () => ({
   pool: { query: jest.fn() },
@@ -8,8 +9,11 @@ jest.mock("../db", () => ({
 
 afterEach(() => jest.clearAllMocks());
 
+const TEST_USER_ID = 1;
+const AUTH = authHeader(TEST_USER_ID);
+
 const mockEncounter = {
-  user_id: 1,
+  user_id: TEST_USER_ID,
   pokemon_id: 4,
   location: "Viridian Forest",
   nickname: "Charmy",
@@ -25,29 +29,42 @@ const mockEncounter = {
   status: null,
 };
 
-// ─── GET /api/encounters/:user_id ─────────────────────────────────────────────
+// ─── Auth required ────────────────────────────────────────────────────────────
 
-describe("GET /api/encounters/:user_id", () => {
-  it("returns all encounters for a user with pokemon info", async () => {
+describe("auth on /api/encounters", () => {
+  it("rejects requests without a token", async () => {
+    const res = await request(app).get("/api/encounters");
+    expect(res.statusCode).toBe(401);
+  });
+});
+
+// ─── GET /api/encounters ──────────────────────────────────────────────────────
+
+describe("GET /api/encounters", () => {
+  it("returns all encounters for the authenticated user with pokemon info", async () => {
     const mockRows = [
       { ...mockEncounter, id: 1, pokemon_name: "charmander", type1: "fire", type2: null },
     ];
     db.pool.query.mockResolvedValueOnce([mockRows]);
 
-    const res = await request(app).get("/api/encounters/1");
+    const res = await request(app)
+      .get("/api/encounters")
+      .set("Authorization", AUTH);
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual(mockRows);
     expect(db.pool.query).toHaveBeenCalledWith(
       expect.stringContaining("JOIN pokemon"),
-      ["1"]  // CHANGE MAYBE SOON WHEN IMPLEEMNTING USER
+      [TEST_USER_ID]
     );
   });
 
   it("returns empty array when user has no encounters", async () => {
     db.pool.query.mockResolvedValueOnce([[]]);
 
-    const res = await request(app).get("/api/encounters/999");
+    const res = await request(app)
+      .get("/api/encounters")
+      .set("Authorization", AUTH);
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual([]);
@@ -56,45 +73,50 @@ describe("GET /api/encounters/:user_id", () => {
   it("returns 500 on database error", async () => {
     db.pool.query.mockRejectedValueOnce(new Error("DB error"));
 
-    const res = await request(app).get("/api/encounters/1");
+    const res = await request(app)
+      .get("/api/encounters")
+      .set("Authorization", AUTH);
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({ error: "Database error" });
   });
 });
 
-// ─── GET /api/encounters/encounter/:id ─────────────────────────────────────────────
+// ─── GET /api/encounters/encounter/:id ────────────────────────────────────────
 
 describe("GET /api/encounters/encounter/:id", () => {
-  it("returns an encounter based on given encounter id", async () => {
-    const mockJson = 
-      { ...mockEncounter, id: 1, pokemon_name: "charmander", type1: "fire", type2: null }
-    ;
-    db.pool.query.mockResolvedValueOnce([mockJson]);
+  it("returns an encounter scoped to the authed user", async () => {
+    const mockRow = { ...mockEncounter, id: 1, pokemon_name: "charmander", type1: "fire", type2: null };
+    db.pool.query.mockResolvedValueOnce([[mockRow]]);
 
-    const res = await request(app).get("/api/encounters/encounter/1");
+    const res = await request(app)
+      .get("/api/encounters/encounter/1")
+      .set("Authorization", AUTH);
 
     expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual(mockJson);
+    expect(res.body).toEqual(mockRow);
     expect(db.pool.query).toHaveBeenCalledWith(
-      expect.stringContaining("JOIN pokemon"),
-      ["1"]
+      expect.stringContaining("e.user_id = ?"),
+      ["1", TEST_USER_ID]
     );
   });
 
-  it("returns empty array when user has no encounters", async () => {
+  it("returns 404 when the encounter is missing or not owned", async () => {
     db.pool.query.mockResolvedValueOnce([[]]);
 
-    const res = await request(app).get("/api/encounters/999");
+    const res = await request(app)
+      .get("/api/encounters/encounter/999")
+      .set("Authorization", AUTH);
 
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual([]);
+    expect(res.statusCode).toBe(404);
   });
 
   it("returns 500 on database error", async () => {
     db.pool.query.mockRejectedValueOnce(new Error("DB error"));
 
-    const res = await request(app).get("/api/encounters/1");
+    const res = await request(app)
+      .get("/api/encounters/encounter/1")
+      .set("Authorization", AUTH);
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({ error: "Database error" });
@@ -107,16 +129,34 @@ describe("POST /api/encounters", () => {
   it("creates a new encounter and returns the new id", async () => {
     db.pool.query.mockResolvedValueOnce([{ insertId: 42 }]);
 
-    const res = await request(app).post("/api/encounters").send(mockEncounter);
+    const res = await request(app)
+      .post("/api/encounters")
+      .set("Authorization", AUTH)
+      .send(mockEncounter);
 
     expect(res.statusCode).toBe(201);
     expect(res.body).toEqual({ id: 42 });
   });
 
+  it("uses the authed user id, ignoring user_id from the body", async () => {
+    db.pool.query.mockResolvedValueOnce([{ insertId: 42 }]);
+
+    await request(app)
+      .post("/api/encounters")
+      .set("Authorization", AUTH)
+      .send({ ...mockEncounter, user_id: 9999 });
+
+    const insertParams = db.pool.query.mock.calls[0][1];
+    expect(insertParams[0]).toBe(TEST_USER_ID);
+  });
+
   it("returns 500 on database error", async () => {
     db.pool.query.mockRejectedValueOnce(new Error("DB error"));
 
-    const res = await request(app).post("/api/encounters").send(mockEncounter);
+    const res = await request(app)
+      .post("/api/encounters")
+      .set("Authorization", AUTH)
+      .send(mockEncounter);
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({ error: "Database error" });
@@ -131,6 +171,7 @@ describe("PATCH /api/encounters/:id", () => {
 
     const res = await request(app)
       .patch("/api/encounters/1")
+      .set("Authorization", AUTH)
       .send({ nickname: "Flamey", status: "caught" });
 
     expect(res.statusCode).toBe(200);
@@ -140,6 +181,7 @@ describe("PATCH /api/encounters/:id", () => {
   it("returns 400 when no valid fields are provided", async () => {
     const res = await request(app)
       .patch("/api/encounters/1")
+      .set("Authorization", AUTH)
       .send({ invalid_field: "value" });
 
     expect(res.statusCode).toBe(400);
@@ -147,11 +189,12 @@ describe("PATCH /api/encounters/:id", () => {
     expect(db.pool.query).not.toHaveBeenCalled();
   });
 
-  it("returns 404 when encounter is not found", async () => {
+  it("returns 404 when encounter is not found or not owned", async () => {
     db.pool.query.mockResolvedValueOnce([{ affectedRows: 0 }]);
 
     const res = await request(app)
       .patch("/api/encounters/999")
+      .set("Authorization", AUTH)
       .send({ nickname: "Ghost" });
 
     expect(res.statusCode).toBe(404);
@@ -163,6 +206,7 @@ describe("PATCH /api/encounters/:id", () => {
 
     await request(app)
       .patch("/api/encounters/1")
+      .set("Authorization", AUTH)
       .send({ nickname: "Flamey", hacked_field: "bad_value" });
 
     const callArgs = db.pool.query.mock.calls[0];
@@ -170,11 +214,25 @@ describe("PATCH /api/encounters/:id", () => {
     expect(callArgs[0]).not.toContain("hacked_field");
   });
 
+  it("scopes the update to the authed user", async () => {
+    db.pool.query.mockResolvedValueOnce([{ affectedRows: 1 }]);
+
+    await request(app)
+      .patch("/api/encounters/1")
+      .set("Authorization", AUTH)
+      .send({ nickname: "Flamey" });
+
+    const [sql, params] = db.pool.query.mock.calls[0];
+    expect(sql).toMatch(/WHERE id = \? AND user_id = \?/);
+    expect(params[params.length - 1]).toBe(TEST_USER_ID);
+  });
+
   it("returns 500 on database error", async () => {
     db.pool.query.mockRejectedValueOnce(new Error("DB error"));
 
     const res = await request(app)
       .patch("/api/encounters/1")
+      .set("Authorization", AUTH)
       .send({ nickname: "Flamey" });
 
     expect(res.statusCode).toBe(500);
@@ -190,17 +248,19 @@ describe("PUT /api/encounters/:id", () => {
 
     const res = await request(app)
       .put("/api/encounters/1")
+      .set("Authorization", AUTH)
       .send(mockEncounter);
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({ message: "Encounter updated" });
   });
 
-  it("returns 404 when encounter is not found", async () => {
+  it("returns 404 when encounter is not found or not owned", async () => {
     db.pool.query.mockResolvedValueOnce([{ affectedRows: 0 }]);
 
     const res = await request(app)
       .put("/api/encounters/999")
+      .set("Authorization", AUTH)
       .send(mockEncounter);
 
     expect(res.statusCode).toBe(404);
@@ -210,7 +270,10 @@ describe("PUT /api/encounters/:id", () => {
   it("returns 500 on database error", async () => {
     db.pool.query.mockRejectedValueOnce(new Error("DB error"));
 
-    const res = await request(app).put("/api/encounters/1").send(mockEncounter);
+    const res = await request(app)
+      .put("/api/encounters/1")
+      .set("Authorization", AUTH)
+      .send(mockEncounter);
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({ error: "Database error" });
@@ -223,16 +286,24 @@ describe("DELETE /api/encounters/:id", () => {
   it("deletes an encounter and returns success message", async () => {
     db.pool.query.mockResolvedValueOnce([{ affectedRows: 1 }]);
 
-    const res = await request(app).delete("/api/encounters/1");
+    const res = await request(app)
+      .delete("/api/encounters/1")
+      .set("Authorization", AUTH);
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({ message: "Encounter deleted" });
+    expect(db.pool.query).toHaveBeenCalledWith(
+      expect.stringContaining("DELETE FROM encounter WHERE id = ? AND user_id = ?"),
+      ["1", TEST_USER_ID]
+    );
   });
 
-  it("returns 404 when encounter is not found", async () => {
+  it("returns 404 when encounter is not found or not owned", async () => {
     db.pool.query.mockResolvedValueOnce([{ affectedRows: 0 }]);
 
-    const res = await request(app).delete("/api/encounters/999");
+    const res = await request(app)
+      .delete("/api/encounters/999")
+      .set("Authorization", AUTH);
 
     expect(res.statusCode).toBe(404);
     expect(res.body).toEqual({ error: "Encounter not found" });
@@ -241,7 +312,9 @@ describe("DELETE /api/encounters/:id", () => {
   it("returns 500 on database error", async () => {
     db.pool.query.mockRejectedValueOnce(new Error("DB error"));
 
-    const res = await request(app).delete("/api/encounters/1");
+    const res = await request(app)
+      .delete("/api/encounters/1")
+      .set("Authorization", AUTH);
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({ error: "Database error" });

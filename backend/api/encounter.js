@@ -1,23 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const { requireAuth } = require("../auth/middleware");
 
-// GET /api/encounters/:user_id
-// TODO: When authentication is added, update this to use auth token for user id
-//router.get("/:user_id", async (req, res) => {
-//try {
-//const [rows] = await db.pool.query(
-//"SELECT * FROM encounter WHERE user_id = ? ORDER BY id ASC",
-//[req.params.user_id]
-//);
-//res.json(rows);
-//} catch (err) {
-// console.error("GET /api/encounters/:user_id error:", err);
-// res.status(500).json({ error: "Database error" });
-// }
-//});
+// All encounter routes require authentication and operate on the
+// authenticated user's data only.
+router.use(requireAuth);
 
-router.get("/:user_id", async (req, res) => {
+// GET /api/encounters
+// Returns all encounters belonging to the authenticated user.
+router.get("/", async (req, res) => {
   try {
     const [rows] = await db.pool.query(
       `SELECT 
@@ -29,19 +21,20 @@ router.get("/:user_id", async (req, res) => {
        JOIN pokemon p ON e.pokemon_id = p.id
        WHERE e.user_id = ?
        ORDER BY e.id ASC`,
-      [req.params.user_id]
+      [req.user.id]
     );
 
     res.json(rows);
   } catch (err) {
-    console.error("GET /api/encounters/:user_id error:", err);
+    console.error("GET /api/encounters error:", err);
     res.status(500).json({ error: "Database error" });
   }
 });
 
+// GET /api/encounters/encounter/:id
 router.get("/encounter/:id", async (req, res) => {
   try {
-    const rows = await db.pool.query(
+    const [rows] = await db.pool.query(
       `SELECT 
          e.*,
          p.name AS pokemon_name,
@@ -49,10 +42,14 @@ router.get("/encounter/:id", async (req, res) => {
          p.type2
        FROM encounter e
        JOIN pokemon p ON e.pokemon_id = p.id
-       WHERE e.id = ?
-       ORDER BY e.id ASC`,
-      [req.params.id]
+       WHERE e.id = ? AND e.user_id = ?
+       LIMIT 1`,
+      [req.params.id, req.user.id]
     );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Encounter not found" });
+    }
 
     res.json(rows[0]);
   } catch (err) {
@@ -62,10 +59,10 @@ router.get("/encounter/:id", async (req, res) => {
 });
 
 // POST /api/encounters
+// user_id is taken from the auth token; any user_id in the body is ignored.
 router.post("/", async (req, res) => {
   try {
     const {
-      user_id,
       pokemon_id,
       location_id,
       nickname,
@@ -99,7 +96,7 @@ router.post("/", async (req, res) => {
          move1_id, move2_id, move3_id, move4_id, item_id, status)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        user_id,
+        req.user.id,
         pokemon_id,
         location_id,
         nickname,
@@ -171,8 +168,8 @@ router.patch("/:id", async (req, res) => {
     const setClause = fields.map((f) => `${f} = ?`).join(", ");
 
     const [result] = await db.pool.query(
-      `UPDATE encounter SET ${setClause} WHERE id = ?`,
-      [...values, req.params.id]
+      `UPDATE encounter SET ${setClause} WHERE id = ? AND user_id = ?`,
+      [...values, req.params.id, req.user.id]
     );
 
     if (result.affectedRows === 0) {
@@ -187,7 +184,6 @@ router.patch("/:id", async (req, res) => {
 });
 
 // PUT /api/encounters/:id
-// TODO: When authentication is added, update this to use auth token for user id
 router.put("/:id", async (req, res) => {
   try {
     const {
@@ -221,7 +217,7 @@ router.put("/:id", async (req, res) => {
         hp_iv = ?, attack_iv = ?, defense_iv = ?, sp_attack_iv = ?, sp_defense_iv = ?, speed_iv = ?,
         hp_ev = ?, attack_ev = ?, defense_ev = ?, sp_attack_ev = ?, sp_defense_ev = ?, speed_ev = ?,
         move1_id = ?, move2_id = ?, move3_id = ?, move4_id = ?, item_id = ?, status = ?
-       WHERE id = ?`,
+       WHERE id = ? AND user_id = ?`,
       [
         location_id,
         nickname,
@@ -246,6 +242,7 @@ router.put("/:id", async (req, res) => {
         item_id,
         status,
         req.params.id,
+        req.user.id,
       ]
     );
 
@@ -261,12 +258,12 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE /api/encounters/:id
-// TODO: When authentication is added, update this to use auth token for user id
 router.delete("/:id", async (req, res) => {
   try {
-    const [result] = await db.pool.query("DELETE FROM encounter WHERE id = ?", [
-      req.params.id,
-    ]);
+    const [result] = await db.pool.query(
+      "DELETE FROM encounter WHERE id = ? AND user_id = ?",
+      [req.params.id, req.user.id]
+    );
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Encounter not found" });

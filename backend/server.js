@@ -11,6 +11,7 @@ const abilityRoutes = require("./api/ability");
 const itemRoutes = require("./api/item");
 const routeRoutes = require("./api/route");
 const moveRoutes = require("./api/move");
+const authRoutes = require("./api/auth");
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Server is running" });
 });
 
+app.use("/api/auth", authRoutes);
 app.use("/api/abilities", abilityRoutes)
 app.use("/api/pokemon", pokemonRoutes);
 app.use("/api/encounters", encounterRoutes);
