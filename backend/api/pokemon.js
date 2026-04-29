@@ -96,6 +96,44 @@ router.get("/:id/moves", async (req, res) => {
   }
 });
 
+// GET /api/pokemon/:id/evolutions
+// Returns all possible evolutions for the given pokemon species
+router.get("/:id/evolutions", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [pokemon] = await db.pool.query(
+      "SELECT id, name FROM pokemon WHERE id = ?",
+      [id]
+    );
+    if (pokemon.length === 0) {
+      return res.status(404).json({ error: "Pokemon not found" });
+    }
+
+    const [rows] = await db.pool.query(
+      `SELECT
+         e.id,
+         e.\`trigger\`,
+         e.min_level,
+         e.item,
+         p.id   AS to_pokemon_id,
+         p.name AS to_pokemon_name,
+         p.type1,
+         p.type2
+       FROM evolution e
+       JOIN pokemon p ON e.to_pokemon_id = p.id
+       WHERE e.from_pokemon_id = ?
+       ORDER BY e.to_pokemon_id ASC`,
+      [id]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("GET /api/pokemon/:id/evolutions error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
 // GET /api/pokemon/:id/locations
 // Returns all locations (and areas) where a given pokemon can be found
 router.get("/:id/locations", async (req, res) => {

@@ -138,6 +138,7 @@ router.patch("/:id", async (req, res) => {
       "nickname",
       "ability_id",
       "nature",
+      "level",
       "status",
       "hp_iv",
       "attack_iv",

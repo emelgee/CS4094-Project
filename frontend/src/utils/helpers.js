@@ -127,12 +127,12 @@ export function getPokemonSpriteUrl(pokemonId, pokemonName) {
 // =====================================================================
 // STAT CALCULATIONS
 // =====================================================================
-export function calculateGen3Stat(baseStat, iv, level, isHp) {
-  const effectiveIv = Number.isFinite(iv) ? iv : 0;
-  const effectiveLevel = Number.isFinite(level) && level > 0 ? level : 1;
-  const ivContribution = Math.floor(effectiveIv / 4);
-  const statCore = Math.floor((((2 * baseStat) + ivContribution) * effectiveLevel) / 100);
-  return isHp ? statCore + effectiveLevel + 10 : statCore + 5;
+export function calculateGen3Stat(baseStat, iv, ev = 0, level, isHp) {
+  const ivVal = Number.isFinite(Number(iv)) ? Number(iv) : 0;
+  const evVal = Number.isFinite(Number(ev)) ? Number(ev) : 0;
+  const lv    = Number.isFinite(level) && level > 0 ? level : 1;
+  const statCore = Math.floor((((2 * baseStat) + ivVal + Math.floor(evVal / 4)) * lv) / 100);
+  return isHp ? statCore + lv + 10 : statCore + 5;
 }
 
 export function gen3CombatStat(base, iv, ev, level) {
@@ -145,7 +145,10 @@ export function buildTrainerPokemonView(entry, pokemonIndex) {
   const speciesName = String(entry?.species || "").toLowerCase();
   const basePokemon = pokemonIndex[speciesName] || null;
   const level = Number(entry?.level) || 1;
-  const iv = Number(entry?.iv);
+  const rawIv = Number(entry?.iv);
+  // Trainer data stores a 0-255 difficulty value; actual IV/EV per stat = floor(rawIv / 10)
+  const actualIv = Math.floor((Number.isFinite(rawIv) ? rawIv : 255) / 10);
+  const actualEv = actualIv;
   const moves = Array.isArray(entry?.moves) ? entry.moves : [];
 
   const baseStats = basePokemon ? {
@@ -153,23 +156,28 @@ export function buildTrainerPokemonView(entry, pokemonIndex) {
     SpA: basePokemon.sp_attack, SpD: basePokemon.sp_defense, Spe: basePokemon.speed,
   } : null;
 
+  const ivs = { HP: actualIv, Atk: actualIv, Def: actualIv, SpA: actualIv, SpD: actualIv, Spe: actualIv };
+  const evs = { HP: actualEv, Atk: actualEv, Def: actualEv, SpA: actualEv, SpD: actualEv, Spe: actualEv };
+
   const battleStats = baseStats ? {
-    HP:  calculateGen3Stat(basePokemon.hp,         iv, level, true),
-    Atk: calculateGen3Stat(basePokemon.attack,     iv, level, false),
-    Def: calculateGen3Stat(basePokemon.defense,    iv, level, false),
-    SpA: calculateGen3Stat(basePokemon.sp_attack,  iv, level, false),
-    SpD: calculateGen3Stat(basePokemon.sp_defense, iv, level, false),
-    Spe: calculateGen3Stat(basePokemon.speed,      iv, level, false),
+    HP:  calculateGen3Stat(basePokemon.hp,         actualIv, actualEv, level, true),
+    Atk: calculateGen3Stat(basePokemon.attack,     actualIv, actualEv, level, false),
+    Def: calculateGen3Stat(basePokemon.defense,    actualIv, actualEv, level, false),
+    SpA: calculateGen3Stat(basePokemon.sp_attack,  actualIv, actualEv, level, false),
+    SpD: calculateGen3Stat(basePokemon.sp_defense, actualIv, actualEv, level, false),
+    Spe: calculateGen3Stat(basePokemon.speed,      actualIv, actualEv, level, false),
   } : null;
 
   return {
     species: entry?.species || "",
     displayName: formatSpeciesName(entry?.species),
     level,
-    iv: Number.isFinite(iv) ? iv : null,
+    iv: Number.isFinite(rawIv) ? rawIv : null,
     moves,
     basePokemon,
     baseStats,
+    ivs,
+    evs,
     battleStats,
   };
 }

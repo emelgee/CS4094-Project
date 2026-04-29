@@ -394,6 +394,7 @@ export default function App() {
               onOpenAdd={() => setShowAddPokemonModal(true)}
               onRemove={handleDeleteEncounter}
               onRelease={handleDeleteEncounter}
+              onSave={fetchTeam}
             />
           )}
           {screen === "encounters" && (
@@ -409,6 +410,7 @@ export default function App() {
             <CalculatorScreen
               onNavigate={navigate}
               encounters={encounters}
+              pcBox={pcBox}
               party={party}
               onRefreshEncounters={fetchEncounters}
               visible={screen === "calculator"}

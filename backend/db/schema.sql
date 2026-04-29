@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS team_pokemon;
 DROP TABLE IF EXISTS encounter;
 DROP TABLE IF EXISTS pokemon_move;
+DROP TABLE IF EXISTS evolution;
 DROP TABLE IF EXISTS move;
 DROP TABLE IF EXISTS item;
 DROP TABLE IF EXISTS trainer;
@@ -44,6 +45,17 @@ CREATE TABLE pokemon (
   FOREIGN KEY (ability1) REFERENCES ability(id),
   FOREIGN KEY (ability2) REFERENCES ability(id),
   FOREIGN KEY (ability_hidden) REFERENCES ability(id)
+);
+
+CREATE TABLE evolution (
+  id              INT AUTO_INCREMENT PRIMARY KEY,
+  from_pokemon_id INT NOT NULL,
+  to_pokemon_id   INT NOT NULL,
+  `trigger`       VARCHAR(64) NULL,
+  min_level       INT NULL,
+  item            VARCHAR(64) NULL,
+  FOREIGN KEY (from_pokemon_id) REFERENCES pokemon(id),
+  FOREIGN KEY (to_pokemon_id)   REFERENCES pokemon(id)
 );
 
 CREATE TABLE location (
