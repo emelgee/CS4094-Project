@@ -126,6 +126,48 @@ router.patch("/:id/slot", async (req, res) => {
   }
 });
 
+// PATCH /api/team/:id/evolve
+// Body: { to_pokemon_id } — changes the species of an encounter while keeping all other data.
+// Validates that the requested evolution is a known evolution of the current species.
+router.patch("/:id/evolve", async (req, res) => {
+  try {
+    const { to_pokemon_id } = req.body;
+    if (!to_pokemon_id) {
+      return res.status(400).json({ error: "to_pokemon_id is required" });
+    }
+
+    // Confirm this encounter belongs to the user and fetch current pokemon_id
+    const [encRows] = await db.pool.query(
+      "SELECT id, pokemon_id FROM encounter WHERE id = ? AND user_id = ?",
+      [req.params.id, req.user.id]
+    );
+    if (encRows.length === 0) {
+      return res.status(404).json({ error: "Pokemon not found or does not belong to user" });
+    }
+
+    const currentPokemonId = encRows[0].pokemon_id;
+
+    // Validate the evolution exists in the evolution table
+    const [evoRows] = await db.pool.query(
+      "SELECT id FROM evolution WHERE from_pokemon_id = ? AND to_pokemon_id = ?",
+      [currentPokemonId, to_pokemon_id]
+    );
+    if (evoRows.length === 0) {
+      return res.status(400).json({ error: "Invalid evolution: not a known evolution of this Pokemon" });
+    }
+
+    await db.pool.query(
+      "UPDATE encounter SET pokemon_id = ? WHERE id = ? AND user_id = ?",
+      [to_pokemon_id, req.params.id, req.user.id]
+    );
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("PATCH /api/team/:id/evolve error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
 // DELETE /api/team/:id
 router.delete("/:id", async (req, res) => {
   try {

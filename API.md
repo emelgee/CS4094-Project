@@ -222,6 +222,33 @@ Returns all locations and areas where the given pokemon can be encountered in th
 
 ---
 
+### GET `/pokemon/:id/evolutions`
+Returns all possible evolutions for the given Pokémon species (handles split evolutions).
+Only includes targets within the Gen 1–3 Pokédex (IDs 1–386).
+
+**Response** `200 OK`
+```json
+[
+  {
+    "id": 1,
+    "trigger": "level-up",
+    "min_level": 16,
+    "item": null,
+    "to_pokemon_id": 2,
+    "to_pokemon_name": "ivysaur",
+    "type1": "grass",
+    "type2": "poison"
+  }
+]
+```
+
+Returns an empty array `[]` if the Pokémon has no evolutions.
+
+**Errors**
+- `404 Not Found` — Pokémon not found
+
+---
+
 ### GET `/pokemon/:id/moves`
 Returns all moves a pokemon can learn, including learn method and level.
 
@@ -467,7 +494,7 @@ body is ignored — the user is taken from the JWT.
 ### PATCH `/encounters/:id`
 Partially updates an encounter. Only the fields provided will be updated.
 
-**Allowed fields:** `location_id`, `nickname`, `ability_id`, `nature`, `status`, `hp_iv`, `attack_iv`, `defense_iv`, `sp_attack_iv`, `sp_defense_iv`, `speed_iv`, `hp_ev`, `attack_ev`, `defense_ev`, `sp_attack_ev`, `sp_defense_ev`, `speed_ev`, `move1_id`, `move2_id`, `move3_id`, `move4_id`, `item_id`
+**Allowed fields:** `location_id`, `nickname`, `ability_id`, `nature`, `level`, `status`, `hp_iv`, `attack_iv`, `defense_iv`, `sp_attack_iv`, `sp_defense_iv`, `speed_iv`, `hp_ev`, `attack_ev`, `defense_ev`, `sp_attack_ev`, `sp_defense_ev`, `speed_ev`, `move1_id`, `move2_id`, `move3_id`, `move4_id`, `item_id`
 
 **Request Body** — any subset of allowed fields
 ```json
@@ -583,6 +610,27 @@ Moves a team pokemon to a different party slot or to the PC box.
 ```json
 { "ok": true }
 ```
+
+---
+
+### PATCH `/team/:id/evolve`
+Evolves a team Pokémon into the specified species. The `pokemon_id` on the encounter is updated;
+all other data (IVs, EVs, nature, level, nickname, moves) is preserved.
+Validates that the target is a known evolution of the current species.
+
+**Request Body**
+```json
+{ "to_pokemon_id": 2 }
+```
+
+**Response** `200 OK`
+```json
+{ "ok": true }
+```
+
+**Errors**
+- `400 Bad Request` — `to_pokemon_id` missing, or not a valid evolution of the current species
+- `404 Not Found` — encounter not found or does not belong to user
 
 ---
 

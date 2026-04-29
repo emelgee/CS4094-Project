@@ -10,6 +10,7 @@ const { insertItems } = require("./insertItem");
 const { insertLocations } = require("./insertLocations");
 const { insertPokemonMoves } = require("./insertLearnsets");
 const { insertAbilities }    = require("./insertAbility");
+const { insertEvolutions }   = require("./insertEvolutions");
 
 const BASE_PATH = path.join(__dirname, "../data");
 
@@ -97,6 +98,18 @@ async function readLocationJson() {
   return parsed;
 }
 
+async function readEvolutionsJson() {
+  const INPUT_PATH = path.join(BASE_PATH, "/evolutions.json");
+  const raw = await fs.readFile(INPUT_PATH, "utf8");
+  const parsed = JSON.parse(raw);
+
+  if (!Array.isArray(parsed)) {
+    throw new Error("evolutions.json must contain an array.");
+  }
+
+  return parsed;
+}
+
 async function seedFromJson() {
   await waitForDatabase();
 
@@ -127,6 +140,10 @@ async function seedFromJson() {
   const location_rows = await readLocationJson();
   await insertLocations(location_rows);
   console.log(`Inserted/updated ${location_rows.length} location rows from JSON.`);
+
+  const evolution_rows = await readEvolutionsJson();
+  await insertEvolutions(evolution_rows);
+  console.log(`Inserted/updated ${evolution_rows.length} evolution rows from JSON.`);
 
   //Test Encounters for Admin Account (REMOVE UPON DEPLOYING)
   await insertEncounterBasic(1, 258, "Littleroot Town", "Muddy", "Torrent", "Bold", "Alive", 11, 1);

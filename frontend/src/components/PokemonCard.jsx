@@ -211,6 +211,9 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate, on
   const [allMoves, setAllMoves] = useState([]);
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState("");
+  const [evolutions, setEvolutions] = useState([]);
+  const [showEvolveModal, setShowEvolveModal] = useState(false);
+  const [evolving, setEvolving] = useState(false);
 
   const spriteUrl = getPokemonSpriteUrl(mon.pokemonId, mon.name);
   const inGame = calcInGame(mon.stats, level, ivs, evs, nature);
@@ -242,6 +245,20 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate, on
     })();
     return () => { cancelled = true; };
   }, []);
+
+  useEffect(() => {
+    if (!mon.pokemonId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/pokemon/${mon.pokemonId}/evolutions`);
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        if (!cancelled) setEvolutions(Array.isArray(data) ? data : []);
+      } catch { /* noop */ }
+    })();
+    return () => { cancelled = true; };
+  }, [mon.pokemonId]);
 
   // Enrich move names to full objects once allMoves is ready
   useEffect(() => {
@@ -296,6 +313,32 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate, on
       setSaving(false);
       setTimeout(() => setSaveMsg(""), 2500);
     }
+  };
+
+  const handleEvolve = async (toPokemonId) => {
+    setEvolving(true);
+    try {
+      const res = await apiFetch(`/api/team/${mon.id}/evolve`, {
+        method: "PATCH",
+        json: { to_pokemon_id: toPokemonId },
+      });
+      if (!res.ok) throw new Error();
+      setShowEvolveModal(false);
+      onSave?.();
+    } catch {
+      /* leave modal open so user can retry */
+    } finally {
+      setEvolving(false);
+    }
+  };
+
+  const evolveConditionLabel = (evo) => {
+    if (evo.trigger === "level-up" && evo.min_level) return `Lv. ${evo.min_level}`;
+    if (evo.trigger === "use-item" && evo.item)
+      return evo.item.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    if (evo.trigger === "trade") return "Trade";
+    if (evo.trigger === "shed") return "Empty party slot + Poké Ball";
+    return evo.trigger ?? "—";
   };
 
   return (
@@ -440,9 +483,96 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate, on
             {saveMsg}
           </span>
         )}
+        {evolutions.length > 0 && (
+          <button className="ghost small" onClick={() => setShowEvolveModal(true)}>
+            ✦ Evolve
+          </button>
+        )}
         <button className="ghost small" onClick={() => onSendToBox(mon.id)}>📦 To Box</button>
         <button className="ghost small danger" onClick={() => onRemove(mon.id)}>Remove</button>
       </div>
+
+      {/* Evolution picker modal */}
+      {showEvolveModal && (
+        <>
+          <div
+            style={{ position: "fixed", inset: 0, zIndex: 200, background: "#00000088" }}
+            onClick={() => !evolving && setShowEvolveModal(false)}
+          />
+          <div style={{
+            position: "fixed", inset: 0, zIndex: 201,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            pointerEvents: "none",
+          }}>
+            <div style={{
+              pointerEvents: "auto",
+              background: "#0e1120", border: "1px solid #252c40", borderRadius: 14,
+              padding: 20, minWidth: 260, maxWidth: 360,
+              boxShadow: "0 8px 40px #00000099",
+            }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#e4e6ef", marginBottom: 4 }}>
+                Evolve {mon.nickname || mon.name}
+              </div>
+              <div style={{ fontSize: 11, color: "#5a6380", marginBottom: 14 }}>
+                Select an evolution. IVs, EVs, moves, and nickname are kept.
+              </div>
+
+              <div style={{ display: "grid", gap: 8 }}>
+                {evolutions.map((evo) => (
+                  <button
+                    key={evo.to_pokemon_id}
+                    disabled={evolving}
+                    onClick={() => handleEvolve(evo.to_pokemon_id)}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 12,
+                      padding: "10px 12px", borderRadius: 10,
+                      border: "1px solid #252c40", background: "#111520",
+                      cursor: evolving ? "default" : "pointer", textAlign: "left",
+                      transition: "border-color 0.12s",
+                    }}
+                    onMouseEnter={e => { if (!evolving) e.currentTarget.style.borderColor = "#3a58cc"; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = "#252c40"; }}
+                  >
+                    <img
+                      src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evo.to_pokemon_id}.png`}
+                      alt={evo.to_pokemon_name}
+                      style={{ width: 48, height: 48, imageRendering: "pixelated", flexShrink: 0 }}
+                      onError={e => { e.target.style.display = "none"; }}
+                    />
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: "#e4e6ef", textTransform: "capitalize" }}>
+                        {evo.to_pokemon_name}
+                      </div>
+                      <div style={{ fontSize: 11, color: "#5a6380", marginTop: 2 }}>
+                        {evolveConditionLabel(evo)}
+                      </div>
+                      <div style={{ display: "flex", gap: 4, marginTop: 4, flexWrap: "wrap" }}>
+                        {[evo.type1, evo.type2].filter(Boolean).map(t => (
+                          <span key={t} className={`type-chip type-${t.toLowerCase()}`}>{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              <button
+                className="ghost small"
+                style={{ marginTop: 12, width: "100%" }}
+                onClick={() => setShowEvolveModal(false)}
+                disabled={evolving}
+              >
+                Cancel
+              </button>
+              {evolving && (
+                <div style={{ textAlign: "center", fontSize: 11, color: "#5a6380", marginTop: 8 }}>
+                  Evolving…
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
