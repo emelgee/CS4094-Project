@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { capitalize, getPokemonSpriteUrl, gen3CombatStat, applyNatureModifier, NATURES } from "../utils/helpers";
 import { API_BASE } from "../data/constants";
 import { apiFetch } from "../utils/api";
@@ -200,7 +200,7 @@ function TeamMoveSlot({ slotIdx, moveObj, learnset, allMoves, onSwap }) {
   );
 }
 
-export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate, onSave }) {
+export default function PokemonCard({ mon, onSendToBox, onRemove, onSave }) {
   const [nature, setNature] = useState(String(mon.nature || "hardy").toLowerCase());
   const [level, setLevel] = useState(mon.level || 1);
   const [nickname, setNickname] = useState(mon.nickname || "");
@@ -213,7 +213,10 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate, on
   const [saveMsg, setSaveMsg] = useState("");
   const [evolutions, setEvolutions] = useState([]);
   const [showEvolveModal, setShowEvolveModal] = useState(false);
-  const [evolving, setEvolving] = useState(false);
+  const [evoAnim, setEvoAnim] = useState(null);
+  const [animPhase, setAnimPhase] = useState(null);
+  const audioRef = useRef(null);
+  const skipRef = useRef(null);
 
   const spriteUrl = getPokemonSpriteUrl(mon.pokemonId, mon.name);
   const inGame = calcInGame(mon.stats, level, ivs, evs, nature);
@@ -315,21 +318,70 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate, on
     }
   };
 
-  const handleEvolve = async (toPokemonId) => {
-    setEvolving(true);
+  const startEvolveAnimation = async (evo) => {
+    setShowEvolveModal(false);
+    setEvoAnim(evo);
+
+    let resolveSkip;
+    const skipPromise = new Promise(r => { resolveSkip = r; });
+    skipRef.current = resolveSkip;
+
+    const waitOrSkip = (ms) => Promise.race([
+      new Promise(r => setTimeout(r, ms)),
+      skipPromise,
+    ]);
+
     try {
-      const res = await apiFetch(`/api/team/${mon.id}/evolve`, {
+      audioRef.current = new Audio("/evolution.mp3");
+      audioRef.current.play().catch(() => {});
+    } catch { /* noop */ }
+
+    await waitOrSkip(1000);
+
+    setAnimPhase("flashing");
+    await waitOrSkip(10000);
+
+    setAnimPhase("whiteout");
+    try {
+      await apiFetch(`/api/team/${mon.id}/evolve`, {
         method: "PATCH",
-        json: { to_pokemon_id: toPokemonId },
+        json: { to_pokemon_id: evo.to_pokemon_id },
       });
-      if (!res.ok) throw new Error();
-      setShowEvolveModal(false);
-      onSave?.();
-    } catch {
-      /* leave modal open so user can retry */
-    } finally {
-      setEvolving(false);
+    } catch { /* keep animating even if API fails */ }
+
+    await waitOrSkip(600);
+
+    setAnimPhase("reveal");
+    onSave?.();
+
+    await waitOrSkip(2500);
+
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
     }
+
+    let fanfare = null;
+    await Promise.race([
+      skipPromise,
+      new Promise(resolve => {
+        try {
+          fanfare = new Audio("/evolution-complete.mp3");
+          const cutoff = setTimeout(() => { fanfare.pause(); resolve(); }, 4000);
+          const done = () => { clearTimeout(cutoff); resolve(); };
+          fanfare.addEventListener("ended", done);
+          fanfare.addEventListener("error", done);
+          fanfare.play().catch(done);
+        } catch {
+          resolve();
+        }
+      }),
+    ]);
+    if (fanfare) fanfare.pause();
+
+    skipRef.current = null;
+    setAnimPhase(null);
+    setEvoAnim(null);
   };
 
   const evolveConditionLabel = (evo) => {
@@ -492,12 +544,53 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate, on
         <button className="ghost small danger" onClick={() => onRemove(mon.id)}>Remove</button>
       </div>
 
+      {/* Evolution animation overlay */}
+      {evoAnim && (
+        <div
+          onClick={() => skipRef.current?.()}
+          style={{
+            position: "fixed", inset: 0, zIndex: 300,
+            background: animPhase === "whiteout" ? "#ffffff" : "#000000",
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            gap: 24, transition: "background 0.3s ease",
+            cursor: "pointer",
+          }}
+        >
+          {animPhase !== "whiteout" && (
+            <>
+              <img
+                src={animPhase === "reveal"
+                  ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evoAnim.to_pokemon_id}.png`
+                  : spriteUrl}
+                alt="evolving"
+                className={
+                  animPhase === "flashing" ? "evo-sprite-flash" :
+                  animPhase === "reveal" ? "evo-sprite-reveal" :
+                  undefined
+                }
+                style={{ width: 192, height: 192, imageRendering: "pixelated" }}
+              />
+              <div style={{
+                background: "#1a1a1a", border: "2px solid #3a3a3a",
+                borderRadius: 6, padding: "14px 32px",
+                fontSize: 19, fontWeight: 700, color: "#ffffff",
+                letterSpacing: "0.02em", textAlign: "center", maxWidth: 420,
+              }}>
+                {animPhase === "reveal"
+                  ? `${capitalize(mon.nickname || mon.name)} evolved into ${capitalize(evoAnim.to_pokemon_name)}!`
+                  : `What? ${capitalize(mon.nickname || mon.name)} is evolving!`}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
       {/* Evolution picker modal */}
       {showEvolveModal && (
         <>
           <div
             style={{ position: "fixed", inset: 0, zIndex: 200, background: "#00000088" }}
-            onClick={() => !evolving && setShowEvolveModal(false)}
+            onClick={() => !animPhase && setShowEvolveModal(false)}
           />
           <div style={{
             position: "fixed", inset: 0, zIndex: 201,
@@ -521,16 +614,16 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate, on
                 {evolutions.map((evo) => (
                   <button
                     key={evo.to_pokemon_id}
-                    disabled={evolving}
-                    onClick={() => handleEvolve(evo.to_pokemon_id)}
+                    disabled={animPhase !== null}
+                    onClick={() => startEvolveAnimation(evo)}
                     style={{
                       display: "flex", alignItems: "center", gap: 12,
                       padding: "10px 12px", borderRadius: 10,
                       border: "1px solid #252c40", background: "#111520",
-                      cursor: evolving ? "default" : "pointer", textAlign: "left",
+                      cursor: animPhase !== null ? "default" : "pointer", textAlign: "left",
                       transition: "border-color 0.12s",
                     }}
-                    onMouseEnter={e => { if (!evolving) e.currentTarget.style.borderColor = "#3a58cc"; }}
+                    onMouseEnter={e => { if (!animPhase) e.currentTarget.style.borderColor = "#3a58cc"; }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = "#252c40"; }}
                   >
                     <img
@@ -560,15 +653,10 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onNavigate, on
                 className="ghost small"
                 style={{ marginTop: 12, width: "100%" }}
                 onClick={() => setShowEvolveModal(false)}
-                disabled={evolving}
+                disabled={animPhase !== null}
               >
                 Cancel
               </button>
-              {evolving && (
-                <div style={{ textAlign: "center", fontSize: 11, color: "#5a6380", marginTop: 8 }}>
-                  Evolving…
-                </div>
-              )}
             </div>
           </div>
         </>

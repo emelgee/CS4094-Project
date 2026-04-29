@@ -12,7 +12,7 @@ export default function TeamScreen({
   onNavigate,
   onSave,
 }) {
-  const emptySlots = Math.max(1, 6 - party.length);
+  const emptySlots = Math.max(0, 6 - party.length);
 
   return (
     <section>

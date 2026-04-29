@@ -335,3 +335,36 @@ textarea { resize: vertical; }
 .btn.danger { background: #3a1a1f; border-color: #b6303a; color: #fca5a5; }
 .btn.danger:hover { background: #5a2128; }
 .btn.danger:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Evolution animation ── */
+@keyframes evo-sprite-flash {
+  0%   { filter: none; }
+  10%  { filter: brightness(0) invert(1); }
+  20%  { filter: none; }
+  30%  { filter: brightness(0) invert(1); }
+  40%  { filter: none; }
+  50%  { filter: brightness(0) invert(1); }
+  58%  { filter: none; }
+  65%  { filter: brightness(0) invert(1); }
+  71%  { filter: none; }
+  76%  { filter: brightness(0) invert(1); }
+  80%  { filter: none; }
+  84%  { filter: brightness(0) invert(1); }
+  87%  { filter: none; }
+  90%  { filter: brightness(0) invert(1); }
+  92%  { filter: none; }
+  94%  { filter: brightness(0) invert(1); }
+  96%  { filter: none; }
+  98%  { filter: brightness(0) invert(1); }
+  100% { filter: brightness(0) invert(1); }
+}
+@keyframes evo-sprite-reveal {
+  0%   { filter: brightness(0) invert(1); }
+  25%  { filter: none; }
+  45%  { filter: brightness(0) invert(1); }
+  65%  { filter: none; }
+  80%  { filter: brightness(1.4); }
+  100% { filter: none; }
+}
+.evo-sprite-flash  { animation: evo-sprite-flash  10s linear  forwards; }
+.evo-sprite-reveal { animation: evo-sprite-reveal  1s   ease-out forwards; }
