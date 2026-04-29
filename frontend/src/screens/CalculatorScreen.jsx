@@ -283,7 +283,7 @@ function StatRow({ label, base, iv, ev, battle }) {
   return (
     <div style={{display:"grid",gridTemplateColumns:"28px 1fr 30px 22px 26px 32px",gap:4,alignItems:"center",fontSize:11}}>
       <span style={{color:"#5a6380",textAlign:"right"}}>{label}</span>
-      <div style={{height:4,background:"#1a2030",borderRadius:999,overflow:"hidden"}}>
+      <div style={{height:8,background:"#1a2030",borderRadius:999,overflow:"hidden"}}>
         <div style={{height:"100%",width:`${pct}%`,background:color,borderRadius:999,transition:"width 0.3s"}}/>
       </div>
       <span style={{color:"#c0c4d8",textAlign:"right"}}>{base??"-"}</span>
@@ -1094,25 +1094,18 @@ export default function CalculatorScreen({
   return (
     <section>
       {/* ── Page header ── */}
-      <div className="page-header" style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:8}}>
-        <div>
-          <h1 style={{margin:0,fontSize:20}}>Damage Calculator</h1>
-          <p className="muted small" style={{marginTop:2}}>
-            Gen 3 · Click a move to calculate · highlighted side = attacker
-          </p>
-        </div>
-        <div style={{display:"flex",gap:6}}>
-          <button className="ghost small" onClick={()=>onNavigate("team")}>Team</button>
-          <button className="ghost small" onClick={()=>onNavigate("encounters")}>Encounters</button>
-          <button className="ghost small" onClick={handleReset}>Reset</button>
-        </div>
+      <div className="page-header">
+        <h1 style={{margin:0,fontSize:20}}>Damage Calculator</h1>
+        <p className="muted small" style={{marginTop:2}}>
+          Gen 3 · Click a move to calculate · highlighted side = attacker
+        </p>
       </div>
 
       {/* ── Attacker / Defender selectors ── */}
       <div style={{
-        display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12,
+        display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:10, marginBottom:12,
       }}>
-        {/* My team selector */}
+        {/* My team selector — col 1 */}
         <div style={{background:"#111520",border:"1px solid #1f2638",borderRadius:10,padding:10}}>
           <label style={{color:"#5a6380",fontSize:11,display:"grid",gap:4}}>
             My Pokémon
@@ -1136,7 +1129,17 @@ export default function CalculatorScreen({
           </label>
         </div>
 
-        {/* Enemy trainer search */}
+        {/* Page actions — col 2 */}
+        <div style={{
+          display:"flex",alignItems:"center",justifyContent:"center",gap:8,
+          background:"#111520",border:"1px solid #1f2638",borderRadius:10,padding:10,
+        }}>
+          <button className="ghost small" onClick={()=>onNavigate("team")}>Team</button>
+          <button className="ghost small" onClick={()=>onNavigate("encounters")}>Encounters</button>
+          <button className="ghost small" onClick={handleReset}>Reset</button>
+        </div>
+
+        {/* Enemy trainer search — col 3 */}
         <div style={{background:"#111520",border:"1px solid #1f2638",borderRadius:10,padding:10,position:"relative"}}>
           <div style={{color:"#5a6380",fontSize:11,marginBottom:4}}>Enemy Trainer</div>
           <input
@@ -1200,7 +1203,7 @@ export default function CalculatorScreen({
       {/* ── Main 3-col battle layout ── */}
       <div style={{
         display:"grid",
-        gridTemplateColumns:"1fr 300px 1fr",
+        gridTemplateColumns:"1fr 1fr 1fr",
         gap:10, alignItems:"start",
       }}>
         {/* LEFT — My team */}
@@ -1247,11 +1250,23 @@ export default function CalculatorScreen({
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
           <FieldEffects weather={weather} setWeather={setWeather} crit={crit} setCrit={setCrit}/>
 
-          {/* VS badge */}
-          <div style={{
-            textAlign:"center",fontSize:13,fontWeight:700,
-            color:"#3a3f52",padding:"4px 0",letterSpacing:"0.1em",
-          }}>VS</div>
+          {/* Attacker direction badge */}
+          <div style={{display:"flex",alignItems:"center",gap:6,padding:"2px 0"}}>
+            <div style={{flex:1,height:1,background:"#1a2030"}}/>
+            <div style={{
+              display:"flex",alignItems:"center",gap:5,
+              padding:"4px 10px",borderRadius:999,
+              background: attackerSide==="my"?"#1a2240":"#2a1010",
+              border:`1px solid ${attackerSide==="my"?"#3a58cc44":"#6b1a1a44"}`,
+              fontSize:11,fontWeight:700,letterSpacing:"0.06em",whiteSpace:"nowrap",
+              color: attackerSide==="my"?"#7a9ef0":"#f87171",
+            }}>
+              <span>{attackerSide==="my"?"ME":"ENEMY"}</span>
+              <span style={{fontSize:14}}>→</span>
+              <span>{attackerSide==="my"?"ENEMY":"ME"}</span>
+            </div>
+            <div style={{flex:1,height:1,background:"#1a2030"}}/>
+          </div>
 
           {/* Result */}
           <DamageResult
