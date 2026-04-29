@@ -10,6 +10,7 @@ export default function TeamScreen({
   onRelease,
   onOpenAdd,
   onNavigate,
+  onSave,
 }) {
   const emptySlots = Math.max(1, 6 - party.length);
 
@@ -50,6 +51,7 @@ export default function TeamScreen({
             onSendToBox={onSendToBox}
             onRemove={onRemove}
             onNavigate={onNavigate}
+            onSave={onSave}
           />
         ))}
         {Array.from({ length: emptySlots }).map((_, i) => (

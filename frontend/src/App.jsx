@@ -394,6 +394,7 @@ export default function App() {
               onOpenAdd={() => setShowAddPokemonModal(true)}
               onRemove={handleDeleteEncounter}
               onRelease={handleDeleteEncounter}
+              onSave={fetchTeam}
             />
           )}
           {screen === "encounters" && (
