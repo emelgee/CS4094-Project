@@ -109,8 +109,9 @@ export function calculateDamage(attacker, defender, move, conditions = {}) {
   const burn    = conditions.isBurned && isPhysical ? 0.5 : 1;
   const item    = getItemModifier(attacker.item || null, moveType, isPhysical);
 
-  return {
-    min: Math.floor(baseDamage * stab * typeEff * weather * crit * burn * item * 0.85),
-    max: Math.floor(baseDamage * stab * typeEff * weather * crit * burn * item * 1.0),
-  };
+  const raw = baseDamage * stab * typeEff * weather * crit * burn * item;
+  const rolls = [];
+  for (let r = 85; r <= 100; r++) rolls.push(Math.floor(raw * r / 100));
+
+  return { min: rolls[0], max: rolls[15], rolls };
 }

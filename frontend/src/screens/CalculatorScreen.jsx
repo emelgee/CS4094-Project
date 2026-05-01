@@ -489,13 +489,29 @@ function DamageResult({ damageResult, defenderHp, moveName, moveType }) {
     </div>
   );
 
-  const { min, max, rolls } = damageResult;
-  const minPct = defenderHp ? ((min/defenderHp)*100) : null;
-  const maxPct = defenderHp ? ((max/defenderHp)*100) : null;
-  const ohko = maxPct>=100;
-  const twohko = minPct && (minPct*2)>=100;
-  const koLabel = ohko?"guaranteed OHKO": twohko?"guaranteed 2HKO": maxPct>=50?"possible 2HKO":"";
+  const { min, max, rolls = [] } = damageResult;
   const typeColor = TYPE_COLORS[moveType?.toLowerCase()] || "#7a9ef0";
+  const hp = defenderHp || null;
+  const minPct = hp ? (min / hp * 100) : null;
+  const maxPct = hp ? (max / hp * 100) : null;
+
+  const ohkoCount = hp ? rolls.filter(r => r >= hp).length : 0;
+  const ohkoPct   = ohkoCount / 16 * 100;
+
+  let twoHkoCount = 0;
+  if (hp && ohkoPct < 100) {
+    for (const r1 of rolls) for (const r2 of rolls) if (r1 + r2 >= hp) twoHkoCount++;
+  }
+  const twoHkoPct = twoHkoCount / 256 * 100;
+
+  let threeHkoCount = 0;
+  if (hp && twoHkoPct < 100 && ohkoPct < 100) {
+    for (const r1 of rolls) for (const r2 of rolls) for (const r3 of rolls)
+      if (r1 + r2 + r3 >= hp) threeHkoCount++;
+  }
+  const threeHkoPct = threeHkoCount / 4096 * 100;
+
+  const guarHits = hp && min > 0 ? Math.ceil(hp / min) : null;
 
   return (
     <div style={{
@@ -518,36 +534,67 @@ function DamageResult({ damageResult, defenderHp, moveName, moveType }) {
         <div style={{fontSize:22,fontWeight:700,color:"#e4e6ef",fontVariantNumeric:"tabular-nums"}}>
           {min} – {max}
         </div>
-        {minPct && (
+        {minPct != null && (
           <div style={{fontSize:13,color:"#7a82a0",marginTop:2}}>
             {minPct.toFixed(1)}% – {maxPct.toFixed(1)}% of max HP
-            {koLabel && (
-              <span style={{
-                marginLeft:8,fontSize:11,fontWeight:700,
-                color: ohko?"#f87171":twohko?"#ffd740":"#4ade80",
-              }}>({koLabel})</span>
-            )}
           </div>
         )}
       </div>
 
-      {/* Damage rolls */}
-      {Array.isArray(rolls) && rolls.length > 0 && (
+      {hp && (
+        <div style={{display:"flex",flexDirection:"column",gap:4}}>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
+            <span style={{color:"#5a6380"}}>OHKO</span>
+            <span style={{fontWeight:700,fontVariantNumeric:"tabular-nums",
+              color: ohkoPct===100?"#f87171": ohkoPct>0?"#ffd740":"#3a3f52"}}>
+              {ohkoPct===100?"Guaranteed": ohkoPct>0?`${ohkoCount}/16 (${ohkoPct.toFixed(1)}%)`:"No"}
+            </span>
+          </div>
+          {ohkoPct < 100 && (
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
+              <span style={{color:"#5a6380"}}>2HKO</span>
+              <span style={{fontWeight:700,fontVariantNumeric:"tabular-nums",
+                color: twoHkoPct===100?"#ffd740": twoHkoPct>0?"#c8cde0":"#3a3f52"}}>
+                {twoHkoPct===100?"Guaranteed": twoHkoPct>0?`${twoHkoPct.toFixed(1)}%`:"No"}
+              </span>
+            </div>
+          )}
+          {ohkoPct < 100 && twoHkoPct < 100 && (
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
+              <span style={{color:"#5a6380"}}>3HKO</span>
+              <span style={{fontWeight:700,fontVariantNumeric:"tabular-nums",
+                color: threeHkoPct===100?"#4ade80": threeHkoPct>0?"#c8cde0":"#3a3f52"}}>
+                {threeHkoPct===100?"Guaranteed": threeHkoPct>0?`${threeHkoPct.toFixed(1)}%`:"No"}
+              </span>
+            </div>
+          )}
+          {guarHits && guarHits > 1 && (
+            <div style={{fontSize:11,color:"#5a6380",borderTop:"1px solid #1a2030",paddingTop:4,marginTop:2}}>
+              Guaranteed KO in {guarHits} hits (min roll)
+            </div>
+          )}
+        </div>
+      )}
+
+      {rolls.length > 0 && (
         <div>
           <div style={{fontSize:11,color:"#5a6380",textTransform:"uppercase",
             letterSpacing:"0.06em",marginBottom:5}}>
             Damage rolls (16)
           </div>
           <div style={{display:"flex",gap:3,flexWrap:"wrap"}}>
-            {rolls.map((r,i)=>(
-              <span key={i} style={{
-                fontSize:11,padding:"2px 6px",borderRadius:5,
-                background: r===min?"#2a1010":r===max?"#0d2a1a":"#0b0e14",
-                color: r===min?"#f87171":r===max?"#4ade80":"#7a82a0",
-                border:`1px solid ${r===min?"#5a1a1a":r===max?"#1a5235":"#1a2030"}`,
-                fontVariantNumeric:"tabular-nums",
-              }}>{r}</span>
-            ))}
+            {rolls.map((r,i) => {
+              const isKo = hp && r >= hp;
+              return (
+                <span key={i} style={{
+                  fontSize:11,padding:"2px 6px",borderRadius:5,
+                  background: isKo?"#0d2a1a": r===min?"#2a1010":"#0b0e14",
+                  color: isKo?"#4ade80": r===min?"#f87171":"#7a82a0",
+                  border:`1px solid ${isKo?"#1a5235": r===min?"#5a1a1a":"#1a2030"}`,
+                  fontVariantNumeric:"tabular-nums",
+                }}>{r}</span>
+              );
+            })}
           </div>
         </div>
       )}
