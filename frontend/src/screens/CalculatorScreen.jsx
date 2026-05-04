@@ -417,7 +417,36 @@ function PokemonSide({
   );
 }
 
-function FieldEffects({ weather, setWeather, crit, setCrit }) {
+function FieldEffects({
+  weather, setWeather,
+  crit, setCrit,
+  reflect, setReflect,
+  lightScreen, setLightScreen,
+  helpingHand, setHelpingHand,
+  explosion, setExplosion,
+}) {
+  function Toggle({ label, val, set, color="#ffd740" }) {
+    return (
+      <button onClick={() => set(v => !v)} style={{
+        padding:"6px 8px", borderRadius:7, border:"1px solid",
+        borderColor: val ? `${color}66` : "#1a2030",
+        background: val ? "#1a2030" : "transparent",
+        color: val ? color : "#7a82a0",
+        fontSize:11, cursor:"pointer", textAlign:"left",
+        display:"flex", alignItems:"center", gap:6, transition:"all 0.12s",
+      }}>
+        <span style={{
+          width:12, height:12, borderRadius:3, flexShrink:0,
+          background: val ? color : "transparent",
+          border: `1px solid ${val ? color : "#3a3f52"}`,
+          display:"inline-flex", alignItems:"center", justifyContent:"center",
+          fontSize:9, color:"#000",
+        }}>{val ? "✓" : ""}</span>
+        {label}
+      </button>
+    );
+  }
+
   return (
     <div style={{
       background:"#0e1120", border:"1px solid #1a2030",
@@ -429,51 +458,42 @@ function FieldEffects({ weather, setWeather, crit, setCrit }) {
         Field
       </div>
 
-      {/* Weather */}
+      {/* Weather — Sun/Rain affect Fire/Water power; Sand boosts Rock SpD */}
       <div style={{display:"grid",gap:4}}>
         <span style={{fontSize:11,color:"#5a6380"}}>Weather</span>
         {[
-          {val:"",icon:"○",label:"None"},
-          {val:"sun",icon:"☀",label:"Sun"},
-          {val:"rain",icon:"☂",label:"Rain"},
-        ].map(({val,icon,label})=>(
-          <button key={val} onClick={()=>setWeather(val)} style={{
+          {val:"",    icon:"○", label:"None"},
+          {val:"sun", icon:"☀", label:"Sun"},
+          {val:"rain",icon:"☂", label:"Rain"},
+          {val:"sand",icon:"🌪",label:"Sandstorm"},
+          {val:"hail",icon:"❄", label:"Hail"},
+        ].map(({val,icon,label}) => (
+          <button key={val} onClick={() => setWeather(val)} style={{
             padding:"6px 8px", borderRadius:7, border:"1px solid",
-            borderColor: weather===val?"#3a58cc66":"#1a2030",
-            background: weather===val?"#1a2240":"transparent",
-            color: weather===val?"#e4e6ef":"#7a82a0",
+            borderColor: weather===val ? "#3a58cc66" : "#1a2030",
+            background: weather===val ? "#1a2240" : "transparent",
+            color: weather===val ? "#e4e6ef" : "#7a82a0",
             fontSize:11, cursor:"pointer", textAlign:"left",
-            display:"flex",alignItems:"center",gap:6,transition:"all 0.12s",
+            display:"flex", alignItems:"center", gap:6, transition:"all 0.12s",
           }}>
             <span style={{fontSize:14}}>{icon}</span>{label}
           </button>
         ))}
       </div>
 
-      {/* Conditions */}
+      {/* Screens on the defender's side — halved by crits */}
+      <div style={{display:"grid",gap:4}}>
+        <span style={{fontSize:11,color:"#5a6380"}}>Screens (defender)</span>
+        <Toggle label="Reflect"      val={reflect}     set={setReflect}     color="#7a9ef0" />
+        <Toggle label="Light Screen" val={lightScreen} set={setLightScreen} color="#7a9ef0" />
+      </div>
+
+      {/* Other conditions */}
       <div style={{display:"grid",gap:4}}>
         <span style={{fontSize:11,color:"#5a6380"}}>Conditions</span>
-        {[
-          {key:"crit",label:"Crit hit",val:crit,set:setCrit},
-        ].map(({key,label,val,set})=>(
-          <button key={key} onClick={()=>set(v=>!v)} style={{
-            padding:"6px 8px", borderRadius:7, border:"1px solid",
-            borderColor: val?"#ffd74066":"#1a2030",
-            background: val?"#2a2a0a":"transparent",
-            color: val?"#ffd740":"#7a82a0",
-            fontSize:11, cursor:"pointer", textAlign:"left",
-            display:"flex",alignItems:"center",gap:6,transition:"all 0.12s",
-          }}>
-            <span style={{
-              width:12,height:12,borderRadius:3,flexShrink:0,
-              background:val?"#ffd740":"transparent",
-              border:`1px solid ${val?"#ffd740":"#3a3f52"}`,
-              display:"inline-flex",alignItems:"center",justifyContent:"center",
-              fontSize:9,color:"#000",
-            }}>{val?"✓":""}</span>
-            {label}
-          </button>
-        ))}
+        <Toggle label="Crit hit"           val={crit}        set={setCrit}        color="#ffd740" />
+        <Toggle label="Helping Hand (atk)" val={helpingHand} set={setHelpingHand} color="#4ade80" />
+        <Toggle label="Explosion / Self-Destruct" val={explosion} set={setExplosion} color="#f87171" />
       </div>
     </div>
   );
@@ -630,6 +650,10 @@ export default function CalculatorScreen({
   const [crit, setCrit] = useState(false);
   const [burned, setBurned] = useState(false);
   const [weather, setWeather] = useState("");
+  const [reflect, setReflect] = useState(false);
+  const [lightScreen, setLightScreen] = useState(false);
+  const [helpingHand, setHelpingHand] = useState(false);
+  const [explosion, setExplosion] = useState(false);
   const [lookupDefender, setLookupDefender] = useState(null);
   const [defenderHp, setDefenderHp] = useState(null);
   const [atkNature, setAtkNature] = useState("hardy");
@@ -1108,7 +1132,7 @@ export default function CalculatorScreen({
       }
 
       const activeBurned = attackerSide==="my" ? burned : enemyBurned;
-      const conditions = { isCrit:crit, isBurned:activeBurned, weather:weather||"" };
+      const conditions = { isCrit:crit, isBurned:activeBurned, weather:weather||"", reflect, lightScreen, helpingHand, explosion };
       const out = calculateDamage(attackerData, defenderData,
         { type:moveRow.type, basePower:moveRow.power }, conditions);
       setDamageResult(out);
@@ -1121,6 +1145,7 @@ export default function CalculatorScreen({
     setAttackerPartyMonId(""); setDefenderId(""); setCrit(false);
     setAtkNature("hardy"); setDefNature("hardy"); setWeather("");
     setBurned(false); setEnemyBurned(false);
+    setReflect(false); setLightScreen(false); setHelpingHand(false); setExplosion(false);
     setDamageResult(null); setDefenderHp(null); setCalcError(null);
     setDefMode("lookup"); setSelectedPokemonIndex(""); setPreview(null);
     setLookupDefender(null); setMyActiveMoveIdx(null); setEnemyActiveMoveIdx(null);
@@ -1295,7 +1320,14 @@ export default function CalculatorScreen({
 
         {/* MIDDLE — Field + result */}
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
-          <FieldEffects weather={weather} setWeather={setWeather} crit={crit} setCrit={setCrit}/>
+          <FieldEffects
+            weather={weather} setWeather={setWeather}
+            crit={crit} setCrit={setCrit}
+            reflect={reflect} setReflect={setReflect}
+            lightScreen={lightScreen} setLightScreen={setLightScreen}
+            helpingHand={helpingHand} setHelpingHand={setHelpingHand}
+            explosion={explosion} setExplosion={setExplosion}
+          />
 
           {/* Attacker direction badge */}
           <div style={{display:"flex",alignItems:"center",gap:6,padding:"2px 0"}}>
