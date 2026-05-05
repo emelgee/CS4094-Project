@@ -277,7 +277,11 @@ textarea { resize: vertical; }
    padding: 2px;
    flex-shrink: 0;
 }
-.pc-box-actions { display: flex; gap: 6px; margin-top: 4px; }
+.pc-box-actions { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.graveyard-card { border-color: #2a1a30; background: #110a18; filter: grayscale(0.4); }
+.graveyard-card .pc-mon-sprite { filter: grayscale(1) brightness(0.85); }
+.graveyard-card strong { color: #c0a8d0; }
+.trainer-graveyard-row .pc-mon-sprite { filter: grayscale(1) brightness(0.85); }
 
 /* =====================================================================
    GENERATION SCREEN

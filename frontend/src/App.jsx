@@ -69,9 +69,16 @@ export default function App() {
     0
   );
 
-  // ── Party / PC Box ──────────────────────────────────────────────────
+  // ── Party / PC Box / Graveyard ──────────────────────────────────────
+  // All three are slices of the same `encounter` table:
+  //   party      → team_slot 1-6
+  //   PC Box     → team_slot null AND status !== "dead"
+  //   Graveyard  → team_slot null AND status === "dead"
+  // Using the existing `status` column avoids a schema migration; "dead"
+  // is a value distinct from the encounter outcomes (caught/fled/etc.).
   const [party, setParty] = useState([]);
   const [pcBox, setPcBox] = useState([]);
+  const [graveyard, setGraveyard] = useState([]);
 
   const fetchTeam = async () => {
     try {
@@ -121,6 +128,7 @@ export default function App() {
           row.move4 || "",
         ],
         slot: row.team_slot,
+        status: row.status,
         dbData: {
           ability1: row.ability1,
           ability2: row.ability2,
@@ -128,7 +136,8 @@ export default function App() {
         },
       }));
       setParty(mapped.filter((m) => m.slot !== null));
-      setPcBox(mapped.filter((m) => m.slot === null));
+      setPcBox(mapped.filter((m) => m.slot === null && m.status !== "dead"));
+      setGraveyard(mapped.filter((m) => m.slot === null && m.status === "dead"));
     } catch (err) {
       console.error("Failed to fetch team:", err);
     }
@@ -163,6 +172,14 @@ export default function App() {
     try {
       const usedSlots = party.map((m) => m.slot);
       const slot = [1, 2, 3, 4, 5, 6].find((s) => !usedSlots.includes(s));
+      // Withdrawing a "dead" Pokémon also revives it to a normal status.
+      const target = pcBox.find((m) => m.id === id) || graveyard.find((m) => m.id === id);
+      if (target?.status === "dead") {
+        await apiFetch(`/api/encounters/${id}`, {
+          method: "PATCH",
+          json: { status: "caught" },
+        });
+      }
       await apiFetch(`/api/team/${id}/slot`, {
         method: "PATCH",
         json: { team_slot: slot },
@@ -170,6 +187,46 @@ export default function App() {
       await fetchTeam();
     } catch (err) {
       console.error("Withdraw failed:", err);
+    }
+  };
+
+  // Move a Pokémon to the Graveyard. Works from party or PC Box: clears
+  // any team_slot (so it leaves the active party) and flags it as dead so
+  // it shows up in the graveyard list instead of the PC Box.
+  const handleSendToGraveyard = async (id) => {
+    try {
+      const inParty = party.some((m) => m.id === id);
+      if (inParty && party.length <= 1) {
+        alert("You need at least 1 Pokémon in your party!");
+        return;
+      }
+      if (!window.confirm("Move this Pokémon to the Graveyard?")) return;
+      if (inParty) {
+        await apiFetch(`/api/team/${id}/slot`, {
+          method: "PATCH",
+          json: { team_slot: null },
+        });
+      }
+      await apiFetch(`/api/encounters/${id}`, {
+        method: "PATCH",
+        json: { status: "dead" },
+      });
+      await fetchTeam();
+    } catch (err) {
+      console.error("Send to graveyard failed:", err);
+    }
+  };
+
+  // Bring a Pokémon out of the Graveyard back into the PC Box.
+  const handleReviveFromGraveyard = async (id) => {
+    try {
+      await apiFetch(`/api/encounters/${id}`, {
+        method: "PATCH",
+        json: { status: "caught" },
+      });
+      await fetchTeam();
+    } catch (err) {
+      console.error("Revive failed:", err);
     }
   };
 
@@ -414,7 +471,10 @@ export default function App() {
             <TeamScreen
               party={party}
               pcBox={pcBox}
+              graveyard={graveyard}
               onSendToBox={handleSendToBox}
+              onSendToGraveyard={handleSendToGraveyard}
+              onRevive={handleReviveFromGraveyard}
               onWithdraw={handleWithdraw}
               onNavigate={navigate}
               onOpenAdd={() => setShowAddPokemonModal(true)}
@@ -447,6 +507,7 @@ export default function App() {
               earnedBadges={earnedBadges}
               onToggleBadge={toggleBadge}
               earnedBadgeCount={earnedBadgeCount}
+              graveyard={graveyard}
             />
           )}
           {screen === "boss" && <BossScreen onNavigate={navigate} />}

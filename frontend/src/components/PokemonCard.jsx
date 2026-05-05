@@ -200,7 +200,7 @@ function TeamMoveSlot({ slotIdx, moveObj, learnset, allMoves, onSwap }) {
   );
 }
 
-export default function PokemonCard({ mon, onSendToBox, onRemove, onSave }) {
+export default function PokemonCard({ mon, onSendToBox, onSendToGraveyard, onRemove, onSave }) {
   const [nature, setNature] = useState(String(mon.nature || "hardy").toLowerCase());
   const [level, setLevel] = useState(mon.level || 1);
   const [nickname, setNickname] = useState(mon.nickname || "");
@@ -541,6 +541,15 @@ export default function PokemonCard({ mon, onSendToBox, onRemove, onSave }) {
           </button>
         )}
         <button className="ghost small" onClick={() => onSendToBox(mon.id)}>📦 To Box</button>
+        {onSendToGraveyard && (
+          <button
+            className="ghost small danger"
+            onClick={() => onSendToGraveyard(mon.id)}
+            title="Move to Graveyard"
+          >
+            🪦 Graveyard
+          </button>
+        )}
         <button className="ghost small danger" onClick={() => onRemove(mon.id)}>Remove</button>
       </div>
 

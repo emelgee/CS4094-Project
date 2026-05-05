@@ -1,9 +1,11 @@
 import { BADGES } from "../data/constants";
+import { getPokemonSpriteUrl } from "../utils/helpers";
 
 export default function TrainerScreen({
   earnedBadges,
   onToggleBadge,
   earnedBadgeCount = 0,
+  graveyard = [],
 }) {
   // Fall back to an empty Set so the screen still renders if it's ever
   // mounted without these props (e.g. in tests / storybook).
@@ -20,7 +22,7 @@ export default function TrainerScreen({
   const runStats = [
     ["Total Encounters",  3],
     ["Pokémon Caught",    2],
-    ["Deaths",            0],
+    ["Deaths",            graveyard.length],
     ["Badges Earned",     `${earnedBadgeCount} / ${BADGES.length}`],
     ["Current Location",  "Mauville City"],
   ];
@@ -114,11 +116,44 @@ export default function TrainerScreen({
             </div>
           </details>
 
-          <details className="panel">
-            <summary>Graveyard</summary>
-            <div className="muted small">Pokémon lost during this run will appear here.</div>
+          <details open={graveyard.length > 0} className="panel">
+            <summary>Graveyard ({graveyard.length})</summary>
+            <div className="muted small">
+              Pokémon lost during this run. Manage them from the Team screen.
+            </div>
             <div className="list mt8">
-              <div className="graveyard-empty muted">— No deaths yet. Keep it that way. —</div>
+              {graveyard.length === 0 ? (
+                <div className="graveyard-empty muted">— No deaths yet. Keep it that way. —</div>
+              ) : (
+                graveyard.map((mon) => (
+                  <div key={mon.id} className="listItem trainer-graveyard-row">
+                    <div className="pc-mon-name-wrap">
+                      <img
+                        className="pc-mon-sprite"
+                        src={getPokemonSpriteUrl(mon.pokemonId, mon.name)}
+                        alt={`${mon.name} sprite`}
+                        loading="lazy"
+                      />
+                      <div>
+                        <strong>{mon.nickname || mon.name}</strong>
+                        <div className="muted small">
+                          {mon.nickname ? `${mon.name} · ` : ""}Lv {mon.level}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      {(mon.types || []).map((t) => (
+                        <span
+                          key={t}
+                          className={`type-chip type-${t.toLowerCase().split("/")[0]}`}
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </details>
         </div>
