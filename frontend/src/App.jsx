@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import AddEncounterModal from "./components/AddEncounterModal";
 import AddPokemonModal from "./components/AddPokemonModal";
-import GenScreen from "./screens/GenScreen";
 import DashboardScreen from "./screens/DashboardScreen";
 import TeamScreen from "./screens/TeamScreen";
 import EncountersScreen from "./screens/EncountersScreen";
@@ -16,7 +15,6 @@ import { useAuth } from "./auth/AuthContext";
 import { apiFetch } from "./utils/api";
 
 const NAV_ITEMS = [
-  { key: "gen", label: "Generation" },
   { key: "dashboard", label: "Dashboard" },
   { key: "team", label: "Team" },
   { key: "encounters", label: "Encounters" },
@@ -31,16 +29,10 @@ export default function App() {
   const { status } = useAuth();
 
   // ── Navigation ──────────────────────────────────────────────────────
-  const [screen, setScreen] = useState("gen");
-  const [genBadge, setGenBadge] = useState("—");
+  const [screen, setScreen] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const navigate = (s) => setScreen(s);
-
-  const handleSelectGen = (n) => {
-    setGenBadge(n);
-    setScreen("dashboard");
-  };
 
   // ── Party / PC Box ──────────────────────────────────────────────────
   const [party, setParty] = useState([]);
@@ -296,7 +288,7 @@ export default function App() {
         <div className="brand">
           <span className="brand-icon">⚔</span>
           <strong>PokeChallenge</strong>
-          <span className="badge">Gen {genBadge}</span>
+          <span className="badge">Gen 3</span>
         </div>
         <nav className="nav">
           {NAV_ITEMS.map(({ key, label }) => (
@@ -375,7 +367,6 @@ export default function App() {
         </aside>
 
         <main className="main">
-          {screen === "gen" && <GenScreen onSelectGen={handleSelectGen} />}
           {screen === "dashboard" && (
             <DashboardScreen
               party={party}
