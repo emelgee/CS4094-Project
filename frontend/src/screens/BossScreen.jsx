@@ -9,7 +9,7 @@ import {
   capitalize,
 } from "../utils/helpers";
 
-export default function BossScreen({ onNavigate }) {
+export default function BossScreen({ onNavigate, onLoadIntoCalc }) {
   const [trainers, setTrainers] = useState([]);
   const [pokemonIndex, setPokemonIndex] = useState({});
   const [activeBossGroupKey, setActiveBossGroupKey] = useState("");
@@ -217,7 +217,20 @@ export default function BossScreen({ onNavigate }) {
             </div>
 
             <div className="row mt8">
-              <button className="btn small" onClick={() => onNavigate("calculator")}>Load into Calc</button>
+              <button
+                className="btn small"
+                disabled={!activeTrainer}
+                onClick={() => {
+                  if (!activeTrainer) return;
+                  // Hand the trainer (and their lead Pokémon) to the
+                  // calculator. Falls back to plain navigation if the
+                  // host didn't wire onLoadIntoCalc.
+                  if (onLoadIntoCalc) onLoadIntoCalc(activeTrainer.id, 0);
+                  else onNavigate("calculator");
+                }}
+              >
+                Load into Calc
+              </button>
             </div>
           </details>
 

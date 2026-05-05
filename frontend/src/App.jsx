@@ -35,6 +35,19 @@ export default function App() {
 
   const navigate = (s) => setScreen(s);
 
+  // ── Calculator preload ──────────────────────────────────────────────
+  // Set when another screen (e.g. Boss Data) wants to hand a specific
+  // trainer + Pokémon to the calculator. The calculator consumes it on
+  // its next render and clears it via onCalcPreloadConsumed so it
+  // doesn't re-apply on subsequent visits.
+  const [calcPreload, setCalcPreload] = useState(null);
+
+  const handleLoadBossIntoCalc = (trainerId, monIdx = 0) => {
+    if (!trainerId) return;
+    setCalcPreload({ trainerId, monIdx });
+    setScreen("calculator");
+  };
+
   // ── Badges ──────────────────────────────────────────────────────────
   // Earned badges live here (not in TrainerScreen) so the sidebar's
   // "Badges: X / 8" indicator stays in sync with the badge grid.
@@ -500,6 +513,8 @@ export default function App() {
               party={party}
               onRefreshEncounters={fetchEncounters}
               visible={screen === "calculator"}
+              calcPreload={calcPreload}
+              onCalcPreloadConsumed={() => setCalcPreload(null)}
             />
           </div>
           {screen === "trainer" && (
@@ -510,7 +525,12 @@ export default function App() {
               graveyard={graveyard}
             />
           )}
-          {screen === "boss" && <BossScreen onNavigate={navigate} />}
+          {screen === "boss" && (
+            <BossScreen
+              onNavigate={navigate}
+              onLoadIntoCalc={handleLoadBossIntoCalc}
+            />
+          )}
           {screen === "lookup" && <LookupScreen onNavigate={navigate} />}
         </main>
       </div>

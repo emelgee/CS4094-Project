@@ -562,6 +562,11 @@ export default function CalculatorScreen({
   pcBox = [],
   onRefreshEncounters,
   visible = false,
+  // When set (e.g. from the Boss Data screen "Load into Calc" button)
+  // we pre-select that trainer + Pokémon on the enemy side, then call
+  // onCalcPreloadConsumed so the parent can clear the request.
+  calcPreload = null,
+  onCalcPreloadConsumed,
 }) {
   /* ── State ── */
   const [defMode, setDefMode] = useState("lookup");
@@ -712,6 +717,40 @@ export default function CalculatorScreen({
     load();
     return () => { cancelled = true; };
   }, [visible]);
+
+  /* ── External preload (e.g. Boss screen → Load into Calc) ──
+     Wait until the calculator is visible AND trainerRows is populated,
+     then mirror the same state changes the in-screen trainer search bar
+     would make: pick the trainer, route, sprite-strip slot, and clear
+     any other defender source so calculation uses the strip mon. */
+  useEffect(() => {
+    if (!visible) return;
+    if (!calcPreload?.trainerId) return;
+    if (!trainerRows.length) return;
+    const t = trainerRows.find((r) => r.id === calcPreload.trainerId);
+    if (!t) {
+      onCalcPreloadConsumed?.();
+      return;
+    }
+    const team = Array.isArray(t.pokemon) ? t.pokemon : [];
+    const monIdx = Math.min(
+      Math.max(0, Number(calcPreload.monIdx) || 0),
+      Math.max(0, team.length - 1)
+    );
+    setSelectedTrainerId(t.id);
+    setSelectedRoute(formatTrainerRoute(t));
+    setTrainerQuery(`${t.name}${t.party ? " (" + t.party + ")" : ""}`);
+    setTrainerSearchOpen(false);
+    setEnemyStripIdx(team.length ? monIdx : null);
+    setLookupDefender(null);
+    setDefenderId("");
+    setSelectedPokemonIndex("");
+    setPreview(null);
+    setEnemyMoveOverrides({});
+    setEnemyActiveMoveIdx(null);
+    setDamageResult(null);
+    onCalcPreloadConsumed?.();
+  }, [visible, trainerRows, calcPreload, onCalcPreloadConsumed]);
 
   /* ── Derived data ── */
   const groupedTrainers = groupTrainersByRoute(trainerRows);
