@@ -6,14 +6,23 @@ const db = require("../db");
 // Optional: ?include_areas=true
 router.get("/", async (req, res) => {
   try {
-    const includeAreas = req.query.include_areas === "true";
+    const { search, include_areas } = req.query;
+    const includeAreas = include_areas === "true";
+
+    let baseQuery = "SELECT * FROM location";
+    let params = [];
+    if (search && search.trim()) {
+      baseQuery += " WHERE name LIKE ?";
+      params.push(`${search.trim()}%`);
+    }
+    baseQuery += " ORDER BY name ASC";
 
     if (!includeAreas) {
-      const [rows] = await db.pool.query("SELECT * FROM location ORDER BY name ASC");
+      const [rows] = await db.pool.query(baseQuery, params);
       return res.json(rows);
     }
 
-    const [locations] = await db.pool.query("SELECT * FROM location ORDER BY name ASC");
+    const [locations] = await db.pool.query(baseQuery, params);
     const [areas] = await db.pool.query("SELECT * FROM area ORDER BY name ASC");
 
     const result = locations.map((loc) => ({
