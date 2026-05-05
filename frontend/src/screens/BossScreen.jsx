@@ -218,7 +218,6 @@ export default function BossScreen({ onNavigate }) {
 
             <div className="row mt8">
               <button className="btn small" onClick={() => onNavigate("calculator")}>Load into Calc</button>
-              <button className="ghost small">Export Team</button>
             </div>
           </details>
 
