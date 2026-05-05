@@ -529,6 +529,7 @@ export default function App() {
             <BossScreen
               onNavigate={navigate}
               onLoadIntoCalc={handleLoadBossIntoCalc}
+              party={party}
             />
           )}
           {screen === "lookup" && <LookupScreen onNavigate={navigate} />}
