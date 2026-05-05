@@ -14,11 +14,11 @@ import { useAuth } from "./auth/AuthContext";
 import { apiFetch } from "./utils/api";
 
 const NAV_ITEMS = [
+  { key: "trainer", label: "Trainer" },
   { key: "dashboard", label: "Dashboard" },
   { key: "team", label: "Team" },
   { key: "encounters", label: "Encounters" },
   { key: "calculator", label: "Calculator" },
-  { key: "trainer", label: "Trainer" },
   { key: "boss", label: "Boss Data" },
   { key: "lookup", label: "Lookup" },
 ];
@@ -27,7 +27,7 @@ export default function App() {
   const { status } = useAuth();
 
   // ── Navigation ──────────────────────────────────────────────────────
-  const [screen, setScreen] = useState("dashboard");
+  const [screen, setScreen] = useState("trainer");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const navigate = (s) => setScreen(s);
