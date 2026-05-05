@@ -12,6 +12,9 @@ import AuthScreen from "./screens/AuthScreen";
 import UserMenu from "./components/UserMenu";
 import { useAuth } from "./auth/AuthContext";
 import { apiFetch } from "./utils/api";
+import { BADGES } from "./data/constants";
+
+const BADGES_STORAGE_KEY = "pcm_earned_badges";
 
 const NAV_ITEMS = [
   { key: "trainer", label: "Trainer" },
@@ -31,6 +34,40 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const navigate = (s) => setScreen(s);
+
+  // ── Badges ──────────────────────────────────────────────────────────
+  // Earned badges live here (not in TrainerScreen) so the sidebar's
+  // "Badges: X / 8" indicator stays in sync with the badge grid.
+  // Persisted in localStorage so a refresh doesn't wipe progress.
+  const [earnedBadges, setEarnedBadges] = useState(() => {
+    try {
+      const raw = localStorage.getItem(BADGES_STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? new Set(parsed) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(BADGES_STORAGE_KEY, JSON.stringify([...earnedBadges]));
+    } catch { /* ignore quota / private mode */ }
+  }, [earnedBadges]);
+
+  const toggleBadge = (name) => {
+    setEarnedBadges((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  };
+
+  const earnedBadgeCount = BADGES.reduce(
+    (acc, b) => acc + (earnedBadges.has(b.name) ? 1 : 0),
+    0
+  );
 
   // ── Party / PC Box ──────────────────────────────────────────────────
   const [party, setParty] = useState([]);
@@ -324,7 +361,7 @@ export default function App() {
               </div>
               <div className="row">
                 <span>Badges:</span>
-                <strong>2 / 8</strong>
+                <strong>{earnedBadgeCount} / {BADGES.length}</strong>
               </div>
             </div>
           </details>
@@ -405,7 +442,13 @@ export default function App() {
               visible={screen === "calculator"}
             />
           </div>
-          {screen === "trainer" && <TrainerScreen />}
+          {screen === "trainer" && (
+            <TrainerScreen
+              earnedBadges={earnedBadges}
+              onToggleBadge={toggleBadge}
+              earnedBadgeCount={earnedBadgeCount}
+            />
+          )}
           {screen === "boss" && <BossScreen onNavigate={navigate} />}
           {screen === "lookup" && <LookupScreen onNavigate={navigate} />}
         </main>

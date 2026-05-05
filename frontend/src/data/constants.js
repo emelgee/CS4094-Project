@@ -4,6 +4,22 @@
 export const API_BASE = import.meta.env.VITE_API_BASE?.trim() || "https://cs4094-project-production.up.railway.app";
 
 // =====================================================================
+// HOENN GYM BADGES (Gen 3)
+// =====================================================================
+// Order matches the in-game gym progression. `name` doubles as the stable
+// id used in storage and in the cross-component badge state.
+export const BADGES = [
+  { name: "Stone",   icon: "🪨" },
+  { name: "Knuckle", icon: "✊" },
+  { name: "Dynamo",  icon: "⚡" },
+  { name: "Heat",    icon: "🔥" },
+  { name: "Balance", icon: "⚖" },
+  { name: "Feather", icon: "🪶" },
+  { name: "Mind",    icon: "🔮" },
+  { name: "Rain",    icon: "🌊" },
+];
+
+// =====================================================================
 // BOSS CONSTANTS
 // =====================================================================
 export const BOSS_PRIORITY = [
