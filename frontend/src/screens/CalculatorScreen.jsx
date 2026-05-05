@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { API_BASE } from "../data/constants";
+import { API_BASE, BOSS_PRIORITY } from "../data/constants";
 import {
   groupTrainersByRoute,
   formatTrainerRoute,
@@ -423,7 +423,6 @@ function FieldEffects({
   reflect, setReflect,
   lightScreen, setLightScreen,
   helpingHand, setHelpingHand,
-  explosion, setExplosion,
 }) {
   function Toggle({ label, val, set, color="#ffd740" }) {
     return (
@@ -449,7 +448,7 @@ function FieldEffects({
 
   return (
     <div style={{
-      background:"#0e1120", border:"1px solid #1a2030",
+      background:"#111520", border:"1px solid #1f2638",
       borderRadius:12, padding:12, display:"flex",
       flexDirection:"column", gap:10,
     }}>
@@ -493,7 +492,6 @@ function FieldEffects({
         <span style={{fontSize:11,color:"#5a6380"}}>Conditions</span>
         <Toggle label="Crit hit"           val={crit}        set={setCrit}        color="#ffd740" />
         <Toggle label="Helping Hand (atk)" val={helpingHand} set={setHelpingHand} color="#4ade80" />
-        <Toggle label="Explosion / Self-Destruct" val={explosion} set={setExplosion} color="#f87171" />
       </div>
     </div>
   );
@@ -653,7 +651,6 @@ export default function CalculatorScreen({
   const [reflect, setReflect] = useState(false);
   const [lightScreen, setLightScreen] = useState(false);
   const [helpingHand, setHelpingHand] = useState(false);
-  const [explosion, setExplosion] = useState(false);
   const [lookupDefender, setLookupDefender] = useState(null);
   const [defenderHp, setDefenderHp] = useState(null);
   const [atkNature, setAtkNature] = useState("hardy");
@@ -768,9 +765,15 @@ export default function CalculatorScreen({
         const rows = Array.isArray(trainerData)?trainerData:[];
         setPokemonIndex(index);
         setTrainerRows(rows);
-        const firstRoute = formatTrainerRoute(rows[0]);
-        setSelectedRoute(firstRoute||"");
-        setSelectedTrainerId(rows[0]?.id||"");
+        const sortedBosses = rows
+          .filter(r => BOSS_PRIORITY.includes(r.id))
+          .sort((a, b) => BOSS_PRIORITY.indexOf(a.id) - BOSS_PRIORITY.indexOf(b.id));
+        const defaultTrainer = sortedBosses[0] || rows[0];
+        if (defaultTrainer) {
+          setSelectedRoute(formatTrainerRoute(defaultTrainer) || "");
+          setSelectedTrainerId(defaultTrainer.id || "");
+          setTrainerQuery(`${defaultTrainer.name}${defaultTrainer.party ? ` (${defaultTrainer.party})` : ""}`);
+        }
       } catch (err) {
         if (!cancelled) {
           setLookupError(err.message||"Failed to load trainer lookup data.");
@@ -783,6 +786,13 @@ export default function CalculatorScreen({
     load();
     return () => { cancelled = true; };
   }, [visible]);
+
+  /* Auto-select first enemy Pokemon when the active trainer changes */
+  useEffect(() => {
+    if (!selectedTrainerId) { setEnemyStripIdx(null); return; }
+    setEnemyStripIdx(0);
+    setEnemyMoveOverrides({});
+  }, [selectedTrainerId]);
 
   /* ── Derived data ── */
   const groupedTrainers = groupTrainersByRoute(trainerRows);
@@ -1132,6 +1142,8 @@ export default function CalculatorScreen({
       }
 
       const activeBurned = attackerSide==="my" ? burned : enemyBurned;
+      const moveName = (moveRow.name || "").toLowerCase().replace(/[\s_-]/g, "");
+      const explosion = moveName === "explosion" || moveName === "selfdestruct";
       const conditions = { isCrit:crit, isBurned:activeBurned, weather:weather||"", reflect, lightScreen, helpingHand, explosion };
       const out = calculateDamage(attackerData, defenderData,
         { type:moveRow.type, basePower:moveRow.power }, conditions);
@@ -1145,12 +1157,39 @@ export default function CalculatorScreen({
     setAttackerPartyMonId(""); setDefenderId(""); setCrit(false);
     setAtkNature("hardy"); setDefNature("hardy"); setWeather("");
     setBurned(false); setEnemyBurned(false);
-    setReflect(false); setLightScreen(false); setHelpingHand(false); setExplosion(false);
+    setReflect(false); setLightScreen(false); setHelpingHand(false);
     setDamageResult(null); setDefenderHp(null); setCalcError(null);
     setDefMode("lookup"); setSelectedPokemonIndex(""); setPreview(null);
     setLookupDefender(null); setMyActiveMoveIdx(null); setEnemyActiveMoveIdx(null);
     setAttackerSide("my"); setMyMoveOverrides({}); setEnemyMoveOverrides({});
     setMyStripMonId(null); setEnemyStripIdx(null); setTrainerQuery(""); setTrainerSearchOpen(false);
+  };
+
+  /* ── Boss navigation ── */
+  const sortedBossTrainers = trainerRows
+    .filter(r => BOSS_PRIORITY.includes(r.id))
+    .sort((a, b) => BOSS_PRIORITY.indexOf(a.id) - BOSS_PRIORITY.indexOf(b.id));
+  const currentBossIdx = sortedBossTrainers.findIndex(t => t.id === selectedTrainerId);
+
+  const applyTrainer = (t) => {
+    setSelectedTrainerId(t.id);
+    setSelectedRoute(formatTrainerRoute(t));
+    setTrainerQuery(`${t.name}${t.party ? ` (${t.party})` : ""}`);
+    setLookupDefender(null);
+    setDefenderId("");
+    setSelectedPokemonIndex("");
+    setPreview(null);
+    setDamageResult(null);
+  };
+
+  const goToPrevBoss = () => {
+    if (currentBossIdx <= 0) return;
+    applyTrainer(sortedBossTrainers[currentBossIdx - 1]);
+  };
+
+  const goToNextBoss = () => {
+    if (currentBossIdx === -1 || currentBossIdx >= sortedBossTrainers.length - 1) return;
+    applyTrainer(sortedBossTrainers[currentBossIdx + 1]);
   };
 
   /* Sprite helpers */
@@ -1244,8 +1283,6 @@ export default function CalculatorScreen({
                     setDefenderId("");
                     setSelectedPokemonIndex("");
                     setPreview(null);
-                    setEnemyStripIdx(null);
-                    setEnemyMoveOverrides({});
                     setDamageResult(null);
                   }}
                   style={{
@@ -1326,7 +1363,6 @@ export default function CalculatorScreen({
             reflect={reflect} setReflect={setReflect}
             lightScreen={lightScreen} setLightScreen={setLightScreen}
             helpingHand={helpingHand} setHelpingHand={setHelpingHand}
-            explosion={explosion} setExplosion={setExplosion}
           />
 
           {/* Attacker direction badge */}
@@ -1486,9 +1522,41 @@ export default function CalculatorScreen({
 
         {/* Enemy side strip: selected trainer's team */}
         <div style={{background:"#111520",border:"1px solid #1f2638",borderRadius:12,padding:10}}>
-          <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",
-            letterSpacing:"0.08em",color:"#5a6380",marginBottom:8}}>
-            {selectedTrainer ? `${selectedTrainer.name}${selectedTrainer.party?" ("+selectedTrainer.party+")":""}` : "Enemy Team"}
+          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}>
+            <button
+              onClick={goToPrevBoss}
+              disabled={currentBossIdx <= 0}
+              title="Previous boss"
+              style={{
+                padding:"2px 7px",borderRadius:5,border:"1px solid #1f2638",
+                background:"transparent",color:currentBossIdx<=0?"#2a2f40":"#7a9ef0",
+                cursor:currentBossIdx<=0?"default":"pointer",fontSize:12,lineHeight:1,
+              }}
+            >‹</button>
+            <div style={{flex:1,fontSize:10,fontWeight:700,textTransform:"uppercase",
+              letterSpacing:"0.08em",color:"#5a6380",textAlign:"center",overflow:"hidden",
+              textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
+              {selectedTrainer
+                ? `${selectedTrainer.name}${selectedTrainer.party ? " (" + selectedTrainer.party + ")" : ""}`
+                : "Enemy Team"}
+              {currentBossIdx !== -1 && (
+                <span style={{color:"#3a4060",marginLeft:4,fontWeight:400}}>
+                  {currentBossIdx + 1}/{sortedBossTrainers.length}
+                </span>
+              )}
+            </div>
+            <button
+              onClick={goToNextBoss}
+              disabled={currentBossIdx === -1 || currentBossIdx >= sortedBossTrainers.length - 1}
+              title="Next boss"
+              style={{
+                padding:"2px 7px",borderRadius:5,border:"1px solid #1f2638",
+                background:"transparent",
+                color:(currentBossIdx===-1||currentBossIdx>=sortedBossTrainers.length-1)?"#2a2f40":"#7a9ef0",
+                cursor:(currentBossIdx===-1||currentBossIdx>=sortedBossTrainers.length-1)?"default":"pointer",
+                fontSize:12,lineHeight:1,
+              }}
+            >›</button>
           </div>
           {selectedTeam.length === 0 ? (
             <div style={{fontSize:12,color:"#3a3f52"}}>Search a trainer above to load their team</div>
