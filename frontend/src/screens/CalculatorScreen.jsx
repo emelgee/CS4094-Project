@@ -618,6 +618,10 @@ export default function CalculatorScreen({
   /* ── Data loading ── */
   useEffect(() => {
     if (!visible) return;
+    // Static reference data — fetch once per session, not every time the
+    // screen becomes visible. Refetching also caused the trainer-data
+    // effect below to clobber preloaded selections on revisit.
+    if (moves.length > 0) return;
     let cancelled = false;
     (async () => {
       try {
@@ -629,7 +633,7 @@ export default function CalculatorScreen({
       } catch { if (!cancelled) setMoves([]); }
     })();
     return () => { cancelled = true; };
-  }, [visible]);
+  }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Fetch my mon's learnset when active mon changes */
   useEffect(() => {
@@ -681,6 +685,11 @@ export default function CalculatorScreen({
 
   useEffect(() => {
     if (!visible) return;
+    // Trainer + Pokémon data is static reference data; load once and
+    // keep it. Refetching on every visibility flip used to overwrite a
+    // pending calcPreload (e.g. boss "Load into Calc") because the
+    // fetch resolves AFTER the preload effect applies its selection.
+    if (trainerRows.length > 0) return;
     let cancelled = false;
     async function load() {
       setLookupLoading(true);
@@ -702,9 +711,15 @@ export default function CalculatorScreen({
         const rows = Array.isArray(trainerData)?trainerData:[];
         setPokemonIndex(index);
         setTrainerRows(rows);
-        const firstRoute = formatTrainerRoute(rows[0]);
-        setSelectedRoute(firstRoute||"");
-        setSelectedTrainerId(rows[0]?.id||"");
+        // Only seed defaults when nothing more specific is pending.
+        // calcPreload (if any) will run its own effect right after this
+        // and pick the right trainer; seeding here would briefly flash
+        // the wrong selection.
+        if (!calcPreload?.trainerId) {
+          const firstRoute = formatTrainerRoute(rows[0]);
+          setSelectedRoute(firstRoute||"");
+          setSelectedTrainerId(rows[0]?.id||"");
+        }
       } catch (err) {
         if (!cancelled) {
           setLookupError(err.message||"Failed to load trainer lookup data.");
@@ -716,7 +731,7 @@ export default function CalculatorScreen({
     }
     load();
     return () => { cancelled = true; };
-  }, [visible]);
+  }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── External preload (e.g. Boss screen → Load into Calc) ──
      Wait until the calculator is visible AND trainerRows is populated,
