@@ -16,6 +16,24 @@ import {
   getOhkoThreats,
 } from "../utils/threatNotes";
 
+const NOTES_STORAGE_KEY = "pcm_boss_notes";
+
+function readAllNotes() {
+  try {
+    const raw = localStorage.getItem(NOTES_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeAllNotes(map) {
+  try {
+    localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(map));
+  } catch { /* ignore quota / private mode */ }
+}
+
 export default function BossScreen({ onNavigate, onLoadIntoCalc, party = [] }) {
   const [trainers, setTrainers] = useState([]);
   const [pokemonIndex, setPokemonIndex] = useState({});
@@ -127,6 +145,22 @@ export default function BossScreen({ onNavigate, onLoadIntoCalc, party = [] }) {
     () => getOhkoThreats(activeTeam, pokemonIndex, allMoves, party),
     [activeTeam, pokemonIndex, allMoves, party],
   );
+
+  // ── Per-boss user notes (persisted) ─────────────────────────────────
+  // Map of { [bossGroupKey]: text } in localStorage. The textarea below
+  // is bound to whichever boss is currently active.
+  const [allNotes, setAllNotes] = useState(() => readAllNotes());
+  const noteKey = activeGroup?.key || "";
+  const currentNote = noteKey ? (allNotes[noteKey] || "") : "";
+
+  const handleNoteChange = (text) => {
+    if (!noteKey) return;
+    setAllNotes((prev) => {
+      const next = { ...prev, [noteKey]: text };
+      writeAllNotes(next);
+      return next;
+    });
+  };
 
   const variantLabel = activeTrainer ? getBossVariantLabel(activeTrainer) : "";
   const variantSelectLabel =
@@ -421,6 +455,26 @@ export default function BossScreen({ onNavigate, onLoadIntoCalc, party = [] }) {
                 )}
               </div>
             )}
+          </details>
+
+          <details className="panel">
+            <summary>My Notes</summary>
+            <p className="muted small">
+              Personal notes for this boss — saved automatically and shown
+              again next time you select them.
+            </p>
+            <textarea
+              key={noteKey || "no-boss"}
+              rows="4"
+              placeholder={
+                activeGroup
+                  ? `Strategy notes for ${activeGroup.name}…`
+                  : "Select a boss first."
+              }
+              value={currentNote}
+              disabled={!activeGroup}
+              onChange={(e) => handleNoteChange(e.target.value)}
+            />
           </details>
         </div>
       </div>
