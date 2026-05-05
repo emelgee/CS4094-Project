@@ -1,14 +1,13 @@
-export default function TrainerScreen() {
-  const badges = [
-    { icon: "🪨", name: "Stone",   earned: true  },
-    { icon: "✊", name: "Knuckle", earned: true  },
-    { icon: "⚡", name: "Dynamo",  earned: false },
-    { icon: "🔥", name: "Heat",    earned: false },
-    { icon: "⚖",  name: "Balance", earned: false },
-    { icon: "🪶", name: "Feather", earned: false },
-    { icon: "🔮", name: "Mind",    earned: false },
-    { icon: "🌊", name: "Rain",    earned: false },
-  ];
+import { BADGES } from "../data/constants";
+
+export default function TrainerScreen({
+  earnedBadges,
+  onToggleBadge,
+  earnedBadgeCount = 0,
+}) {
+  // Fall back to an empty Set so the screen still renders if it's ever
+  // mounted without these props (e.g. in tests / storybook).
+  const earned = earnedBadges instanceof Set ? earnedBadges : new Set();
 
   const customRules = [
     ["Fainted Pokémon are dead (permadeath)", true],
@@ -22,7 +21,7 @@ export default function TrainerScreen() {
     ["Total Encounters",  3],
     ["Pokémon Caught",    2],
     ["Deaths",            0],
-    ["Badges Earned",     "2 / 8"],
+    ["Badges Earned",     `${earnedBadgeCount} / ${BADGES.length}`],
     ["Current Location",  "Mauville City"],
   ];
 
@@ -82,13 +81,24 @@ export default function TrainerScreen() {
         <div className="col">
           <details open className="panel">
             <summary>Badge Progress</summary>
+            <p className="muted small">Click a badge to toggle whether you've earned it.</p>
             <div className="badge-grid">
-              {badges.map((b) => (
-                <div key={b.name} className={`badge-item${b.earned ? " earned" : ""}`}>
-                  <div className="badge-icon">{b.icon}</div>
-                  <span>{b.name}</span>
-                </div>
-              ))}
+              {BADGES.map((b) => {
+                const isEarned = earned.has(b.name);
+                return (
+                  <button
+                    key={b.name}
+                    type="button"
+                    onClick={() => onToggleBadge?.(b.name)}
+                    className={`badge-item${isEarned ? " earned" : ""}`}
+                    aria-pressed={isEarned}
+                    title={isEarned ? `Unset ${b.name} Badge` : `Mark ${b.name} Badge earned`}
+                  >
+                    <div className="badge-icon">{b.icon}</div>
+                    <span>{b.name}</span>
+                  </button>
+                );
+              })}
             </div>
           </details>
 

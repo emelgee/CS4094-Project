@@ -211,8 +211,11 @@ textarea { resize: vertical; }
 /* =====================================================================
    TRAINER / BADGES
    ===================================================================== */
-.badge-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border-radius: 10px; border: 1px solid #1f2638; background: #0e1120; font-size: 11px; color: #5a6380; opacity: 0.5; }
+.badge-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border-radius: 10px; border: 1px solid #1f2638; background: #0e1120; font-size: 11px; color: #5a6380; opacity: 0.5; cursor: pointer; transition: background 0.15s, border-color 0.15s, opacity 0.15s, transform 0.05s; font-family: inherit; }
+.badge-item:hover { opacity: 0.85; border-color: #3348aa66; }
+.badge-item:active { transform: scale(0.97); }
 .badge-item.earned { opacity: 1; border-color: #2a4a2055; background: #0d1a10; color: #a0d090; }
+.badge-item.earned:hover { border-color: #3a6a3088; }
 .badge-icon { font-size: 20px; }
 .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #c8cde0; cursor: pointer; }
 .checkbox-row input { width: auto; }
