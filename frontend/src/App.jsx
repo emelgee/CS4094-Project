@@ -5,7 +5,6 @@ import DashboardScreen from "./screens/DashboardScreen";
 import TeamScreen from "./screens/TeamScreen";
 import EncountersScreen from "./screens/EncountersScreen";
 import CalculatorScreen from "./screens/CalculatorScreen";
-import IvEvScreen from "./screens/IvEvScreen";
 import TrainerScreen from "./screens/TrainerScreen";
 import BossScreen from "./screens/BossScreen";
 import LookupScreen from "./screens/LookupScreen";
@@ -19,7 +18,6 @@ const NAV_ITEMS = [
   { key: "team", label: "Team" },
   { key: "encounters", label: "Encounters" },
   { key: "calculator", label: "Calculator" },
-  { key: "ivev", label: "IV / EV" },
   { key: "trainer", label: "Trainer" },
   { key: "boss", label: "Boss Data" },
   { key: "lookup", label: "Lookup" },
@@ -407,7 +405,6 @@ export default function App() {
               visible={screen === "calculator"}
             />
           </div>
-          {screen === "ivev" && <IvEvScreen />}
           {screen === "trainer" && <TrainerScreen />}
           {screen === "boss" && <BossScreen onNavigate={navigate} />}
           {screen === "lookup" && <LookupScreen onNavigate={navigate} />}
