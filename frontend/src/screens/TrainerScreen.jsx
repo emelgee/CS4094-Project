@@ -1,29 +1,39 @@
+import { useState } from "react";
+
 export default function TrainerScreen() {
-  const badges = [
-    { icon: "🪨", name: "Stone",   earned: true  },
-    { icon: "✊", name: "Knuckle", earned: true  },
+  const [badges, setBadges] = useState([
+    { icon: "🪨", name: "Stone",   earned: false  },
+    { icon: "✊", name: "Knuckle", earned: false  },
     { icon: "⚡", name: "Dynamo",  earned: false },
     { icon: "🔥", name: "Heat",    earned: false },
     { icon: "⚖",  name: "Balance", earned: false },
     { icon: "🪶", name: "Feather", earned: false },
     { icon: "🔮", name: "Mind",    earned: false },
     { icon: "🌊", name: "Rain",    earned: false },
-  ];
+  ]);
+
+  const toggleBadge = (name) => {
+    setBadges((prev) =>
+      prev.map((b) => (b.name === name ? { ...b, earned: !b.earned } : b))
+    );
+  };
 
   const customRules = [
-    ["Fainted Pokémon are dead (permadeath)", true],
-    ["Only catch first encounter per route",  true],
+    ["Fainted Pokémon are dead (permadeath)", false],
+    ["Only catch first encounter per route",  false],
     ["Species / duplication clause",          false],
     ["Nickname all Pokémon",                  false],
     ["No items in battle",                    false],
   ];
 
+  const earnedCount = badges.filter((b) => b.earned).length;
+
   const runStats = [
-    ["Total Encounters",  3],
-    ["Pokémon Caught",    2],
+    ["Total Encounters",  0],
+    ["Pokémon Caught",    0],
     ["Deaths",            0],
-    ["Badges Earned",     "2 / 8"],
-    ["Current Location",  "Mauville City"],
+    ["Badges Earned",     `${earnedCount} / 8`],
+    ["Current Location",  ""],
   ];
 
   return (
@@ -38,11 +48,11 @@ export default function TrainerScreen() {
           <details open className="panel">
             <summary>Run Info</summary>
             <div className="formGrid">
-              <label>Trainer Name<input defaultValue="Martin" /></label>
+              <label>Trainer Name<input defaultValue="Trainer" /></label>
               <label>
                 Game
                 <select>
-                  {["Pokémon Emerald","Pokémon Ruby","Pokémon Sapphire","Pokémon FireRed","Pokémon LeafGreen","Pokémon Red","Pokémon Blue","Pokémon Yellow","Pokémon Gold","Pokémon Silver","Pokémon Crystal"].map((g) => (
+                  {["Pokémon Emerald","Pokémon Ruby","Pokémon Sapphire","Pokémon FireRed","Pokémon LeafGreen",].map((g) => (
                     <option key={g}>{g}</option>
                   ))}
                 </select>
@@ -84,7 +94,12 @@ export default function TrainerScreen() {
             <summary>Badge Progress</summary>
             <div className="badge-grid">
               {badges.map((b) => (
-                <div key={b.name} className={`badge-item${b.earned ? " earned" : ""}`}>
+                <div 
+                  key={b.name} 
+                  className={`badge-item${b.earned ? " earned" : ""}`}
+                  onClick={() => toggleBadge(b.name)}
+                  style={{ cursor: "pointer" }}
+                >
                   <div className="badge-icon">{b.icon}</div>
                   <span>{b.name}</span>
                 </div>
