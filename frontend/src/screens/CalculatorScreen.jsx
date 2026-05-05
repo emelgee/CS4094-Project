@@ -417,7 +417,36 @@ function PokemonSide({
   );
 }
 
-function FieldEffects({ weather, setWeather, crit, setCrit }) {
+function FieldEffects({
+  weather, setWeather,
+  crit, setCrit,
+  reflect, setReflect,
+  lightScreen, setLightScreen,
+  helpingHand, setHelpingHand,
+  explosion, setExplosion,
+}) {
+  function Toggle({ label, val, set, color="#ffd740" }) {
+    return (
+      <button onClick={() => set(v => !v)} style={{
+        padding:"6px 8px", borderRadius:7, border:"1px solid",
+        borderColor: val ? `${color}66` : "#1a2030",
+        background: val ? "#1a2030" : "transparent",
+        color: val ? color : "#7a82a0",
+        fontSize:11, cursor:"pointer", textAlign:"left",
+        display:"flex", alignItems:"center", gap:6, transition:"all 0.12s",
+      }}>
+        <span style={{
+          width:12, height:12, borderRadius:3, flexShrink:0,
+          background: val ? color : "transparent",
+          border: `1px solid ${val ? color : "#3a3f52"}`,
+          display:"inline-flex", alignItems:"center", justifyContent:"center",
+          fontSize:9, color:"#000",
+        }}>{val ? "✓" : ""}</span>
+        {label}
+      </button>
+    );
+  }
+
   return (
     <div style={{
       background:"#0e1120", border:"1px solid #1a2030",
@@ -429,51 +458,42 @@ function FieldEffects({ weather, setWeather, crit, setCrit }) {
         Field
       </div>
 
-      {/* Weather */}
+      {/* Weather — Sun/Rain affect Fire/Water power; Sand boosts Rock SpD */}
       <div style={{display:"grid",gap:4}}>
         <span style={{fontSize:11,color:"#5a6380"}}>Weather</span>
         {[
-          {val:"",icon:"○",label:"None"},
-          {val:"sun",icon:"☀",label:"Sun"},
-          {val:"rain",icon:"☂",label:"Rain"},
-        ].map(({val,icon,label})=>(
-          <button key={val} onClick={()=>setWeather(val)} style={{
+          {val:"",    icon:"○", label:"None"},
+          {val:"sun", icon:"☀", label:"Sun"},
+          {val:"rain",icon:"☂", label:"Rain"},
+          {val:"sand",icon:"🌪",label:"Sandstorm"},
+          {val:"hail",icon:"❄", label:"Hail"},
+        ].map(({val,icon,label}) => (
+          <button key={val} onClick={() => setWeather(val)} style={{
             padding:"6px 8px", borderRadius:7, border:"1px solid",
-            borderColor: weather===val?"#3a58cc66":"#1a2030",
-            background: weather===val?"#1a2240":"transparent",
-            color: weather===val?"#e4e6ef":"#7a82a0",
+            borderColor: weather===val ? "#3a58cc66" : "#1a2030",
+            background: weather===val ? "#1a2240" : "transparent",
+            color: weather===val ? "#e4e6ef" : "#7a82a0",
             fontSize:11, cursor:"pointer", textAlign:"left",
-            display:"flex",alignItems:"center",gap:6,transition:"all 0.12s",
+            display:"flex", alignItems:"center", gap:6, transition:"all 0.12s",
           }}>
             <span style={{fontSize:14}}>{icon}</span>{label}
           </button>
         ))}
       </div>
 
-      {/* Conditions */}
+      {/* Screens on the defender's side — halved by crits */}
+      <div style={{display:"grid",gap:4}}>
+        <span style={{fontSize:11,color:"#5a6380"}}>Screens (defender)</span>
+        <Toggle label="Reflect"      val={reflect}     set={setReflect}     color="#7a9ef0" />
+        <Toggle label="Light Screen" val={lightScreen} set={setLightScreen} color="#7a9ef0" />
+      </div>
+
+      {/* Other conditions */}
       <div style={{display:"grid",gap:4}}>
         <span style={{fontSize:11,color:"#5a6380"}}>Conditions</span>
-        {[
-          {key:"crit",label:"Crit hit",val:crit,set:setCrit},
-        ].map(({key,label,val,set})=>(
-          <button key={key} onClick={()=>set(v=>!v)} style={{
-            padding:"6px 8px", borderRadius:7, border:"1px solid",
-            borderColor: val?"#ffd74066":"#1a2030",
-            background: val?"#2a2a0a":"transparent",
-            color: val?"#ffd740":"#7a82a0",
-            fontSize:11, cursor:"pointer", textAlign:"left",
-            display:"flex",alignItems:"center",gap:6,transition:"all 0.12s",
-          }}>
-            <span style={{
-              width:12,height:12,borderRadius:3,flexShrink:0,
-              background:val?"#ffd740":"transparent",
-              border:`1px solid ${val?"#ffd740":"#3a3f52"}`,
-              display:"inline-flex",alignItems:"center",justifyContent:"center",
-              fontSize:9,color:"#000",
-            }}>{val?"✓":""}</span>
-            {label}
-          </button>
-        ))}
+        <Toggle label="Crit hit"           val={crit}        set={setCrit}        color="#ffd740" />
+        <Toggle label="Helping Hand (atk)" val={helpingHand} set={setHelpingHand} color="#4ade80" />
+        <Toggle label="Explosion / Self-Destruct" val={explosion} set={setExplosion} color="#f87171" />
       </div>
     </div>
   );
@@ -489,13 +509,29 @@ function DamageResult({ damageResult, defenderHp, moveName, moveType }) {
     </div>
   );
 
-  const { min, max, rolls } = damageResult;
-  const minPct = defenderHp ? ((min/defenderHp)*100) : null;
-  const maxPct = defenderHp ? ((max/defenderHp)*100) : null;
-  const ohko = maxPct>=100;
-  const twohko = minPct && (minPct*2)>=100;
-  const koLabel = ohko?"guaranteed OHKO": twohko?"guaranteed 2HKO": maxPct>=50?"possible 2HKO":"";
+  const { min, max, rolls = [] } = damageResult;
   const typeColor = TYPE_COLORS[moveType?.toLowerCase()] || "#7a9ef0";
+  const hp = defenderHp || null;
+  const minPct = hp ? (min / hp * 100) : null;
+  const maxPct = hp ? (max / hp * 100) : null;
+
+  const ohkoCount = hp ? rolls.filter(r => r >= hp).length : 0;
+  const ohkoPct   = ohkoCount / 16 * 100;
+
+  let twoHkoCount = 0;
+  if (hp && ohkoPct < 100) {
+    for (const r1 of rolls) for (const r2 of rolls) if (r1 + r2 >= hp) twoHkoCount++;
+  }
+  const twoHkoPct = twoHkoCount / 256 * 100;
+
+  let threeHkoCount = 0;
+  if (hp && twoHkoPct < 100 && ohkoPct < 100) {
+    for (const r1 of rolls) for (const r2 of rolls) for (const r3 of rolls)
+      if (r1 + r2 + r3 >= hp) threeHkoCount++;
+  }
+  const threeHkoPct = threeHkoCount / 4096 * 100;
+
+  const guarHits = hp && min > 0 ? Math.ceil(hp / min) : null;
 
   return (
     <div style={{
@@ -518,36 +554,67 @@ function DamageResult({ damageResult, defenderHp, moveName, moveType }) {
         <div style={{fontSize:22,fontWeight:700,color:"#e4e6ef",fontVariantNumeric:"tabular-nums"}}>
           {min} – {max}
         </div>
-        {minPct && (
+        {minPct != null && (
           <div style={{fontSize:13,color:"#7a82a0",marginTop:2}}>
             {minPct.toFixed(1)}% – {maxPct.toFixed(1)}% of max HP
-            {koLabel && (
-              <span style={{
-                marginLeft:8,fontSize:11,fontWeight:700,
-                color: ohko?"#f87171":twohko?"#ffd740":"#4ade80",
-              }}>({koLabel})</span>
-            )}
           </div>
         )}
       </div>
 
-      {/* Damage rolls */}
-      {Array.isArray(rolls) && rolls.length > 0 && (
+      {hp && (
+        <div style={{display:"flex",flexDirection:"column",gap:4}}>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
+            <span style={{color:"#5a6380"}}>OHKO</span>
+            <span style={{fontWeight:700,fontVariantNumeric:"tabular-nums",
+              color: ohkoPct===100?"#f87171": ohkoPct>0?"#ffd740":"#3a3f52"}}>
+              {ohkoPct===100?"Guaranteed": ohkoPct>0?`${ohkoCount}/16 (${ohkoPct.toFixed(1)}%)`:"No"}
+            </span>
+          </div>
+          {ohkoPct < 100 && (
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
+              <span style={{color:"#5a6380"}}>2HKO</span>
+              <span style={{fontWeight:700,fontVariantNumeric:"tabular-nums",
+                color: twoHkoPct===100?"#ffd740": twoHkoPct>0?"#c8cde0":"#3a3f52"}}>
+                {twoHkoPct===100?"Guaranteed": twoHkoPct>0?`${twoHkoPct.toFixed(1)}%`:"No"}
+              </span>
+            </div>
+          )}
+          {ohkoPct < 100 && twoHkoPct < 100 && (
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
+              <span style={{color:"#5a6380"}}>3HKO</span>
+              <span style={{fontWeight:700,fontVariantNumeric:"tabular-nums",
+                color: threeHkoPct===100?"#4ade80": threeHkoPct>0?"#c8cde0":"#3a3f52"}}>
+                {threeHkoPct===100?"Guaranteed": threeHkoPct>0?`${threeHkoPct.toFixed(1)}%`:"No"}
+              </span>
+            </div>
+          )}
+          {guarHits && guarHits > 1 && (
+            <div style={{fontSize:11,color:"#5a6380",borderTop:"1px solid #1a2030",paddingTop:4,marginTop:2}}>
+              Guaranteed KO in {guarHits} hits (min roll)
+            </div>
+          )}
+        </div>
+      )}
+
+      {rolls.length > 0 && (
         <div>
           <div style={{fontSize:11,color:"#5a6380",textTransform:"uppercase",
             letterSpacing:"0.06em",marginBottom:5}}>
             Damage rolls (16)
           </div>
           <div style={{display:"flex",gap:3,flexWrap:"wrap"}}>
-            {rolls.map((r,i)=>(
-              <span key={i} style={{
-                fontSize:11,padding:"2px 6px",borderRadius:5,
-                background: r===min?"#2a1010":r===max?"#0d2a1a":"#0b0e14",
-                color: r===min?"#f87171":r===max?"#4ade80":"#7a82a0",
-                border:`1px solid ${r===min?"#5a1a1a":r===max?"#1a5235":"#1a2030"}`,
-                fontVariantNumeric:"tabular-nums",
-              }}>{r}</span>
-            ))}
+            {rolls.map((r,i) => {
+              const isKo = hp && r >= hp;
+              return (
+                <span key={i} style={{
+                  fontSize:11,padding:"2px 6px",borderRadius:5,
+                  background: isKo?"#0d2a1a": r===min?"#2a1010":"#0b0e14",
+                  color: isKo?"#4ade80": r===min?"#f87171":"#7a82a0",
+                  border:`1px solid ${isKo?"#1a5235": r===min?"#5a1a1a":"#1a2030"}`,
+                  fontVariantNumeric:"tabular-nums",
+                }}>{r}</span>
+              );
+            })}
           </div>
         </div>
       )}
@@ -583,6 +650,10 @@ export default function CalculatorScreen({
   const [crit, setCrit] = useState(false);
   const [burned, setBurned] = useState(false);
   const [weather, setWeather] = useState("");
+  const [reflect, setReflect] = useState(false);
+  const [lightScreen, setLightScreen] = useState(false);
+  const [helpingHand, setHelpingHand] = useState(false);
+  const [explosion, setExplosion] = useState(false);
   const [lookupDefender, setLookupDefender] = useState(null);
   const [defenderHp, setDefenderHp] = useState(null);
   const [atkNature, setAtkNature] = useState("hardy");
@@ -1061,7 +1132,7 @@ export default function CalculatorScreen({
       }
 
       const activeBurned = attackerSide==="my" ? burned : enemyBurned;
-      const conditions = { isCrit:crit, isBurned:activeBurned, weather:weather||"" };
+      const conditions = { isCrit:crit, isBurned:activeBurned, weather:weather||"", reflect, lightScreen, helpingHand, explosion };
       const out = calculateDamage(attackerData, defenderData,
         { type:moveRow.type, basePower:moveRow.power }, conditions);
       setDamageResult(out);
@@ -1074,6 +1145,7 @@ export default function CalculatorScreen({
     setAttackerPartyMonId(""); setDefenderId(""); setCrit(false);
     setAtkNature("hardy"); setDefNature("hardy"); setWeather("");
     setBurned(false); setEnemyBurned(false);
+    setReflect(false); setLightScreen(false); setHelpingHand(false); setExplosion(false);
     setDamageResult(null); setDefenderHp(null); setCalcError(null);
     setDefMode("lookup"); setSelectedPokemonIndex(""); setPreview(null);
     setLookupDefender(null); setMyActiveMoveIdx(null); setEnemyActiveMoveIdx(null);
@@ -1248,7 +1320,14 @@ export default function CalculatorScreen({
 
         {/* MIDDLE — Field + result */}
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
-          <FieldEffects weather={weather} setWeather={setWeather} crit={crit} setCrit={setCrit}/>
+          <FieldEffects
+            weather={weather} setWeather={setWeather}
+            crit={crit} setCrit={setCrit}
+            reflect={reflect} setReflect={setReflect}
+            lightScreen={lightScreen} setLightScreen={setLightScreen}
+            helpingHand={helpingHand} setHelpingHand={setHelpingHand}
+            explosion={explosion} setExplosion={setExplosion}
+          />
 
           {/* Attacker direction badge */}
           <div style={{display:"flex",alignItems:"center",gap:6,padding:"2px 0"}}>
