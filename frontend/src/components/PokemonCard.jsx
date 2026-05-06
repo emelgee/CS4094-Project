@@ -395,53 +395,64 @@ export default function PokemonCard({ mon, onSendToBox, onSendToGraveyard, onRem
 
   return (
     <div className="card pokemon-card">
-      <div className="poke-header">
-        <div className={`poke-type-pip type-${mon.primaryType}`}></div>
-        <img
-          className="poke-sprite"
-          src={spriteUrl}
-          alt={`${mon.name} sprite`}
-          loading="lazy"
-        />
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "flex-start", gap: 6 }}>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <strong className="poke-name">{mon.name}</strong>
-              <input
-                type="text"
-                placeholder="Nickname…"
-                value={nickname}
-                onChange={e => setNickname(e.target.value)}
-                style={{ display: "block", width: "100%", fontSize: 11, padding: "2px 6px", color: "#7a9ef0", marginTop: 2 }}
-              />
+      <div className="poke-header" style={{ flexDirection: "column", gap: 0 }}>
+        {/* Row 1: pip | sprite | name+level / nickname */}
+        <div style={{ display: "flex", alignItems: "stretch", gap: 10 }}>
+          <div className={`poke-type-pip type-${mon.primaryType}`} style={{ alignSelf: "stretch", minHeight: "unset" }}></div>
+          <img
+            className="poke-sprite"
+            src={spriteUrl}
+            alt={`${mon.name} sprite`}
+            loading="lazy"
+          />
+          <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center", gap: 6 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <strong className="poke-name" style={{ flex: 1 }}>{mon.name}</strong>
+              <div style={{ display: "flex", alignItems: "center", gap: 3, flexShrink: 0 }}>
+                <span className="muted small">Lv</span>
+                <input
+                  type="number"
+                  value={level}
+                  min={1} max={100}
+                  onChange={e => setLevel(Math.max(1, Math.min(100, Number(e.target.value) || 1)))}
+                  style={{ width: 52, padding: "4px 6px", fontWeight: 600, fontSize: 15, textAlign: "center" }}
+                />
+              </div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 3, flexShrink: 0 }}>
-              <span className="muted small">Lv</span>
-              <input
-                type="number"
-                value={level}
-                min={1} max={100}
-                onChange={e => setLevel(Math.max(1, Math.min(100, Number(e.target.value) || 1)))}
-                style={{ width: 42, padding: "2px 4px", fontWeight: 600, fontSize: 13, textAlign: "center" }}
-              />
-            </div>
+            <input
+              type="text"
+              placeholder="Nickname…"
+              value={nickname}
+              onChange={e => setNickname(e.target.value)}
+              style={{ width: "100%", fontSize: 17, padding: "6px 8px", color: "#7a9ef0" }}
+            />
           </div>
-          <div className="poke-meta" style={{ marginTop: 4 }}>
-            <select className="mini-select" defaultValue={mon.gender}>
-              <option>♂ Male</option>
-              <option>♀ Female</option>
-              <option>— Genderless</option>
-            </select>
-            {mon.types.map((t) => (
-              <span key={t} className={`type-chip type-${t.toLowerCase()}`}>{t}</span>
-            ))}
-          </div>
+        </div>
+
+        {/* Row 2: gender | type1 | type2 equal columns */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: `1fr${mon.types.map(() => " 1fr").join("")}`,
+          gap: 6, marginTop: 10,
+          borderTop: "1px solid #1a2030", paddingTop: 8,
+        }}>
+          <select className="mini-select" defaultValue={mon.gender}>
+            <option>♂ Male</option>
+            <option>♀ Female</option>
+            <option>— Genderless</option>
+          </select>
+          {mon.types.map((t) => (
+            <span key={t} className={`type-chip type-${t.toLowerCase()}`}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {t}
+            </span>
+          ))}
         </div>
       </div>
 
       <div className="poke-sections">
-        <details open>
-          <summary>Core Stats</summary>
+        <div>
+          <div className="section-label">Core Stats</div>
           <div style={{ marginTop: 6 }}>
             <div style={{ display: "grid", gridTemplateColumns: "32px 1fr 44px 50px 52px", gap: "2px 6px", alignItems: "center", marginBottom: 4 }}>
               <span />
@@ -477,10 +488,10 @@ export default function PokemonCard({ mon, onSendToBox, onSendToGraveyard, onRem
               EVs: {totalEvs} / 510{totalEvs > 510 ? " ⚠" : ""}
             </div>
           </div>
-        </details>
+        </div>
 
-        <details open>
-          <summary>Nature &amp; Ability</summary>
+        <div>
+          <div className="section-label">Nature &amp; Ability</div>
           <div className="formGrid tight">
             <label>
               Nature
@@ -507,10 +518,10 @@ export default function PokemonCard({ mon, onSendToBox, onSendToGraveyard, onRem
               </select>
             </label>
           </div>
-        </details>
+        </div>
 
-        <details open>
-          <summary>Moves (4)</summary>
+        <div>
+          <div className="section-label">Moves</div>
           <div style={{ display: "grid", gap: 5, marginTop: 6 }}>
             {[0, 1, 2, 3].map((i) => (
               <TeamMoveSlot
@@ -523,7 +534,7 @@ export default function PokemonCard({ mon, onSendToBox, onSendToGraveyard, onRem
               />
             ))}
           </div>
-        </details>
+        </div>
       </div>
 
       <div className="row" style={{ alignItems: "center" }}>

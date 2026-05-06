@@ -33,6 +33,7 @@ h3 { margin: 0 0 10px; font-size: 14px; }
 .muted { color: #7a82a0; margin: 0; }
 .small { font-size: 12px; }
 .mb8 { margin-bottom: 8px; }
+.section-label { font-size: 11px; font-weight: 600; color: #5a6380; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
 .mt8 { margin-top: 8px; }
 
 /* =====================================================================
@@ -153,8 +154,8 @@ textarea { resize: vertical; }
 .poke-header { display: flex; gap: 10px; align-items: flex-start; }
 .poke-type-pip { width: 4px; min-height: 40px; border-radius: 999px; flex-shrink: 0; }
 .poke-sprite {
-   width: 56px;
-   height: 56px;
+   width: 80px;
+   height: 80px;
    object-fit: contain;
    image-rendering: pixelated;
    border-radius: 8px;
@@ -163,7 +164,7 @@ textarea { resize: vertical; }
    padding: 4px;
    flex-shrink: 0;
 }
-.poke-name { font-size: 16px; }
+.poke-name { font-size: 20px; }
 .poke-sections { display: flex; flex-direction: column; gap: 4px; }
 .stat-bars { display: grid; gap: 6px; margin-top: 8px; }
 .stat-bar-row { display: grid; grid-template-columns: 36px 1fr 32px; align-items: center; gap: 8px; font-size: 12px; color: #7a82a0; }

@@ -2,15 +2,18 @@ const { pool, closePool } = require("../db/connection");
 
 const INSERT_MOVE_SQL = `
   INSERT INTO move (
-    id, name, type, power, accuracy, pp
+    id, name, type, power, accuracy, pp, damage_class, effect, flavor_text
   )
-  VALUES (?, ?, ?, ?, ?, ?)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   ON DUPLICATE KEY UPDATE
-    name     = VALUES(name),
-    type     = VALUES(type),
-    power    = VALUES(power),
-    accuracy = VALUES(accuracy),
-    pp       = VALUES(pp)
+    name         = VALUES(name),
+    type         = VALUES(type),
+    power        = VALUES(power),
+    accuracy     = VALUES(accuracy),
+    pp           = VALUES(pp),
+    damage_class = VALUES(damage_class),
+    effect       = VALUES(effect),
+    flavor_text  = VALUES(flavor_text)
 `;
 
 async function insertMoves(moveRows) {
@@ -30,6 +33,9 @@ async function insertMoves(moveRows) {
         move.power ?? null,
         move.accuracy ?? null,
         move.pp,
+        move.damage_class ?? null,
+        move.effect ?? null,
+        move.flavor_text ?? null,
       ]);
     }
 

@@ -136,6 +136,64 @@ router.get("/:id/evolutions", async (req, res) => {
   }
 });
 
+// GET /api/pokemon/:id/evolution-chain
+// Returns the full evolution chain for any pokemon in the line
+router.get("/:id/evolution-chain", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Walk backwards to find the chain root
+    let rootId = Number(id);
+    const visited = new Set();
+    while (true) {
+      if (visited.has(rootId)) break;
+      visited.add(rootId);
+      const [prev] = await db.pool.query(
+        "SELECT from_pokemon_id FROM evolution WHERE to_pokemon_id = ?",
+        [rootId]
+      );
+      if (prev.length === 0) break;
+      rootId = prev[0].from_pokemon_id;
+    }
+
+    // BFS forward from root to collect all chain edges
+    const queue = [rootId];
+    const seen = new Set([rootId]);
+    const edges = [];
+
+    while (queue.length > 0) {
+      const fromId = queue.shift();
+      const [rows] = await db.pool.query(
+        `SELECT e.from_pokemon_id, e.to_pokemon_id, e.\`trigger\`, e.min_level, e.item,
+                pf.name AS from_name, pf.type1 AS from_type1, pf.type2 AS from_type2,
+                pt.name AS to_name,   pt.type1 AS to_type1,   pt.type2 AS to_type2
+         FROM evolution e
+         JOIN pokemon pf ON e.from_pokemon_id = pf.id
+         JOIN pokemon pt ON e.to_pokemon_id   = pt.id
+         WHERE e.from_pokemon_id = ?`,
+        [fromId]
+      );
+      for (const row of rows) {
+        edges.push(row);
+        if (!seen.has(row.to_pokemon_id)) {
+          seen.add(row.to_pokemon_id);
+          queue.push(row.to_pokemon_id);
+        }
+      }
+    }
+
+    const [[root]] = await db.pool.query(
+      "SELECT id, name, type1, type2 FROM pokemon WHERE id = ?",
+      [rootId]
+    );
+
+    res.json({ root, edges });
+  } catch (err) {
+    console.error("GET /api/pokemon/:id/evolution-chain error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
 // GET /api/pokemon/:id/locations
 // Returns all locations (and areas) where a given pokemon can be found
 router.get("/:id/locations", async (req, res) => {
