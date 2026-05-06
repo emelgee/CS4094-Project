@@ -299,8 +299,12 @@ function MoveSlot({ move, active, onMoveClick, disabled, slotIdx, learnset, allM
   );
 }
 
+const STAGE_MULT = {"-6":0.25,"-5":0.28,"-4":0.33,"-3":0.40,"-2":0.50,"-1":0.67,"0":1,"1":1.5,"2":2,"3":2.5,"4":3,"5":3.5,"6":4};
+
 function StatRow({ label, base, iv, ev, battle, stage, onStageChange }) {
-  const display = battle ?? base ?? 0;
+  const s = stage ?? 0;
+  const boosted = battle != null ? Math.floor(battle * (STAGE_MULT[String(s)] ?? 1)) : null;
+  const display = boosted ?? base ?? 0;
   const pct = Math.min(100, Math.round((display / (battle != null ? 400 : 255)) * 100));
   const color = display >= 120 ? "#4ade80" : display >= 70 ? "#ffd740" : "#f87171";
   const stageColor = stage > 0 ? "#4ade80" : stage < 0 ? "#f87171" : "#3a3f52";
@@ -319,7 +323,9 @@ function StatRow({ label, base, iv, ev, battle, stage, onStageChange }) {
       <span style={{color:"#c0c4d8"}}>{base??"-"}</span>
       <span style={{color:"#5a6a8a"}}>{iv??"-"}</span>
       <span style={{color:"#4a6a4a"}}>{ev??"-"}</span>
-      <span style={{color:"#e4e6ef",fontWeight:700}}>{battle??"-"}</span>
+      <span style={{color: s!==0 ? stageColor : "#e4e6ef", fontWeight:700}}>
+        {boosted??battle??"-"}
+      </span>
       {onStageChange ? (
         <div style={{display:"flex",alignItems:"center",gap:2}}>
           <button style={btnStyle} onClick={() => onStageChange(Math.max(-6, (stage??0) - 1))}>−</button>
