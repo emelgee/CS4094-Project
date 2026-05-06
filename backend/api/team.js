@@ -8,8 +8,10 @@ const { requireAuth } = require("../auth/middleware");
 router.use(requireAuth);
 
 // GET /api/team
-// Returns party (team_slot 1-6) and PC box (team_slot NULL) with full
-// pokemon + move data for the authenticated user.
+// Returns party (team_slot 1-6), PC box (slot NULL, alive), and graveyard
+// (slot NULL, status dead) with full pokemon + move data. Encounter-sourced
+// rows use status 'caught' in PC/party and 'dead' in graveyard; both must
+// be included or graveyard Pokémon would vanish after clearing team_slot.
 router.get("/", async (req, res) => {
   try {
     const [rows] = await db.pool.query(
@@ -38,7 +40,7 @@ router.get("/", async (req, res) => {
          AND (
            e.team_slot IS NOT NULL
            OR e.source = 'team'
-           OR (e.source = 'encounter' AND e.status = 'caught')
+           OR (e.source = 'encounter' AND e.status IN ('caught', 'dead'))
          )
        ORDER BY e.team_slot ASC, e.id ASC`,
       [req.user.id]
