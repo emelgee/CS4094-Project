@@ -17,10 +17,12 @@ router.get("/", async (req, res) => {
          p.name AS pokemon_name,
          p.type1,
          p.type2,
-         l.name AS location
+         l.name AS location,
+         ab.name AS ability_name
        FROM encounter e
        JOIN pokemon p ON e.pokemon_id = p.id
        LEFT JOIN location l ON e.location_id = l.id
+       LEFT JOIN ability ab ON e.ability_id = ab.id
        WHERE e.user_id = ? AND e.source = 'encounter'
        ORDER BY e.id ASC`,
       [req.user.id]

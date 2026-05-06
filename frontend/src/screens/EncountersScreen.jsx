@@ -32,6 +32,10 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
   const [quickAddPoke, setQuickAddPoke] = useState(null);
   const [qaForm, setQaForm] = useState({ nickname: "", level: "", nature: "serious", outcome: "Caught" });
   const [qaLoading, setQaLoading] = useState(false);
+  const [qaMoveOptions, setQaMoveOptions] = useState([]);
+  const [qaMoves, setQaMoves] = useState([null, null, null, null]);
+  const [qaAbilityId, setQaAbilityId] = useState(null);
+  const [qaAbilityOptions, setQaAbilityOptions] = useState([]);
 
   useEffect(() => {
     fetch(`${API_BASE}/api/locations`)
@@ -112,9 +116,43 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
     debounceRef.current = setTimeout(() => fetchPokemon(val), 250);
   };
 
-  const handleSelectRoutePoke = (p) => {
+  const handleSelectRoutePoke = async (p) => {
+    const lv = p.min_level || 5;
     setQuickAddPoke(p);
-    setQaForm({ nickname: capitalize(p.pokemon_name), level: p.min_level || "", nature: "serious", outcome: "Caught" });
+    setQaForm({ nickname: capitalize(p.pokemon_name), level: lv, nature: "serious", outcome: "Caught" });
+    setQaMoveOptions([]);
+    setQaMoves([null, null, null, null]);
+    setQaAbilityId(null);
+    setQaAbilityOptions([]);
+    try {
+      const [pokeRes, movesRes] = await Promise.all([
+        fetch(`${API_BASE}/api/pokemon/${p.pokemon_id}`),
+        fetch(`${API_BASE}/api/pokemon/${p.pokemon_id}/moves`),
+      ]);
+      const pokeData = await pokeRes.json();
+      const movesData = await movesRes.json();
+      const levelUp = Array.isArray(movesData)
+        ? movesData.filter((m) => m.learn_method === "level-up").sort((a, b) => a.level - b.level)
+        : [];
+      setQaMoveOptions(levelUp);
+      const eligible = levelUp.filter((m) => m.level <= lv);
+      const last4 = eligible.slice(-4);
+      setQaMoves([
+        last4[0] ? { id: last4[0].move_id, name: last4[0].move_name } : null,
+        last4[1] ? { id: last4[1].move_id, name: last4[1].move_name } : null,
+        last4[2] ? { id: last4[2].move_id, name: last4[2].move_name } : null,
+        last4[3] ? { id: last4[3].move_id, name: last4[3].move_name } : null,
+      ]);
+      const abilOpts = [
+        pokeData.ability1_id ? { id: pokeData.ability1_id, name: pokeData.ability1 } : null,
+        pokeData.ability2_id ? { id: pokeData.ability2_id, name: pokeData.ability2 } : null,
+        pokeData.ability_hidden_id ? { id: pokeData.ability_hidden_id, name: pokeData.ability_hidden } : null,
+      ].filter(Boolean);
+      setQaAbilityOptions(abilOpts);
+      setQaAbilityId(abilOpts[0]?.id || null);
+    } catch {
+      // leave empty
+    }
   };
 
   const handleQuickAdd = async () => {
@@ -127,10 +165,14 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
         pokemon: capitalize(quickAddPoke.pokemon_name),
         pokemon_id: quickAddPoke.pokemon_id,
         nickname: qaForm.nickname || capitalize(quickAddPoke.pokemon_name),
-        ability: null,
+        ability_id: qaAbilityId,
         outcome: qaForm.outcome,
         level: Number(qaForm.level) || quickAddPoke.min_level || 5,
         nature: qaForm.nature,
+        move1_id: qaMoves[0]?.id || null,
+        move2_id: qaMoves[1]?.id || null,
+        move3_id: qaMoves[2]?.id || null,
+        move4_id: qaMoves[3]?.id || null,
       });
       setQuickAddPoke(null);
     } finally {
@@ -201,6 +243,8 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                           <strong>{enc.nickname || capitalize(enc.pokemon_name) || `#${enc.pokemon_id}`}</strong>
                         </div>
                         <div className="muted" style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginTop: 2 }}>
+                          {enc.location && <span style={{ fontSize: 11 }}>{enc.location}</span>}
+                          {enc.location && [enc.type1, enc.type2].some(Boolean) && <span style={{ color: "#3a4060" }}>·</span>}
                           {[enc.type1, enc.type2].filter(Boolean).map((t) => (
                             <span key={t} className={`type-chip type-${t}`}>{capitalize(t)}</span>
                           ))}
@@ -232,7 +276,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
               <form onSubmit={handleSaveDetails}>
                 <div className="formGrid">
                   <div>
-                    <label htmlFor="area-input">Area</label>
+                    <label htmlFor="area-input">Location</label>
                     <div className="search-wrap">
                       <input
                         id="area-input"
@@ -251,7 +295,12 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                                 <div
                                   key={loc}
                                   className="dropdown-item"
-                                  onMouseDown={(e) => { e.preventDefault(); setFormData({ ...formData, location: loc }); setLocOpen(false); }}
+                                  onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    const found = routes.find((r) => r.name === loc);
+                                    setFormData({ ...formData, location: loc, location_id: found?.id || formData.location_id });
+                                    setLocOpen(false);
+                                  }}
                                 >
                                   <strong>{loc}</strong>
                                 </div>
@@ -262,42 +311,19 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                   </div>
 
                   <div>
-                    <label htmlFor="opponent-input">Opponent</label>
-                    <div className="search-wrap">
-                      <input
-                        id="opponent-input"
-                        value={formData.pokemon || ""}
-                        onChange={handlePokeChange}
-                        onFocus={() => { setPokeOpen(true); fetchPokemon(formData.pokemon || ""); }}
-                        onBlur={() => setTimeout(() => setPokeOpen(false), 200)}
-                        disabled={!formData.id}
-                        autoComplete="off"
-                      />
-                      {pokeOpen && formData.id && (
-                        <div className="dropdown">
-                          {pokeLoading && <div className="dropdown-empty">Loading…</div>}
-                          {!pokeLoading && pokeResults.length === 0 && <div className="dropdown-empty">No Pokémon found</div>}
-                          {!pokeLoading && pokeResults.slice(0, 50).map((p) => (
-                            <div
-                              key={p.id}
-                              className="dropdown-item"
-                              onMouseDown={(e) => { e.preventDefault(); setFormData({ ...formData, pokemon: capitalize(p.name) }); setPokeOpen(false); }}
-                            >
-                              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                <span className="muted small">#{String(p.id).padStart(3, "0")}</span>
-                                <strong>{capitalize(p.name)}</strong>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    <label htmlFor="edit-nickname">Nickname</label>
+                    <input
+                      id="edit-nickname"
+                      value={formData.nickname || ""}
+                      onChange={(e) => setFormData({ ...formData, nickname: e.target.value })}
+                      disabled={!formData.id}
+                    />
                   </div>
 
                   <div>
-                    <label htmlFor="level-input">Opponent Level</label>
+                    <label htmlFor="edit-level">Level</label>
                     <input
-                      id="level-input"
+                      id="edit-level"
                       type="number"
                       min="1"
                       max="100"
@@ -308,36 +334,24 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                   </div>
 
                   <div>
-                    <label htmlFor="outcome-select">Outcome</label>
+                    <label htmlFor="edit-status">Status</label>
                     <select
-                      id="outcome-select"
-                      value={formData.outcome || "Caught"}
-                      onChange={(e) => setFormData({ ...formData, outcome: e.target.value })}
+                      id="edit-status"
+                      value={formData.status || "caught"}
+                      onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                       disabled={!formData.id}
                     >
-                      <option value="Caught">Caught</option>
-                      <option value="Fainted">Fainted</option>
-                      <option value="Fled">Fled</option>
-                      <option value="Missed">Missed</option>
+                      <option value="caught">Caught</option>
+                      <option value="fainted">Fainted</option>
+                      <option value="fled">Fled</option>
+                      <option value="missed">Missed</option>
                     </select>
                   </div>
                 </div>
 
-                <div style={{ marginTop: 10 }}>
-                  <label htmlFor="notes-textarea">Notes</label>
-                  <textarea
-                    id="notes-textarea"
-                    rows="3"
-                    placeholder="Notes..."
-                    value={formData.notes || ""}
-                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    disabled={!formData.id}
-                  />
-                </div>
-
                 <div className="row mt8">
                   <button type="submit" className="btn primary small" disabled={!formData.id}>
-                    Save Details
+                    Save Changes
                   </button>
                 </div>
               </form>
@@ -367,20 +381,16 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                     </div>
                   </div>
                   <div style={{ display: "grid", gap: 2 }}>
-                    <div className="statRow"><span>Location</span><span>{formData.location}</span></div>
+                    <div className="statRow"><span>Location</span><span>{formData.location || "—"}</span></div>
+                    {formData.nature && <div className="statRow"><span>Nature</span><span>{capitalize(formData.nature)}</span></div>}
                     {formData.level && <div className="statRow"><span>Level</span><span>{formData.level}</span></div>}
+                    {formData.ability_name && <div className="statRow"><span>Ability</span><span>{capitalize(formData.ability_name)}</span></div>}
                     <div className="statRow">
                       <span>Status</span>
                       <span className={`outcome-tag ${(formData.status || "unknown").toLowerCase()}`}>
                         {formData.status || "unknown"}
                       </span>
                     </div>
-                    {formData.notes && (
-                      <div className="statRow" style={{ flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
-                        <span className="muted small">Notes</span>
-                        <span style={{ fontSize: 12, color: "#c8cde0" }}>{formData.notes}</span>
-                      </div>
-                    )}
                   </div>
                 </div>
               ) : (
@@ -499,7 +509,20 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                       min="1"
                       max="100"
                       value={qaForm.level}
-                      onChange={(e) => setQaForm({ ...qaForm, level: e.target.value })}
+                      onChange={(e) => {
+                        const lv = e.target.value;
+                        setQaForm({ ...qaForm, level: lv });
+                        if (qaMoveOptions.length > 0) {
+                          const eligible = qaMoveOptions.filter((m) => m.level <= (parseInt(lv) || 1));
+                          const last4 = eligible.slice(-4);
+                          setQaMoves([
+                            last4[0] ? { id: last4[0].move_id, name: last4[0].move_name } : null,
+                            last4[1] ? { id: last4[1].move_id, name: last4[1].move_name } : null,
+                            last4[2] ? { id: last4[2].move_id, name: last4[2].move_name } : null,
+                            last4[3] ? { id: last4[3].move_id, name: last4[3].move_name } : null,
+                          ]);
+                        }
+                      }}
                     />
                   </div>
                   <div>
@@ -511,6 +534,19 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                     >
                       {NATURES.map((n) => (
                         <option key={n} value={n}>{capitalize(n)}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="qa-ability">Ability</label>
+                    <select
+                      id="qa-ability"
+                      value={qaAbilityId || ""}
+                      onChange={(e) => setQaAbilityId(Number(e.target.value) || null)}
+                    >
+                      <option value="">— None —</option>
+                      {qaAbilityOptions.map((a) => (
+                        <option key={a.id} value={a.id}>{capitalize(a.name)}</option>
                       ))}
                     </select>
                   </div>
@@ -528,6 +564,34 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                     </select>
                   </div>
                 </div>
+                {qaMoveOptions.length > 0 && (
+                  <div style={{ marginTop: 8 }}>
+                    <div style={{ fontSize: 11, color: "#7a82a0", marginBottom: 4 }}>Starting Moves</div>
+                    <div className="formGrid" style={{ gridTemplateColumns: "1fr 1fr" }}>
+                      {qaMoves.map((mv, i) => (
+                        <div key={i}>
+                          <label htmlFor={`qa-move-${i}`}>Move {i + 1}</label>
+                          <select
+                            id={`qa-move-${i}`}
+                            value={mv?.id || ""}
+                            onChange={(e) => {
+                              const id = Number(e.target.value) || null;
+                              const found = qaMoveOptions.find((m) => m.move_id === id);
+                              const next = [...qaMoves];
+                              next[i] = id ? { id, name: found?.move_name || "" } : null;
+                              setQaMoves(next);
+                            }}
+                          >
+                            <option value="">— None —</option>
+                            {qaMoveOptions.map((m) => (
+                              <option key={m.move_id} value={m.move_id}>{capitalize(m.move_name)}</option>
+                            ))}
+                          </select>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className="row mt8">
                   <button className="btn small" disabled={qaLoading} onClick={handleQuickAdd}>
                     {qaLoading ? "Saving…" : "Save Encounter"}

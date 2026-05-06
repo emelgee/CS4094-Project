@@ -10,6 +10,7 @@ router.get("/", async (req, res) => {
 
     const baseQuery = `
       SELECT p.id, p.name, p.hp, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed, p.type1, p.type2,
+             p.ability1 AS ability1_id, p.ability2 AS ability2_id, p.ability_hidden AS ability_hidden_id,
              a1.name AS ability1, a2.name AS ability2, ah.name AS ability_hidden
       FROM pokemon p
       LEFT JOIN ability a1 ON p.ability1 = a1.id
@@ -38,6 +39,7 @@ router.get("/:id", async (req, res) => {
   try {
     const [rows] = await db.pool.query(
       `SELECT p.id, p.name, p.hp, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed, p.type1, p.type2,
+              p.ability1 AS ability1_id, p.ability2 AS ability2_id, p.ability_hidden AS ability_hidden_id,
               a1.name AS ability1, a2.name AS ability2, ah.name AS ability_hidden
        FROM pokemon p
        LEFT JOIN ability a1 ON p.ability1 = a1.id

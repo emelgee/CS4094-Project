@@ -278,9 +278,10 @@ export default function App() {
       await apiFetch(`/api/encounters/${updatedEnc.id}`, {
         method: "PATCH",
         json: {
-          location: updatedEnc.location,
+          location_id: updatedEnc.location_id || null,
           nickname: updatedEnc.nickname,
-          status: updatedEnc.outcome?.toLowerCase(),
+          level: updatedEnc.level ? Number(updatedEnc.level) : undefined,
+          status: (updatedEnc.status || updatedEnc.outcome)?.toLowerCase(),
         },
       });
       fetchEncounters();
@@ -329,14 +330,17 @@ export default function App() {
           location_id: enc.location_id || null,
           location: enc.location_id ? undefined : enc.location,
           nickname: enc.nickname,
-          ability: enc.ability,
+          ability_id: enc.ability_id || null,
           nature: enc.nature || "serious",
-          level: Number(enc.level) || 50,
+          level: Number(enc.level) || 5,
           hp_iv: 31, attack_iv: 31, defense_iv: 31,
           sp_attack_iv: 31, sp_defense_iv: 31, speed_iv: 31,
           hp_ev: 0, attack_ev: 0, defense_ev: 0,
           sp_attack_ev: 0, sp_defense_ev: 0, speed_ev: 0,
-          move1_id: null, move2_id: null, move3_id: null, move4_id: null,
+          move1_id: enc.move1_id || null,
+          move2_id: enc.move2_id || null,
+          move3_id: enc.move3_id || null,
+          move4_id: enc.move4_id || null,
           item_id: null,
           status: enc.outcome?.toLowerCase() || "caught",
         },
