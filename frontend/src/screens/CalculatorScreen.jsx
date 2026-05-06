@@ -417,6 +417,37 @@ function PokemonSide({
   );
 }
 
+function HpControl({ maxHp, currentHp, onChange }) {
+  const pct = Math.round((currentHp / maxHp) * 100);
+  const barColor = pct > 50 ? "#4ade80" : pct > 20 ? "#ffd740" : "#f87171";
+  return (
+    <div style={{display:"grid",gap:4}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:6}}>
+        <span style={{fontSize:11,color:"#5a6380",flexShrink:0}}>Current HP</span>
+        <div style={{display:"flex",alignItems:"center",gap:4}}>
+          <input
+            type="number"
+            className="no-spinner"
+            min={1}
+            max={maxHp}
+            value={currentHp}
+            onChange={e => {
+              const v = Math.max(1, Math.min(maxHp, Number(e.target.value) || 1));
+              onChange(v);
+            }}
+            style={{width:48,fontSize:11,padding:"2px 6px",textAlign:"center",
+              borderRadius:6,border:"1px solid #252c40",background:"#0b0e14",color:"#e4e6ef"}}
+          />
+          <span style={{fontSize:11,color:"#5a6380"}}>/ {maxHp} ({pct}%)</span>
+        </div>
+      </div>
+      <div style={{height:5,background:"#1a2030",borderRadius:999,overflow:"hidden"}}>
+        <div style={{height:"100%",width:`${pct}%`,background:barColor,borderRadius:999,transition:"width 0.15s"}}/>
+      </div>
+    </div>
+  );
+}
+
 function FieldEffects({
   weather, setWeather,
   crit, setCrit,
@@ -497,7 +528,7 @@ function FieldEffects({
   );
 }
 
-function DamageResult({ damageResult, defenderHp, moveName, moveType }) {
+function DamageResult({ damageResult, defenderHp, maxHp, moveName, moveType }) {
   if (!damageResult) return (
     <div style={{
       background:"#0e1120",border:"1px solid #1a2030",borderRadius:12,
@@ -510,8 +541,9 @@ function DamageResult({ damageResult, defenderHp, moveName, moveType }) {
   const { min, max, rolls = [] } = damageResult;
   const typeColor = TYPE_COLORS[moveType?.toLowerCase()] || "#7a9ef0";
   const hp = defenderHp || null;
-  const minPct = hp ? (min / hp * 100) : null;
-  const maxPct = hp ? (max / hp * 100) : null;
+  const hpBase = maxHp || hp;
+  const minPct = hpBase ? (min / hpBase * 100) : null;
+  const maxPct = hpBase ? (max / hpBase * 100) : null;
 
   const ohkoCount = hp ? rolls.filter(r => r >= hp).length : 0;
   const ohkoPct   = ohkoCount / 16 * 100;
@@ -653,6 +685,8 @@ export default function CalculatorScreen({
   const [helpingHand, setHelpingHand] = useState(false);
   const [lookupDefender, setLookupDefender] = useState(null);
   const [defenderHp, setDefenderHp] = useState(null);
+  const [myCurrentHp, setMyCurrentHp] = useState(null);   // null = use max
+  const [enemyCurrentHp, setEnemyCurrentHp] = useState(null);
   const [atkNature, setAtkNature] = useState("hardy");
   const [defNature, setDefNature] = useState("hardy");
   const [enemyBurned, setEnemyBurned] = useState(false);
@@ -792,7 +826,12 @@ export default function CalculatorScreen({
     if (!selectedTrainerId) { setEnemyStripIdx(null); return; }
     setEnemyStripIdx(0);
     setEnemyMoveOverrides({});
+    setEnemyCurrentHp(null);
   }, [selectedTrainerId]);
+
+  /* Reset current HP when the active mon changes */
+  useEffect(() => { setMyCurrentHp(null); }, [myStripMonId, attackerPartyMonId]);
+  useEffect(() => { setEnemyCurrentHp(null); }, [enemyStripIdx]);
 
   /* ── Derived data ── */
   const groupedTrainers = groupTrainersByRoute(trainerRows);
@@ -1159,6 +1198,7 @@ export default function CalculatorScreen({
     setBurned(false); setEnemyBurned(false);
     setReflect(false); setLightScreen(false); setHelpingHand(false);
     setDamageResult(null); setDefenderHp(null); setCalcError(null);
+    setMyCurrentHp(null); setEnemyCurrentHp(null);
     setDefMode("lookup"); setSelectedPokemonIndex(""); setPreview(null);
     setLookupDefender(null); setMyActiveMoveIdx(null); setEnemyActiveMoveIdx(null);
     setAttackerSide("my"); setMyMoveOverrides({}); setEnemyMoveOverrides({});
@@ -1351,6 +1391,13 @@ export default function CalculatorScreen({
                 <input type="checkbox" checked={burned} onChange={e=>setBurned(e.target.checked)} style={{width:"auto"}}/>
                 Burned
               </label>
+              {myStatData?.battle?.HP && (
+                <HpControl
+                  maxHp={myStatData.battle.HP}
+                  currentHp={myCurrentHp ?? myStatData.battle.HP}
+                  onChange={setMyCurrentHp}
+                />
+              )}
             </div>
           }
         />
@@ -1386,7 +1433,15 @@ export default function CalculatorScreen({
           {/* Result */}
           <DamageResult
             damageResult={damageResult}
-            defenderHp={defenderHp}
+            defenderHp={(() => {
+              const enemyMaxHp = enemyStatData?.battle?.HP ?? defenderHp;
+              const myMaxHp = myStatData?.battle?.HP ?? defenderHp;
+              if (attackerSide === "my") return enemyMaxHp ? (enemyCurrentHp ?? enemyMaxHp) : null;
+              return myMaxHp ? (myCurrentHp ?? myMaxHp) : null;
+            })()}
+            maxHp={attackerSide === "my"
+              ? (enemyStatData?.battle?.HP ?? defenderHp)
+              : (myStatData?.battle?.HP ?? defenderHp)}
             moveName={activeMoveObj?.name}
             moveType={activeMoveObj?.type}
           />
@@ -1443,6 +1498,13 @@ export default function CalculatorScreen({
                 <input type="checkbox" checked={enemyBurned} onChange={e=>setEnemyBurned(e.target.checked)} style={{width:"auto"}}/>
                 Burned
               </label>
+              {(enemyStatData?.battle?.HP || defenderHp) && (
+                <HpControl
+                  maxHp={enemyStatData?.battle?.HP ?? defenderHp}
+                  currentHp={enemyCurrentHp ?? (enemyStatData?.battle?.HP ?? defenderHp)}
+                  onChange={setEnemyCurrentHp}
+                />
+              )}
             </div>
           }
         />
