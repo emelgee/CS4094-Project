@@ -67,8 +67,8 @@ router.post("/", async (req, res) => {
 
     const [result] = await db.pool.query(
       `INSERT INTO encounter
-        (user_id, pokemon_id, nickname, level, nature, ability_id, team_slot, location_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        (user_id, pokemon_id, nickname, level, nature, ability_id, team_slot, location_id, source)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'team')`,
       [req.user.id, pokemon_id, nickname, level, nature, ability_id, team_slot, location_id]
     );
 
