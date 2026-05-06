@@ -66,7 +66,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
     <section>
       <header className="page-header">
         <h1>Encounters</h1>
-        <p className="muted">Log encounters and damage events per route.</p>
+        <p className="muted">Log encounters per route.</p>
       </header>
 
       <div className="twoCol">
@@ -119,7 +119,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
           </ul>
         </div>
 
-        {/* ── Right: detail + damage events ── */}
+        {/* ── Right: detail ── */}
         <div className="col">
           <details open className="panel">
             <summary>Encounter Details</summary>
@@ -241,29 +241,6 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
             </form>
           </details>
 
-          <details open className="panel mt8">
-            <summary>Damage Events</summary>
-            <ul className="list" style={{ listStyle: "none", padding: 0 }}>
-              <li className="listItem">
-                <div>
-                  <strong>Turn 1</strong>
-                  <div className="muted">Breloom → Taillow | Mach Punch | 12 dmg</div>
-                </div>
-                <button className="ghost small" onClick={() => onNavigate("calculator")}>Calc</button>
-              </li>
-              <li className="listItem">
-                <div>
-                  <strong>Turn 2</strong>
-                  <div className="muted">Taillow → Breloom | Peck | 8 dmg</div>
-                </div>
-                <button className="ghost small" onClick={() => onNavigate("calculator")}>Calc</button>
-              </li>
-            </ul>
-            <div className="row mt8">
-              <button className="btn small">+ Add Damage Event</button>
-              <button className="ghost small" onClick={() => onNavigate("calculator")}>Open Calculator</button>
-            </div>
-          </details>
         </div>
       </div>
     </section>
