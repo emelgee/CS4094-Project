@@ -530,6 +530,7 @@ export default function App() {
               onToggleBadge={toggleBadge}
               earnedBadgeCount={earnedBadgeCount}
               graveyard={graveyard}
+              encounters={encounters}
             />
           )}
           {screen === "boss" && (

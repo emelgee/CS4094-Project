@@ -2,6 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { API_BASE, HOENN_LOCATIONS } from "../data/constants";
 import { capitalize, getPokemonSpriteUrl } from "../utils/helpers";
 
+const REGION_PREFIX = /^(hoenn|kanto|johto|sinnoh|unova|kalos|alola|galar|paldea)-/;
+const fmtLocation = n => (n || "").replace(REGION_PREFIX, "").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+const fmtAbility = n => (n || "").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
 const NATURES = [
   "hardy","lonely","brave","adamant","naughty",
   "bold","docile","relaxed","impish","lax",
@@ -14,6 +18,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
   const [activeId, setActiveId] = useState(null);
   const [formData, setFormData] = useState({});
   const [locOpen, setLocOpen] = useState(false);
+  const [locInput, setLocInput] = useState("");
   const [pokeOpen, setPokeOpen] = useState(false);
   const [pokeResults, setPokeResults] = useState([]);
   const [pokeLoading, setPokeLoading] = useState(false);
@@ -70,15 +75,18 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
     if (!activeExists && visibleEncounters.length > 0) {
       setActiveId(visibleEncounters[0].id);
       setFormData(visibleEncounters[0]);
+      setLocInput(visibleEncounters[0].location ? fmtLocation(visibleEncounters[0].location) : "");
     } else if (visibleEncounters.length === 0) {
       setActiveId(null);
       setFormData({});
+      setLocInput("");
     }
   }, [encounters, activeId, selectedRoute]);
 
   const handleSelectEncounter = (enc) => {
     setActiveId(enc.id);
     setFormData(enc);
+    setLocInput(enc.location ? fmtLocation(enc.location) : "");
     setLocOpen(false);
     setPokeOpen(false);
   };
@@ -88,9 +96,10 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
     if (onUpdate && formData.id) onUpdate(formData);
   };
 
-  const filteredLocs = HOENN_LOCATIONS.filter((l) =>
-    l.toLowerCase().includes((formData.location || "").toLowerCase())
-  );
+  const filteredLocs = HOENN_LOCATIONS.filter((l) => {
+    const q = locInput.toLowerCase();
+    return fmtLocation(l).toLowerCase().includes(q) || l.toLowerCase().includes(q.replace(/\s+/g, "-"));
+  });
 
   const fetchPokemon = async (q) => {
     setPokeLoading(true);
@@ -190,7 +199,8 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
   };
 
   const filteredRoutes = routes.filter((r) =>
-    r.name.toLowerCase().includes(routeSearch.toLowerCase())
+    fmtLocation(r.name).toLowerCase().includes(routeSearch.toLowerCase()) ||
+    r.name.toLowerCase().includes(routeSearch.toLowerCase().replace(/\s+/g, "-"))
   );
 
   const uniqueRoutePokemon = routePokemon.reduce((acc, cur) => {
@@ -216,12 +226,17 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
               <strong>
                 Encounters
                 <span className="muted" style={{ fontWeight: 400 }}>
-                  {selectedRoute ? ` — ${selectedRoute.name}` : " — All"}
+                  {selectedRoute ? ` — ${fmtLocation(selectedRoute.name)}` : " — All"}
                 </span>
               </strong>
-              <button className="btn small" aria-label="Add new encounter" onClick={onOpenAdd}>+ Add</button>
+              <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                {selectedRoute && (
+                  <button className="ghost small" onClick={() => setSelectedRoute(null)}>Show All</button>
+                )}
+                <button className="btn small" aria-label="Add new encounter" onClick={onOpenAdd}>+ Add</button>
+              </div>
             </div>
-            <ul className="list" style={{ listStyle: "none", padding: 0 }}>
+            <ul className="list" style={{ listStyle: "none", padding: 0, maxHeight: 280, overflowY: "auto" }}>
               {visibleEncounters.length === 0 ? (
                 <li className="listItem"><div className="muted">No encounters logged yet.</div></li>
               ) : (
@@ -243,7 +258,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                           <strong>{enc.nickname || capitalize(enc.pokemon_name) || `#${enc.pokemon_id}`}</strong>
                         </div>
                         <div className="muted" style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginTop: 2 }}>
-                          {enc.location && <span style={{ fontSize: 11 }}>{enc.location}</span>}
+                          {enc.location && <span style={{ fontSize: 11 }}>{fmtLocation(enc.location)}</span>}
                           {enc.location && [enc.type1, enc.type2].some(Boolean) && <span style={{ color: "#3a4060" }}>·</span>}
                           {[enc.type1, enc.type2].filter(Boolean).map((t) => (
                             <span key={t} className={`type-chip type-${t}`}>{capitalize(t)}</span>
@@ -280,8 +295,8 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                     <div className="search-wrap">
                       <input
                         id="area-input"
-                        value={formData.location || ""}
-                        onChange={(e) => { setFormData({ ...formData, location: e.target.value }); setLocOpen(true); }}
+                        value={locInput}
+                        onChange={(e) => { setLocInput(e.target.value); setLocOpen(true); }}
                         onFocus={() => setLocOpen(true)}
                         onBlur={() => setTimeout(() => setLocOpen(false), 200)}
                         disabled={!formData.id}
@@ -299,10 +314,11 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                                     e.preventDefault();
                                     const found = routes.find((r) => r.name === loc);
                                     setFormData({ ...formData, location: loc, location_id: found?.id || formData.location_id });
+                                    setLocInput(fmtLocation(loc));
                                     setLocOpen(false);
                                   }}
                                 >
-                                  <strong>{loc}</strong>
+                                  <strong>{fmtLocation(loc)}</strong>
                                 </div>
                               ))}
                         </div>
@@ -381,10 +397,10 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                     </div>
                   </div>
                   <div style={{ display: "grid", gap: 2 }}>
-                    <div className="statRow"><span>Location</span><span>{formData.location || "—"}</span></div>
+                    <div className="statRow"><span>Location</span><span>{formData.location ? fmtLocation(formData.location) : "—"}</span></div>
                     {formData.nature && <div className="statRow"><span>Nature</span><span>{capitalize(formData.nature)}</span></div>}
                     {formData.level && <div className="statRow"><span>Level</span><span>{formData.level}</span></div>}
-                    {formData.ability_name && <div className="statRow"><span>Ability</span><span>{capitalize(formData.ability_name)}</span></div>}
+                    {formData.ability_name && <div className="statRow"><span>Ability</span><span>{fmtAbility(formData.ability_name)}</span></div>}
                     <div className="statRow">
                       <span>Status</span>
                       <span className={`outcome-tag ${(formData.status || "unknown").toLowerCase()}`}>
@@ -432,7 +448,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                       onClick={() => setSelectedRoute(selectedRoute?.id === r.id ? null : r)}
                       style={{ cursor: "pointer" }}
                     >
-                      <span>{r.name}</span>
+                      <span>{fmtLocation(r.name)}</span>
                       {summary ? (
                         <span style={{ fontSize: 11, whiteSpace: "nowrap", color: "#7a82a0" }}>
                           {summary.caught} caught · {summary.total} enc
@@ -450,7 +466,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
           {/* Pokemon on route */}
           <div className="panel" style={{ margin: 0 }}>
             <div style={{ fontWeight: 600, fontSize: 13, color: "#c8cde0", marginBottom: 8 }}>
-              {selectedRoute ? `Pokémon on ${selectedRoute.name}` : "Pokémon on Route"}
+              {selectedRoute ? `Pokémon on ${fmtLocation(selectedRoute.name)}` : "Pokémon on Route"}
             </div>
             <ul className="list" style={{ listStyle: "none", padding: 0, maxHeight: quickAddPoke ? 160 : 260, overflowY: "auto" }}>
               {!selectedRoute ? (
@@ -546,7 +562,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                     >
                       <option value="">— None —</option>
                       {qaAbilityOptions.map((a) => (
-                        <option key={a.id} value={a.id}>{capitalize(a.name)}</option>
+                        <option key={a.id} value={a.id}>{fmtAbility(a.name)}</option>
                       ))}
                     </select>
                   </div>
@@ -584,7 +600,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                           >
                             <option value="">— None —</option>
                             {qaMoveOptions.map((m) => (
-                              <option key={m.move_id} value={m.move_id}>{capitalize(m.move_name)}</option>
+                              <option key={m.move_id} value={m.move_id}>{fmtAbility(m.move_name)}</option>
                             ))}
                           </select>
                         </div>

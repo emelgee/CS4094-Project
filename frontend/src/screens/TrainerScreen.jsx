@@ -6,10 +6,11 @@ export default function TrainerScreen({
   onToggleBadge,
   earnedBadgeCount = 0,
   graveyard = [],
+  encounters = [],
 }) {
-  // Fall back to an empty Set so the screen still renders if it's ever
-  // mounted without these props (e.g. in tests / storybook).
   const earned = earnedBadges instanceof Set ? earnedBadges : new Set();
+
+  const caught = encounters.filter(e => (e.status || "").toLowerCase() === "caught").length;
 
   const customRules = [
     ["Fainted Pokémon are dead (permadeath)", true],
@@ -20,11 +21,9 @@ export default function TrainerScreen({
   ];
 
   const runStats = [
-    ["Total Encounters",  3],
-    ["Pokémon Caught",    2],
-    ["Deaths",            graveyard.length],
-    ["Badges Earned",     `${earnedBadgeCount} / ${BADGES.length}`],
-    ["Current Location",  "Mauville City"],
+    ["Pokémon Caught",  caught],
+    ["Deaths",          graveyard.length],
+    ["Badges Earned",   `${earnedBadgeCount} / ${BADGES.length}`],
   ];
 
   return (
