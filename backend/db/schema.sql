@@ -110,7 +110,10 @@ CREATE TABLE move (
   type VARCHAR(20) NOT NULL,
   power INT NULL,
   accuracy INT NULL CHECK (accuracy BETWEEN 0 AND 100 OR accuracy IS NULL),
-  pp INT NOT NULL
+  pp INT NOT NULL,
+  damage_class VARCHAR(10) NULL,
+  effect TEXT NULL,
+  flavor_text TEXT NULL
 );
 
 CREATE TABLE pokemon_move (

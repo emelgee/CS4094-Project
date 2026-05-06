@@ -12,8 +12,9 @@ router.get("/", async (req, res) => {
     let baseQuery = "SELECT * FROM location";
     let params = [];
     if (search && search.trim()) {
+      const normalized = search.trim().replace(/\s+/g, "-").toLowerCase();
       baseQuery += " WHERE name LIKE ?";
-      params.push(`${search.trim()}%`);
+      params.push(`%${normalized}%`);
     }
     baseQuery += " ORDER BY name ASC";
 

@@ -40,7 +40,26 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/pokemon/moves/:id
+// GET /api/moves/:id/pokemon
+router.get("/:id/pokemon", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const query = `
+      SELECT DISTINCT p.id, p.name, p.type1, p.type2
+      FROM pokemon_move pm
+      JOIN pokemon p ON pm.pokemon_id = p.id
+      WHERE pm.move_id = ?
+      ORDER BY p.id ASC
+    `;
+    const [rows] = await db.pool.query(query, [id]);
+    res.json(rows);
+  } catch (err) {
+    console.error("GET /api/moves/:id/pokemon error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
+// GET /api/moves/:id
 router.get("/:id", async (req, res) => {
   try {
     const [rows] = await db.pool.query(
