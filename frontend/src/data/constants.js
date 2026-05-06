@@ -1,7 +1,15 @@
 // =====================================================================
 // API
 // =====================================================================
-export const API_BASE = "http://localhost:5000";
+const envApiBase = import.meta.env.VITE_API_BASE?.trim();
+const isLocalHost =
+  typeof window !== "undefined" && /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
+
+export const API_BASE = (
+  envApiBase ||
+  (isLocalHost ? "http://localhost:5000" : "https://cs4094-project-production.up.railway.app")
+).replace(/\/+$/, "");
+
 
 // =====================================================================
 // HOENN GYM BADGES (Gen 3)
