@@ -104,6 +104,8 @@ export default function App() {
         name: row.name.charAt(0).toUpperCase() + row.name.slice(1),
         nickname: row.nickname,
         level: row.level,
+        location_id: row.location_id,
+        location: row.location,
         nature: row.nature.charAt(0).toUpperCase() + row.nature.slice(1),
         ability: row.ability,
         types: [row.type1, row.type2]

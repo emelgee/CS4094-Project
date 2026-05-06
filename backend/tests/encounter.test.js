@@ -253,6 +253,9 @@ describe("PUT /api/encounters/:id", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({ message: "Encounter updated" });
+    const [sql, params] = db.pool.query.mock.calls[0];
+    expect(sql).toContain("level = ?");
+    expect(params[4]).toBe(mockEncounter.level);
   });
 
   it("returns 404 when encounter is not found or not owned", async () => {

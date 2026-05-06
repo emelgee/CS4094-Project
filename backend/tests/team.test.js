@@ -40,6 +40,7 @@ describe("GET /api/team", () => {
       {
         id: 1,
         ...mockTeamMember,
+        location: "petalburg-woods",
         pokemon_id: 4,
         name: "charmander",
         type1: "fire",
@@ -59,7 +60,7 @@ describe("GET /api/team", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual(mockRows);
     expect(db.pool.query).toHaveBeenCalledWith(
-      expect.stringContaining("WHERE e.user_id = ?"),
+      expect.stringContaining("LEFT JOIN location l ON e.location_id = l.id"),
       [TEST_USER_ID]
     );
   });
@@ -94,6 +95,7 @@ describe("POST /api/team", () => {
     const mockInserted = {
       id: 1,
       ...mockTeamMember,
+      location: null,
       name: "charmander",
       type1: "fire",
       type2: null,

@@ -15,15 +15,18 @@ router.get("/", async (req, res) => {
     const [rows] = await db.pool.query(
       `SELECT
         e.id, e.user_id, e.nickname, e.level, e.nature, e.ability_id, e.team_slot,
+        e.location_id,
         e.hp_iv, e.attack_iv, e.defense_iv, e.sp_attack_iv, e.sp_defense_iv, e.speed_iv,
         e.hp_ev, e.attack_ev, e.defense_ev, e.sp_attack_ev, e.sp_defense_ev, e.speed_ev,
         e.status, e.item_id,
         p.id AS pokemon_id, p.name, p.type1, p.type2,
         p.hp, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed,
+        l.name AS location,
         a1.name AS ability1, a2.name AS ability2, ah.name AS ability_hidden,
         m1.name AS move1, m2.name AS move2, m3.name AS move3, m4.name AS move4
        FROM encounter e
        JOIN pokemon p ON e.pokemon_id = p.id
+       LEFT JOIN location l ON e.location_id = l.id
        LEFT JOIN ability a1 ON p.ability1 = a1.id
        LEFT JOIN ability a2 ON p.ability2 = a2.id
        LEFT JOIN ability ah ON p.ability_hidden = ah.id
@@ -80,14 +83,17 @@ router.post("/", async (req, res) => {
     const [rows] = await db.pool.query(
       `SELECT
         e.id, e.user_id, e.nickname, e.level, e.nature, e.ability_id, e.team_slot,
+        e.location_id,
         e.hp_iv, e.attack_iv, e.defense_iv, e.sp_attack_iv, e.sp_defense_iv, e.speed_iv,
         e.hp_ev, e.attack_ev, e.defense_ev, e.sp_attack_ev, e.sp_defense_ev, e.speed_ev,
         e.status, e.item_id,
         p.id AS pokemon_id, p.name, p.type1, p.type2,
         p.hp, p.attack, p.defense, p.sp_attack, p.sp_defense, p.speed,
+        l.name AS location,
         a1.name AS ability1, a2.name AS ability2, ah.name AS ability_hidden
        FROM encounter e
        JOIN pokemon p ON e.pokemon_id = p.id
+       LEFT JOIN location l ON e.location_id = l.id
        LEFT JOIN ability a1 ON p.ability1 = a1.id
        LEFT JOIN ability a2 ON p.ability2 = a2.id
        LEFT JOIN ability ah ON p.ability_hidden = ah.id

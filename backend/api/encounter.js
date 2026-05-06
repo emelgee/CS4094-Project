@@ -212,6 +212,7 @@ router.put("/:id", async (req, res) => {
       nickname,
       ability_id,
       nature,
+      level,
       hp_iv,
       attack_iv,
       defense_iv,
@@ -234,7 +235,7 @@ router.put("/:id", async (req, res) => {
 
     const [result] = await db.pool.query(
       `UPDATE encounter SET
-        location_id = ?, nickname = ?, ability_id = ?, nature = ?,
+        location_id = ?, nickname = ?, ability_id = ?, nature = ?, level = ?,
         hp_iv = ?, attack_iv = ?, defense_iv = ?, sp_attack_iv = ?, sp_defense_iv = ?, speed_iv = ?,
         hp_ev = ?, attack_ev = ?, defense_ev = ?, sp_attack_ev = ?, sp_defense_ev = ?, speed_ev = ?,
         move1_id = ?, move2_id = ?, move3_id = ?, move4_id = ?, item_id = ?, status = ?
@@ -244,6 +245,7 @@ router.put("/:id", async (req, res) => {
         nickname,
         ability_id,
         nature,
+        level,
         hp_iv,
         attack_iv,
         defense_iv,
