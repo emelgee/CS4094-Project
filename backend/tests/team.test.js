@@ -75,6 +75,15 @@ describe("GET /api/team", () => {
     expect(res.body).toEqual([]);
   });
 
+  it("query includes caught and dead encounter status (PC box + graveyard)", async () => {
+    db.pool.query.mockResolvedValueOnce([[]]);
+
+    await request(app).get("/api/team").set("Authorization", AUTH);
+
+    const sql = db.pool.query.mock.calls[0][0];
+    expect(sql).toMatch(/status IN \('caught', 'dead'\)/);
+  });
+
   it("returns 500 on database error", async () => {
     db.pool.query.mockRejectedValueOnce(new Error("DB error"));
 
