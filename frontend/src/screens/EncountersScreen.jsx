@@ -2,7 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import { API_BASE, HOENN_LOCATIONS } from "../data/constants";
 import { capitalize, getPokemonSpriteUrl } from "../utils/helpers";
 
-export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdate }) {
+const NATURES = [
+  "hardy","lonely","brave","adamant","naughty",
+  "bold","docile","relaxed","impish","lax",
+  "timid","hasty","serious","jolly","naive",
+  "modest","mild","quiet","bashful","rash",
+  "calm","gentle","sassy","careful","quirky",
+];
+
+export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, onDelete, onUpdate, onAdd }) {
   const [activeId, setActiveId] = useState(null);
   const [formData, setFormData] = useState({});
   const [locOpen, setLocOpen] = useState(false);
@@ -17,6 +25,11 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
   const [routePokemon, setRoutePokemon] = useState([]);
   const [routeLoading, setRouteLoading] = useState(false);
 
+  // Quick-add from route
+  const [quickAddPoke, setQuickAddPoke] = useState(null);
+  const [qaForm, setQaForm] = useState({ nickname: "", level: "", nature: "serious", outcome: "Caught" });
+  const [qaLoading, setQaLoading] = useState(false);
+
   useEffect(() => {
     fetch(`${API_BASE}/api/locations`)
       .then((r) => r.json())
@@ -27,6 +40,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
   useEffect(() => {
     if (!selectedRoute) { setRoutePokemon([]); return; }
     setRouteLoading(true);
+    setQuickAddPoke(null);
     fetch(`${API_BASE}/api/locations/${selectedRoute.id}/encounters`)
       .then((r) => r.json())
       .then((data) => setRoutePokemon(Array.isArray(data) ? data : []))
@@ -87,6 +101,37 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
     setPokeOpen(true);
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => fetchPokemon(val), 250);
+  };
+
+  const handleSelectRoutePoke = (p) => {
+    setQuickAddPoke(p);
+    setQaForm({ nickname: capitalize(p.pokemon_name), level: p.min_level || "", nature: "serious", outcome: "Caught" });
+  };
+
+  const handleQuickAdd = async () => {
+    if (!onAdd || !quickAddPoke || !selectedRoute) return;
+    setQaLoading(true);
+    try {
+      await onAdd({
+        location: selectedRoute.name,
+        pokemon: capitalize(quickAddPoke.pokemon_name),
+        pokemon_id: quickAddPoke.pokemon_id,
+        nickname: qaForm.nickname || capitalize(quickAddPoke.pokemon_name),
+        ability: null,
+        outcome: qaForm.outcome,
+        level: Number(qaForm.level) || quickAddPoke.min_level || 5,
+        nature: qaForm.nature,
+      });
+      setQuickAddPoke(null);
+    } finally {
+      setQaLoading(false);
+    }
+  };
+
+  // Derive per-route outcome tags
+  const routeOutcomes = (routeName) => {
+    const statuses = [...new Set(encounters.filter((e) => e.location === routeName).map((e) => (e.status || "unknown").toLowerCase()))];
+    return statuses;
   };
 
   const uniqueRoutePokemon = routePokemon.reduce((acc, cur) => {
@@ -290,7 +335,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                     <img
                       src={getPokemonSpriteUrl(formData.pokemon_id, formData.pokemon_name)}
                       alt={formData.pokemon_name || ""}
-                      style={{ width: 64, height: 64, objectFit: "contain", imageRendering: "pixelated", borderRadius: 10, background: "#0b0e14", border: "1px solid #1f2638", padding: 4, flexShrink: 0 }}
+                      style={{ width: 128, height: 128, objectFit: "contain", imageRendering: "pixelated", borderRadius: 10, background: "#0b0e14", border: "1px solid #1f2638", padding: 4, flexShrink: 0 }}
                     />
                     <div>
                       <div style={{ fontSize: 15, fontWeight: 700 }}>
@@ -345,6 +390,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
               ) : (
                 routes.map((r) => {
                   const count = encounters.filter((e) => e.location === r.name).length;
+                  const tags = routeOutcomes(r.name);
                   return (
                     <li
                       key={r.id}
@@ -353,7 +399,12 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                       style={{ cursor: "pointer" }}
                     >
                       <span>{r.name}</span>
-                      {count > 0 && <span className="muted small">{count} enc</span>}
+                      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        {tags.map((t) => (
+                          <span key={t} className={`outcome-tag ${t}`}>{t}</span>
+                        ))}
+                        {count > 0 && <span className="muted small">{count}</span>}
+                      </div>
                     </li>
                   );
                 })
@@ -366,7 +417,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
             <div style={{ fontWeight: 600, fontSize: 13, color: "#c8cde0", marginBottom: 8 }}>
               {selectedRoute ? `Pokémon on ${selectedRoute.name}` : "Pokémon on Route"}
             </div>
-            <ul className="list" style={{ listStyle: "none", padding: 0, maxHeight: 260, overflowY: "auto" }}>
+            <ul className="list" style={{ listStyle: "none", padding: 0, maxHeight: quickAddPoke ? 160 : 260, overflowY: "auto" }}>
               {!selectedRoute ? (
                 <li className="listItem"><div className="muted">Select a route to see wild Pokémon.</div></li>
               ) : routeLoading ? (
@@ -375,7 +426,13 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                 <li className="listItem"><div className="muted">No encounters data found.</div></li>
               ) : (
                 uniqueRoutePokemon.map((p) => (
-                  <li key={p.pokemon_id} className="listItem">
+                  <li
+                    key={p.pokemon_id}
+                    className={`listItem${quickAddPoke?.pokemon_id === p.pokemon_id ? " active" : ""}`}
+                    onClick={() => handleSelectRoutePoke(p)}
+                    style={{ cursor: "pointer" }}
+                    title="Click to log as an encounter"
+                  >
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <img
                         src={getPokemonSpriteUrl(p.pokemon_id, p.pokemon_name)}
@@ -387,10 +444,73 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                         <div className="muted small">#{String(p.pokemon_id).padStart(3, "0")} · Lv {p.min_level}–{p.max_level}</div>
                       </div>
                     </div>
+                    <span className="muted small" style={{ fontSize: 11 }}>+ Add</span>
                   </li>
                 ))
               )}
             </ul>
+
+            {/* Quick-add form */}
+            {quickAddPoke && (
+              <div style={{ marginTop: 10, borderTop: "1px solid #1f2638", paddingTop: 10 }}>
+                <div style={{ fontWeight: 600, fontSize: 12, color: "#c8cde0", marginBottom: 8 }}>
+                  Log {capitalize(quickAddPoke.pokemon_name)} on {selectedRoute?.name}
+                </div>
+                <div className="formGrid" style={{ gridTemplateColumns: "1fr 1fr" }}>
+                  <div>
+                    <label htmlFor="qa-nickname">Nickname</label>
+                    <input
+                      id="qa-nickname"
+                      value={qaForm.nickname}
+                      onChange={(e) => setQaForm({ ...qaForm, nickname: e.target.value })}
+                      placeholder={capitalize(quickAddPoke.pokemon_name)}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="qa-level">Level</label>
+                    <input
+                      id="qa-level"
+                      type="number"
+                      min="1"
+                      max="100"
+                      value={qaForm.level}
+                      onChange={(e) => setQaForm({ ...qaForm, level: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="qa-nature">Nature</label>
+                    <select
+                      id="qa-nature"
+                      value={qaForm.nature}
+                      onChange={(e) => setQaForm({ ...qaForm, nature: e.target.value })}
+                    >
+                      {NATURES.map((n) => (
+                        <option key={n} value={n}>{capitalize(n)}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="qa-outcome">Outcome</label>
+                    <select
+                      id="qa-outcome"
+                      value={qaForm.outcome}
+                      onChange={(e) => setQaForm({ ...qaForm, outcome: e.target.value })}
+                    >
+                      <option value="Caught">Caught</option>
+                      <option value="Fainted">Fainted</option>
+                      <option value="Fled">Fled</option>
+                      <option value="Missed">Missed</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="row mt8">
+                  <button className="btn small" disabled={qaLoading} onClick={handleQuickAdd}>
+                    {qaLoading ? "Saving…" : "Save Encounter"}
+                  </button>
+                  <button className="ghost small" onClick={() => setQuickAddPoke(null)}>Cancel</button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
