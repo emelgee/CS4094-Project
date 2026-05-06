@@ -1,0 +1,7 @@
+services:
+  backend:
+    command: sh -c "npm install && npm run db:load && node index.js"
+  frontend:
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules

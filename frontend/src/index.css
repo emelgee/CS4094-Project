@@ -77,6 +77,9 @@ input, select, textarea { width: 100%; padding: 8px 10px; border-radius: 8px; bo
 input:focus, select:focus, textarea:focus { outline: none; border-color: #3a58cc66; }
 textarea { resize: vertical; }
 .mini-select { padding: 4px 6px; font-size: 12px; border-radius: 6px; width: auto; }
+.no-spinner { -moz-appearance: textfield; }
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
 /* =====================================================================
    BUTTONS
