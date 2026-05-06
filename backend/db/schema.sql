@@ -164,6 +164,8 @@ CREATE TABLE encounter (
   team_slot INT DEFAULT NULL CHECK (team_slot BETWEEN 1 AND 6),
   UNIQUE (user_id, team_slot),
 
+  source ENUM('encounter', 'team') NOT NULL DEFAULT 'encounter',
+
   FOREIGN KEY (item_id) REFERENCES item(id),
   FOREIGN KEY (ability_id) REFERENCES ability(id),
   FOREIGN KEY (location_id) REFERENCES location(id),

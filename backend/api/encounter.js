@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
          p.type2
        FROM encounter e
        JOIN pokemon p ON e.pokemon_id = p.id
-       WHERE e.user_id = ?
+       WHERE e.user_id = ? AND e.source = 'encounter'
        ORDER BY e.id ASC`,
       [req.user.id]
     );
@@ -89,12 +89,12 @@ router.post("/", async (req, res) => {
     } = req.body;
 
     const [result] = await db.pool.query(
-      `INSERT INTO encounter 
+      `INSERT INTO encounter
         (user_id, pokemon_id, location_id, nickname, ability_id, nature,
          hp_iv, attack_iv, defense_iv, sp_attack_iv, sp_defense_iv, speed_iv,
          hp_ev, attack_ev, defense_ev, sp_attack_ev, sp_defense_ev, speed_ev,
-         move1_id, move2_id, move3_id, move4_id, item_id, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         move1_id, move2_id, move3_id, move4_id, item_id, status, source)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'encounter')`,
       [
         req.user.id,
         pokemon_id,
