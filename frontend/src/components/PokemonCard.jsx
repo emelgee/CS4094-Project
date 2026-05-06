@@ -451,8 +451,8 @@ export default function PokemonCard({ mon, onSendToBox, onSendToGraveyard, onRem
       </div>
 
       <div className="poke-sections">
-        <details open>
-          <summary>Core Stats</summary>
+        <div>
+          <div className="section-label">Core Stats</div>
           <div style={{ marginTop: 6 }}>
             <div style={{ display: "grid", gridTemplateColumns: "32px 1fr 44px 50px 52px", gap: "2px 6px", alignItems: "center", marginBottom: 4 }}>
               <span />
@@ -488,10 +488,10 @@ export default function PokemonCard({ mon, onSendToBox, onSendToGraveyard, onRem
               EVs: {totalEvs} / 510{totalEvs > 510 ? " ⚠" : ""}
             </div>
           </div>
-        </details>
+        </div>
 
-        <details open>
-          <summary>Nature &amp; Ability</summary>
+        <div>
+          <div className="section-label">Nature &amp; Ability</div>
           <div className="formGrid tight">
             <label>
               Nature
@@ -518,10 +518,10 @@ export default function PokemonCard({ mon, onSendToBox, onSendToGraveyard, onRem
               </select>
             </label>
           </div>
-        </details>
+        </div>
 
-        <details open>
-          <summary>Moves (4)</summary>
+        <div>
+          <div className="section-label">Moves</div>
           <div style={{ display: "grid", gap: 5, marginTop: 6 }}>
             {[0, 1, 2, 3].map((i) => (
               <TeamMoveSlot
@@ -534,7 +534,7 @@ export default function PokemonCard({ mon, onSendToBox, onSendToGraveyard, onRem
               />
             ))}
           </div>
-        </details>
+        </div>
       </div>
 
       <div className="row" style={{ alignItems: "center" }}>
