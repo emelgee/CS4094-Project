@@ -326,7 +326,8 @@ export default function App() {
         method: "POST",
         json: {
           pokemon_id: enc.pokemon_id,
-          location: enc.location,
+          location_id: enc.location_id || null,
+          location: enc.location_id ? undefined : enc.location,
           nickname: enc.nickname,
           ability: enc.ability,
           nature: enc.nature || "serious",
@@ -342,9 +343,10 @@ export default function App() {
       });
       if (!res.ok) throw new Error("Failed to create encounter");
 
-      // Auto-assign to team if there's a free slot
+      // Auto-assign to team slot only if the pokemon was caught
       const newEncounter = await res.json();
-      if (party.length < 6) {
+      const wasCaught = (enc.outcome || "").toLowerCase() === "caught";
+      if (wasCaught && party.length < 6) {
         const usedSlots = party.map((m) => m.slot);
         const slot = [1, 2, 3, 4, 5, 6].find((s) => !usedSlots.includes(s));
         await apiFetch(`/api/team/${newEncounter.id}/slot`, {

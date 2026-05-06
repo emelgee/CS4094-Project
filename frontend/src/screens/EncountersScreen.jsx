@@ -25,6 +25,9 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
   const [routePokemon, setRoutePokemon] = useState([]);
   const [routeLoading, setRouteLoading] = useState(false);
 
+  // Route search
+  const [routeSearch, setRouteSearch] = useState("");
+
   // Quick-add from route
   const [quickAddPoke, setQuickAddPoke] = useState(null);
   const [qaForm, setQaForm] = useState({ nickname: "", level: "", nature: "serious", outcome: "Caught" });
@@ -52,16 +55,22 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
     ? encounters.filter((e) => e.location === selectedRoute.name)
     : encounters;
 
+  // Clear selection when switching to a route with no encounters
   useEffect(() => {
-    const activeExists = encounters.find((e) => e.id === activeId);
-    if (!activeExists && encounters.length > 0) {
-      setActiveId(encounters[0].id);
-      setFormData(encounters[0]);
-    } else if (encounters.length === 0) {
+    if (selectedRoute && visibleEncounters.length === 0) {
+      setActiveId(null);
+      setFormData({});
+      return;
+    }
+    const activeExists = visibleEncounters.find((e) => e.id === activeId);
+    if (!activeExists && visibleEncounters.length > 0) {
+      setActiveId(visibleEncounters[0].id);
+      setFormData(visibleEncounters[0]);
+    } else if (visibleEncounters.length === 0) {
       setActiveId(null);
       setFormData({});
     }
-  }, [encounters, activeId]);
+  }, [encounters, activeId, selectedRoute]);
 
   const handleSelectEncounter = (enc) => {
     setActiveId(enc.id);
@@ -113,6 +122,7 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
     setQaLoading(true);
     try {
       await onAdd({
+        location_id: selectedRoute.id,
         location: selectedRoute.name,
         pokemon: capitalize(quickAddPoke.pokemon_name),
         pokemon_id: quickAddPoke.pokemon_id,
@@ -128,11 +138,18 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
     }
   };
 
-  // Derive per-route outcome tags
-  const routeOutcomes = (routeName) => {
-    const statuses = [...new Set(encounters.filter((e) => e.location === routeName).map((e) => (e.status || "unknown").toLowerCase()))];
-    return statuses;
+  // Derive per-route summary
+  const routeSummary = (routeName) => {
+    const encs = encounters.filter((e) => e.location === routeName);
+    if (encs.length === 0) return null;
+    const caught = encs.filter((e) => (e.status || "").toLowerCase() === "caught").length;
+    const total = encs.length;
+    return { caught, total };
   };
+
+  const filteredRoutes = routes.filter((r) =>
+    r.name.toLowerCase().includes(routeSearch.toLowerCase())
+  );
 
   const uniqueRoutePokemon = routePokemon.reduce((acc, cur) => {
     if (!acc.find((p) => p.pokemon_id === cur.pokemon_id)) acc.push(cur);
@@ -180,10 +197,10 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                         className="enc-sprite"
                       />
                       <div>
-                        <strong>{enc.location}</strong>
-                        <div className="muted" style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                          <span>#{String(enc.pokemon_id).padStart(3, "0")}</span>
-                          <span>{enc.nickname || capitalize(enc.pokemon_name) || `Pokemon #${enc.pokemon_id}`}</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                          <strong>{enc.nickname || capitalize(enc.pokemon_name) || `#${enc.pokemon_id}`}</strong>
+                        </div>
+                        <div className="muted" style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginTop: 2 }}>
                           {[enc.type1, enc.type2].filter(Boolean).map((t) => (
                             <span key={t} className={`type-chip type-${t}`}>{capitalize(t)}</span>
                           ))}
@@ -381,16 +398,23 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
             <div className="rowBetween mb8">
               <strong>Routes</strong>
               {selectedRoute && (
-                <button className="ghost small" onClick={() => setSelectedRoute(null)}>Clear</button>
+                <button className="ghost small" onClick={() => { setSelectedRoute(null); setRouteSearch(""); }}>Clear</button>
               )}
             </div>
-            <ul className="list" style={{ listStyle: "none", padding: 0, maxHeight: 260, overflowY: "auto" }}>
+            <input
+              placeholder="Search routes…"
+              value={routeSearch}
+              onChange={(e) => setRouteSearch(e.target.value)}
+              style={{ marginBottom: 8 }}
+            />
+            <ul className="list" style={{ listStyle: "none", padding: 0, maxHeight: 230, overflowY: "auto" }}>
               {routes.length === 0 ? (
                 <li className="listItem"><div className="muted">Loading…</div></li>
+              ) : filteredRoutes.length === 0 ? (
+                <li className="listItem"><div className="muted">No routes match.</div></li>
               ) : (
-                routes.map((r) => {
-                  const count = encounters.filter((e) => e.location === r.name).length;
-                  const tags = routeOutcomes(r.name);
+                filteredRoutes.map((r) => {
+                  const summary = routeSummary(r.name);
                   return (
                     <li
                       key={r.id}
@@ -399,12 +423,13 @@ export default function EncountersScreen({ onNavigate, onOpenAdd, encounters, on
                       style={{ cursor: "pointer" }}
                     >
                       <span>{r.name}</span>
-                      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                        {tags.map((t) => (
-                          <span key={t} className={`outcome-tag ${t}`}>{t}</span>
-                        ))}
-                        {count > 0 && <span className="muted small">{count}</span>}
-                      </div>
+                      {summary ? (
+                        <span style={{ fontSize: 11, whiteSpace: "nowrap", color: "#7a82a0" }}>
+                          {summary.caught} caught · {summary.total} enc
+                        </span>
+                      ) : (
+                        <span style={{ fontSize: 11, color: "#3a4060" }}>no encounters</span>
+                      )}
                     </li>
                   );
                 })
