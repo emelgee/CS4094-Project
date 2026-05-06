@@ -24,17 +24,34 @@ async function indexExists(tableName, indexName) {
   return rows[0].cnt > 0;
 }
 
+async function columnExists(tableName, columnName) {
+  const [rows] = await pool.query(
+    `SELECT COUNT(*) AS cnt
+     FROM information_schema.columns
+     WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?`,
+    [tableName, columnName]
+  );
+  return rows[0].cnt > 0;
+}
+
 async function ensureEncounterSchema() {
   const hasEncounterTable = await tableExists("encounter");
   if (!hasEncounterTable) return;
 
   // Backfill columns added after initial release so older deployed DBs keep working.
-  await pool.query(
-    `ALTER TABLE encounter
-      ADD COLUMN IF NOT EXISTS status VARCHAR(20) NULL,
-      ADD COLUMN IF NOT EXISTS team_slot INT NULL,
-      ADD COLUMN IF NOT EXISTS source ENUM('encounter', 'team') NOT NULL DEFAULT 'encounter'`
-  );
+  if (!(await columnExists("encounter", "status"))) {
+    await pool.query("ALTER TABLE encounter ADD COLUMN status VARCHAR(20) NULL");
+  }
+
+  if (!(await columnExists("encounter", "team_slot"))) {
+    await pool.query("ALTER TABLE encounter ADD COLUMN team_slot INT NULL");
+  }
+
+  if (!(await columnExists("encounter", "source"))) {
+    await pool.query(
+      "ALTER TABLE encounter ADD COLUMN source ENUM('encounter', 'team') NOT NULL DEFAULT 'encounter'"
+    );
+  }
 
   if (!(await indexExists("encounter", "idx_encounter_user_source"))) {
     await pool.query("CREATE INDEX idx_encounter_user_source ON encounter (user_id, source)");
