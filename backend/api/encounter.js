@@ -16,9 +16,13 @@ router.get("/", async (req, res) => {
          e.*,
          p.name AS pokemon_name,
          p.type1,
-         p.type2
+         p.type2,
+         l.name AS location,
+         ab.name AS ability_name
        FROM encounter e
        JOIN pokemon p ON e.pokemon_id = p.id
+       LEFT JOIN location l ON e.location_id = l.id
+       LEFT JOIN ability ab ON e.ability_id = ab.id
        WHERE e.user_id = ? AND e.source = 'encounter'
        ORDER BY e.id ASC`,
       [req.user.id]
@@ -39,9 +43,11 @@ router.get("/encounter/:id", async (req, res) => {
          e.*,
          p.name AS pokemon_name,
          p.type1,
-         p.type2
+         p.type2,
+         l.name AS location
        FROM encounter e
        JOIN pokemon p ON e.pokemon_id = p.id
+       LEFT JOIN location l ON e.location_id = l.id
        WHERE e.id = ? AND e.user_id = ?
        LIMIT 1`,
       [req.params.id, req.user.id]
@@ -64,7 +70,8 @@ router.post("/", async (req, res) => {
   try {
     const {
       pokemon_id,
-      location_id,
+      location_id: rawLocationId,
+      location: locationName,
       nickname,
       ability_id,
       nature,
@@ -88,13 +95,25 @@ router.post("/", async (req, res) => {
       status,
     } = req.body;
 
+    // Resolve location_id from name if needed
+    let location_id = rawLocationId || null;
+    if (!location_id && locationName) {
+      const [locRows] = await db.pool.query(
+        "SELECT id FROM location WHERE name = ? LIMIT 1",
+        [locationName]
+      );
+      if (locRows.length > 0) location_id = locRows[0].id;
+    }
+
+    const level = Number(req.body.level) || 5;
+
     const [result] = await db.pool.query(
       `INSERT INTO encounter
-        (user_id, pokemon_id, location_id, nickname, ability_id, nature,
+        (user_id, pokemon_id, location_id, nickname, ability_id, nature, level,
          hp_iv, attack_iv, defense_iv, sp_attack_iv, sp_defense_iv, speed_iv,
          hp_ev, attack_ev, defense_ev, sp_attack_ev, sp_defense_ev, speed_ev,
          move1_id, move2_id, move3_id, move4_id, item_id, status, source)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'encounter')`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'encounter')`,
       [
         req.user.id,
         pokemon_id,
@@ -102,6 +121,7 @@ router.post("/", async (req, res) => {
         nickname,
         ability_id,
         nature,
+        level,
         hp_iv,
         attack_iv,
         defense_iv,

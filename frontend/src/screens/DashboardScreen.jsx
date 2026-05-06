@@ -1,4 +1,7 @@
-import { getPokemonSpriteUrl } from "../utils/helpers";
+import { getPokemonSpriteUrl, capitalize } from "../utils/helpers";
+
+const REGION_PREFIX = /^(hoenn|kanto|johto|sinnoh|unova|kalos|alola|galar|paldea)-/;
+const fmtLocation = n => (n || "").replace(REGION_PREFIX, "").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 
 export default function DashboardScreen({
   party,
@@ -94,17 +97,15 @@ export default function DashboardScreen({
                 recent.map((enc) => (
                   <div key={enc.id} className="listItem">
                     <div>
-                      <strong>{enc.location}</strong>
+                      <strong>{fmtLocation(enc.location)}</strong>
                       <div className="muted">
-                        {enc.nickname || enc.pokemon_name} — {enc.status}
+                        {enc.nickname || enc.pokemon_name} — {capitalize(enc.status || "unknown")}
                       </div>
                     </div>
                     <span
-                      className={`outcome-tag ${(
-                        enc.status || "unknown"
-                      ).toLowerCase()}`}
+                      className={`outcome-tag ${(enc.status || "unknown").toLowerCase()}`}
                     >
-                      {enc.status || "unknown"}
+                      {capitalize(enc.status || "unknown")}
                     </span>
                   </div>
                 ))

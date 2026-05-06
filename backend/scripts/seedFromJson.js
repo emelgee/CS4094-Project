@@ -146,11 +146,11 @@ async function seedFromJson() {
   console.log(`Inserted/updated ${evolution_rows.length} evolution rows from JSON.`);
 
   //Test Encounters for Admin Account (REMOVE UPON DEPLOYING)
-  await insertEncounterBasic(1, 258, "Littleroot Town", "Muddy", "Torrent", "Bold", "Alive", 11, 1);
-  await insertEncounterBasic(1, 261, "Route 101", "Stitch", "Run Away", "Adamant", "Alive", 7, 2);
-  await insertEncounterBasic(1, 263, "Route 102", "Ziggy", "Pickup", "Quiet", "Alive", 8, 3);
-  await insertEncounterBasic(1, 278, "Route 103", "Bird", "Keen Eye", "Modest", "Alive", 9, 4);
-  await insertEncounterBasic(1, 265, "Petalburg Woods", "Chud", "Shield Dust", "Adamant", "Alive", 1, null);
+  await insertEncounterBasic(1, 258, "littleroot-town", "Muddy", "Torrent", "Bold", "caught", 11, 1);
+  await insertEncounterBasic(1, 261, "hoenn-route-101", "Stitch", "Run Away", "Adamant", "caught", 7, 2);
+  await insertEncounterBasic(1, 263, "hoenn-route-102", "Ziggy", "Pickup", "Quiet", "caught", 8, 3);
+  await insertEncounterBasic(1, 278, "hoenn-route-103", "Bird", "Keen Eye", "Modest", "caught", 9, 4);
+  await insertEncounterBasic(1, 265, "petalburg-woods", "Chud", "Shield Dust", "Adamant", "caught", 6, null);
   console.log(`Inserted 5 encounters for Admin.`);
 }
 

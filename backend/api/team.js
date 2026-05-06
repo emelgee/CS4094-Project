@@ -32,6 +32,11 @@ router.get("/", async (req, res) => {
        LEFT JOIN move m3 ON e.move3_id = m3.id
        LEFT JOIN move m4 ON e.move4_id = m4.id
        WHERE e.user_id = ?
+         AND (
+           e.team_slot IS NOT NULL
+           OR e.source = 'team'
+           OR (e.source = 'encounter' AND e.status = 'caught')
+         )
        ORDER BY e.team_slot ASC, e.id ASC`,
       [req.user.id]
     );
