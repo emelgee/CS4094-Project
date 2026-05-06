@@ -8,10 +8,36 @@ import {
   getPokemonSpriteUrl,
   capitalize,
 } from "../utils/helpers";
+import {
+  getCoverageRecommendations,
+  getKeyThreats,
+  getNotableTraits,
+  getSpeedTier,
+  getOhkoThreats,
+} from "../utils/threatNotes";
 
-export default function BossScreen({ onNavigate }) {
+const NOTES_STORAGE_KEY = "pcm_boss_notes";
+
+function readAllNotes() {
+  try {
+    const raw = localStorage.getItem(NOTES_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeAllNotes(map) {
+  try {
+    localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(map));
+  } catch { /* ignore quota / private mode */ }
+}
+
+export default function BossScreen({ onNavigate, onLoadIntoCalc, party = [] }) {
   const [trainers, setTrainers] = useState([]);
   const [pokemonIndex, setPokemonIndex] = useState({});
+  const [allMoves, setAllMoves] = useState([]);
   const [activeBossGroupKey, setActiveBossGroupKey] = useState("");
   const [activeBossVariantId, setActiveBossVariantId] = useState("");
   const [loading, setLoading] = useState(true);
@@ -23,13 +49,19 @@ export default function BossScreen({ onNavigate }) {
       setLoading(true);
       setError("");
       try {
-        const [trainerRes, pokemonRes] = await Promise.all([
+        const [trainerRes, pokemonRes, movesRes] = await Promise.all([
           fetch(`${API_BASE}/api/trainers`),
           fetch(`${API_BASE}/api/pokemon`),
+          fetch(`${API_BASE}/api/moves`),
         ]);
         if (!trainerRes.ok) throw new Error("Failed to load trainer data.");
         if (!pokemonRes.ok) throw new Error("Failed to load pokemon data.");
-        const [trainerData, pokemonData] = await Promise.all([trainerRes.json(), pokemonRes.json()]);
+        // Moves are only used for the threat analysis — non-fatal if it fails.
+        const [trainerData, pokemonData, movesData] = await Promise.all([
+          trainerRes.json(),
+          pokemonRes.json(),
+          movesRes.ok ? movesRes.json() : Promise.resolve([]),
+        ]);
         if (cancelled) return;
 
         const pokemonMap = {};
@@ -41,11 +73,13 @@ export default function BossScreen({ onNavigate }) {
         // Filter to boss trainers only (done inside groupBossTrainers)
         setPokemonIndex(pokemonMap);
         setTrainers(rows);
+        setAllMoves(Array.isArray(movesData) ? movesData : []);
       } catch (err) {
         if (!cancelled) {
           setError(err.message || "Failed to load boss data.");
           setTrainers([]);
           setPokemonIndex({});
+          setAllMoves([]);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -88,6 +122,45 @@ export default function BossScreen({ onNavigate }) {
       types: pokemon ? [pokemon.type1, pokemon.type2].filter(Boolean) : [],
     };
   });
+
+  // ── Threat analysis (auto-derived from data above) ──────────────────
+  const activeTrainerItems = Array.isArray(activeTrainer?.items) ? activeTrainer.items : [];
+  const coverage = useMemo(
+    () => getCoverageRecommendations(activeTeam, pokemonIndex),
+    [activeTeam, pokemonIndex],
+  );
+  const keyThreats = useMemo(
+    () => getKeyThreats(activeTeam, pokemonIndex, allMoves),
+    [activeTeam, pokemonIndex, allMoves],
+  );
+  const notableTraits = useMemo(
+    () => getNotableTraits(activeTeam, pokemonIndex, activeTrainerItems),
+    [activeTeam, pokemonIndex, activeTrainerItems],
+  );
+  const speedTier = useMemo(
+    () => getSpeedTier(activeTeam, pokemonIndex),
+    [activeTeam, pokemonIndex],
+  );
+  const ohkoThreats = useMemo(
+    () => getOhkoThreats(activeTeam, pokemonIndex, allMoves, party),
+    [activeTeam, pokemonIndex, allMoves, party],
+  );
+
+  // ── Per-boss user notes (persisted) ─────────────────────────────────
+  // Map of { [bossGroupKey]: text } in localStorage. The textarea below
+  // is bound to whichever boss is currently active.
+  const [allNotes, setAllNotes] = useState(() => readAllNotes());
+  const noteKey = activeGroup?.key || "";
+  const currentNote = noteKey ? (allNotes[noteKey] || "") : "";
+
+  const handleNoteChange = (text) => {
+    if (!noteKey) return;
+    setAllNotes((prev) => {
+      const next = { ...prev, [noteKey]: text };
+      writeAllNotes(next);
+      return next;
+    });
+  };
 
   const variantLabel = activeTrainer ? getBossVariantLabel(activeTrainer) : "";
   const variantSelectLabel =
@@ -217,18 +290,191 @@ export default function BossScreen({ onNavigate }) {
             </div>
 
             <div className="row mt8">
-              <button className="btn small" onClick={() => onNavigate("calculator")}>Load into Calc</button>
-              <button className="ghost small">Export Team</button>
+              <button
+                className="btn small"
+                disabled={!activeTrainer}
+                onClick={() => {
+                  if (!activeTrainer) return;
+                  // Hand the trainer (and their lead Pokémon) to the
+                  // calculator. Falls back to plain navigation if the
+                  // host didn't wire onLoadIntoCalc.
+                  if (onLoadIntoCalc) onLoadIntoCalc(activeTrainer.id, 0);
+                  else onNavigate("calculator");
+                }}
+              >
+                Load into Calc
+              </button>
             </div>
           </details>
 
+          <details open className="panel">
+            <summary>Threat Analysis</summary>
+            {!activeTrainer && (
+              <div className="muted small">Select a boss to see analysis.</div>
+            )}
+
+            {activeTrainer && (
+              <div className="threat-analysis">
+                {/* Coverage */}
+                <div className="threat-section">
+                  <div className="threat-label">Bring against this team</div>
+                  {coverage.bring.length === 0 ? (
+                    <div className="muted small">No clear type advantage — go neutral.</div>
+                  ) : (
+                    <div className="threat-chip-row">
+                      {coverage.bring.map((c) => (
+                        <span
+                          key={c.type}
+                          className={`type-chip type-${c.type}`}
+                          title={`Avg ${c.avg.toFixed(2)}× across the team`}
+                        >
+                          {capitalize(c.type)} ×{c.avg.toFixed(1)}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {coverage.avoid.length > 0 && (
+                    <>
+                      <div className="threat-label" style={{ marginTop: 8 }}>
+                        Avoid — resisted by team
+                      </div>
+                      <div className="threat-chip-row">
+                        {coverage.avoid.map((c) => (
+                          <span
+                            key={c.type}
+                            className={`type-chip type-${c.type}`}
+                            style={{ opacity: 0.55 }}
+                            title={`Avg ${c.avg.toFixed(2)}× across the team`}
+                          >
+                            {capitalize(c.type)} ×{c.avg.toFixed(1)}
+                          </span>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Key offensive threats */}
+                <div className="threat-section">
+                  <div className="threat-label">Key offensive threats</div>
+                  <ul className="threat-list">
+                    {keyThreats.map((t, i) => (
+                      <li key={`${t.species}-${i}`}>
+                        <strong>{t.species}</strong>
+                        <span className="muted small"> · Lv {t.level ?? "?"}</span>
+                        {t.strongest ? (
+                          <>
+                            {" — "}
+                            <span
+                              className={`type-chip type-${t.strongest.type || "normal"}`}
+                              style={{ marginRight: 4 }}
+                            >
+                              {t.strongest.name}
+                            </span>
+                            <span className="muted small">
+                              BP {t.strongest.power ?? "—"}
+                              {t.strongest.accuracy ? ` · ${t.strongest.accuracy}%` : ""}
+                              {t.strongest.stab ? " · STAB" : ""}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="muted small"> — no damaging moves listed</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* OHKO/2HKO vs your party */}
+                {ohkoThreats.length > 0 && (
+                  <div className="threat-section">
+                    <div className="threat-label">Versus your party</div>
+                    <ul className="threat-list">
+                      {ohkoThreats.map((t, i) => (
+                        <li key={`${t.bossSpecies}-${t.move.name}-${t.partyName}-${i}`}>
+                          <span
+                            className={`threat-tag ${t.ohko ? "ohko" : t.twohko ? "twohko" : "warn"}`}
+                          >
+                            {t.ohko ? "OHKO" : t.twohko ? "2HKO" : "Threat"}
+                          </span>
+                          <strong>{t.bossSpecies}</strong>
+                          {"'s "}
+                          <span className={`type-chip type-${t.move.type}`}>{t.move.name}</span>
+                          {" → "}
+                          <strong>{t.partyName}</strong>
+                          <span className="muted small">
+                            {" "}
+                            ({t.minPct.toFixed(0)}–{t.maxPct.toFixed(0)}%)
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Notable traits */}
+                {(notableTraits.abilities.length > 0 ||
+                  notableTraits.items.length > 0) && (
+                  <div className="threat-section">
+                    <div className="threat-label">Watch out for</div>
+                    <ul className="threat-list">
+                      {notableTraits.abilities.map((a, i) => (
+                        <li key={`ab-${i}`}>
+                          <strong>{a.species}</strong> · {a.ability}
+                          <span className="muted small"> — {a.why}</span>
+                        </li>
+                      ))}
+                      {notableTraits.items
+                        .filter((it) => it.why)
+                        .map((it, i) => (
+                          <li key={`it-${i}`}>
+                            <span className="move-tag">{it.item}</span>
+                            <span className="muted small"> — {it.why}</span>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Speed line */}
+                {speedTier && (
+                  <div className="threat-section">
+                    <div className="threat-label">Speed line</div>
+                    <div className="muted small">
+                      Fastest: <strong>{speedTier.species}</strong> at{" "}
+                      <strong>{speedTier.spe}</strong> Spe (Lv {speedTier.level}).
+                    </div>
+                  </div>
+                )}
+
+                {party.length === 0 && (
+                  <div className="muted small">
+                    Tip: add Pokémon to your party for OHKO/2HKO warnings against your team.
+                  </div>
+                )}
+              </div>
+            )}
+          </details>
+
           <details className="panel">
-            <summary>Threat Notes</summary>
+            <summary>My Notes</summary>
+            <p className="muted small">
+              Personal notes for this boss — saved automatically and shown
+              again next time you select them.
+            </p>
             <textarea
+              key={noteKey || "no-boss"}
               rows="4"
-              placeholder="Danger moves, recommended types, strategy notes..."
-              defaultValue="Rock Throw can threaten Flying/Bug types. Nosepass high def — use special attackers or Fighting types if available."
-            ></textarea>
+              placeholder={
+                activeGroup
+                  ? `Strategy notes for ${activeGroup.name}…`
+                  : "Select a boss first."
+              }
+              value={currentNote}
+              disabled={!activeGroup}
+              onChange={(e) => handleNoteChange(e.target.value)}
+            />
           </details>
         </div>
       </div>

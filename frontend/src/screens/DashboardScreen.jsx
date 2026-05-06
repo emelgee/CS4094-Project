@@ -78,9 +78,6 @@ export default function DashboardScreen({
               <button className="btn" onClick={() => onNavigate("boss")}>
                 Boss Quick Load
               </button>
-              <button className="btn" onClick={() => onNavigate("ivev")}>
-                IV / EV Tracker
-              </button>
             </div>
           </details>
         </div>

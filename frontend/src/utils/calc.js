@@ -27,13 +27,19 @@ const PHYSICAL_TYPES = new Set([
   "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost", "steel",
 ]);
 
-function getTypeEffectiveness(moveType, defType1, defType2) {
+export function getTypeEffectiveness(moveType, defType1, defType2) {
   const row = typeChart[moveType];
   if (!row) return 1;
   const mult1 = row[defType1] ?? 1;
   const mult2 = defType2 ? (row[defType2] ?? 1) : 1;
   return mult1 * mult2;
 }
+
+export const TYPE_LIST = [
+  "normal", "fire", "water", "electric", "grass", "ice", "fighting",
+  "poison", "ground", "flying", "psychic", "bug", "rock", "ghost",
+  "dragon", "dark", "steel",
+];
 
 function getWeatherModifier(moveType, weather) {
   if (weather === "sun")  { if (moveType === "fire") return 1.5; if (moveType === "water") return 0.5; }
@@ -71,25 +77,39 @@ function getItemModifier(item, moveType, isPhysical) {
 /**
  * Gen 3 damage formula.
  *
- * attacker: { level, attack, sp_attack, type1, type2, item, atkStage, spAtkStage }
- * defender: { defense, sp_defense, type1, type2, defStage, spDefStage }
- * move:     { type, basePower }
- * conditions: { isCrit, isBurned, weather }
+ * attacker:   { level, attack, sp_attack, type1, type2, item, atkStage, spAtkStage }
+ * defender:   { defense, sp_defense, type1, type2, defStage, spDefStage }
+ * move:       { type, basePower }
+ * conditions: { isCrit, isBurned, weather, reflect, lightScreen, helpingHand, explosion }
+ *
+ * Returns { min, max, rolls } — rolls is all 16 values (r = 85..100).
  */
 export function calculateDamage(attacker, defender, move, conditions = {}) {
   const moveType   = (move.type || "normal").toLowerCase();
   const isPhysical = PHYSICAL_TYPES.has(moveType);
 
+  // Crits ignore negative atk stages and positive def stages
   const atkStage = isPhysical ? (attacker.atkStage ?? 0) : (attacker.spAtkStage ?? 0);
   const defStage = isPhysical ? (defender.defStage ?? 0) : (defender.spDefStage ?? 0);
   const finalAtkStage = conditions.isCrit ? Math.max(0, atkStage) : atkStage;
   const finalDefStage = conditions.isCrit ? Math.min(0, defStage) : defStage;
 
   const atk = (isPhysical ? attacker.attack : attacker.sp_attack) * getStatMultiplier(finalAtkStage);
-  const def = (isPhysical ? defender.defense : defender.sp_defense) * getStatMultiplier(finalDefStage);
 
-  const power = Number(move.basePower) || 0;
-  if (!atk || power <= 0 || !def || def <= 0) return { min: 0, max: 0 };
+  // Sandstorm: Rock types get 1.5× SpD on special moves
+  // Explosion/Self-Destruct: halves the defender's defense stat
+  let defBase = isPhysical ? defender.defense : defender.sp_defense;
+  const defT1 = String(defender.type1 || "").toLowerCase();
+  const defT2 = String(defender.type2 || "").toLowerCase();
+  if (conditions.weather === "sand" && !isPhysical && (defT1 === "rock" || defT2 === "rock")) {
+    defBase = Math.floor(defBase * 1.5);
+  }
+  if (conditions.explosion && isPhysical) defBase = Math.max(1, Math.floor(defBase * 0.5));
+  const def = defBase * getStatMultiplier(finalDefStage);
+
+  // Helping Hand boosts the move's base power by 1.5×
+  const power = (Number(move.basePower) || 0) * (conditions.helpingHand ? 1.5 : 1);
+  if (!atk || power <= 0 || !def || def <= 0) return { min: 0, max: 0, rolls: [] };
 
   const baseDamage = Math.floor(
     (((2 * attacker.level) / 5 + 2) * power * atk) / def / 50 + 2
@@ -109,8 +129,14 @@ export function calculateDamage(attacker, defender, move, conditions = {}) {
   const burn    = conditions.isBurned && isPhysical ? 0.5 : 1;
   const item    = getItemModifier(attacker.item || null, moveType, isPhysical);
 
-  return {
-    min: Math.floor(baseDamage * stab * typeEff * weather * crit * burn * item * 0.85),
-    max: Math.floor(baseDamage * stab * typeEff * weather * crit * burn * item * 1.0),
-  };
+  // Reflect/Light Screen halve damage; crits bypass screens
+  const screen = !conditions.isCrit && (
+    (isPhysical && conditions.reflect) || (!isPhysical && conditions.lightScreen)
+  ) ? 0.5 : 1;
+
+  const raw = baseDamage * stab * typeEff * weather * crit * burn * item * screen;
+  const rolls = [];
+  for (let r = 85; r <= 100; r++) rolls.push(Math.floor(raw * r / 100));
+
+  return { min: rolls[0], max: rolls[15], rolls };
 }

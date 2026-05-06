@@ -4,7 +4,10 @@ import { getPokemonSpriteUrl } from "../utils/helpers";
 export default function TeamScreen({
   party,
   pcBox,
+  graveyard = [],
   onSendToBox,
+  onSendToGraveyard,
+  onRevive,
   onRemove,
   onWithdraw,
   onRelease,
@@ -21,19 +24,31 @@ export default function TeamScreen({
           <h1>Your Team</h1>
           <p className="muted">
             Active party (max 6) · Manage stats, moves, and nature. Overflow
-            goes to PC Box.
+            goes to PC Box. Send fainted Pokémon to the Graveyard.
           </p>
         </div>
-        <button
-          className="btn"
-          onClick={() =>
-            document
-              .getElementById("pcBoxAnchor")
-              ?.scrollIntoView({ behavior: "smooth" })
-          }
-        >
-          💾 PC Box ↓
-        </button>
+        <div className="row">
+          <button
+            className="btn"
+            onClick={() =>
+              document
+                .getElementById("pcBoxAnchor")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+          >
+            💾 PC Box ↓
+          </button>
+          <button
+            className="btn"
+            onClick={() =>
+              document
+                .getElementById("graveyardAnchor")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+          >
+            🪦 Graveyard ↓
+          </button>
+        </div>
       </div>
 
       <div className="rowBetween mb8">
@@ -49,6 +64,7 @@ export default function TeamScreen({
             key={mon.id}
             mon={mon}
             onSendToBox={onSendToBox}
+            onSendToGraveyard={onSendToGraveyard}
             onRemove={onRemove}
             onNavigate={onNavigate}
             onSave={onSave}
@@ -119,6 +135,83 @@ export default function TeamScreen({
                   >
                     ⬆ Withdraw
                   </button>
+                  {onSendToGraveyard && (
+                    <button
+                      className="ghost small danger"
+                      onClick={() => onSendToGraveyard(mon.id)}
+                      title="Move to Graveyard"
+                    >
+                      🪦 Graveyard
+                    </button>
+                  )}
+                  <button
+                    className="ghost small danger"
+                    onClick={() => onRelease(mon.id)}
+                  >
+                    Release
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Graveyard */}
+      <div id="graveyardAnchor" style={{ marginTop: 28 }}>
+        <div className="rowBetween mb8">
+          <div>
+            <strong>🪦 Graveyard</strong>
+            <span className="muted small" style={{ marginLeft: 8 }}>
+              ({graveyard.length} fallen)
+            </span>
+          </div>
+          <span className="muted small">
+            Pokémon that have fainted in your run. Revive moves them back to
+            the PC Box.
+          </span>
+        </div>
+
+        <div className="grid">
+          {graveyard.length === 0 ? (
+            <div className="card empty big" style={{ gridColumn: "1 / -1" }}>
+              🕊 No fallen Pokémon. May it stay that way.
+            </div>
+          ) : (
+            graveyard.map((mon) => (
+              <div key={mon.id} className="pc-box-card graveyard-card">
+                <div className="pc-mon-header">
+                  <div className="pc-mon-name-wrap">
+                    <img
+                      className="pc-mon-sprite"
+                      src={getPokemonSpriteUrl(mon.pokemonId, mon.name)}
+                      alt={`${mon.name} sprite`}
+                      loading="lazy"
+                    />
+                    <strong>{mon.nickname || mon.name}</strong>
+                  </div>
+                  <span className="badge">Lv {mon.level}</span>
+                </div>
+                <div className="pc-mon-meta" style={{ margin: "4px 0" }}>
+                  {mon.types.map((t) => (
+                    <span
+                      key={t}
+                      className={`type-chip type-${t.toLowerCase().split("/")[0]}`}
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <div className="pc-box-actions">
+                  {onRevive && (
+                    <button
+                      className="btn small"
+                      onClick={() => onRevive(mon.id)}
+                      title="Move back to PC Box"
+                    >
+                      ✨ Revive
+                    </button>
+                  )}
                   <button
                     className="ghost small danger"
                     onClick={() => onRelease(mon.id)}

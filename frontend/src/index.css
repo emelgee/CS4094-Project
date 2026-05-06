@@ -77,6 +77,9 @@ input, select, textarea { width: 100%; padding: 8px 10px; border-radius: 8px; bo
 input:focus, select:focus, textarea:focus { outline: none; border-color: #3a58cc66; }
 textarea { resize: vertical; }
 .mini-select { padding: 4px 6px; font-size: 12px; border-radius: 6px; width: auto; }
+.no-spinner { -moz-appearance: textfield; }
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
 /* =====================================================================
    BUTTONS
@@ -211,8 +214,11 @@ textarea { resize: vertical; }
 /* =====================================================================
    TRAINER / BADGES
    ===================================================================== */
-.badge-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border-radius: 10px; border: 1px solid #1f2638; background: #0e1120; font-size: 11px; color: #5a6380; opacity: 0.5; }
+.badge-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border-radius: 10px; border: 1px solid #1f2638; background: #0e1120; font-size: 11px; color: #5a6380; opacity: 0.5; cursor: pointer; transition: background 0.15s, border-color 0.15s, opacity 0.15s, transform 0.05s; font-family: inherit; }
+.badge-item:hover { opacity: 0.85; border-color: #3348aa66; }
+.badge-item:active { transform: scale(0.97); }
 .badge-item.earned { opacity: 1; border-color: #2a4a2055; background: #0d1a10; color: #a0d090; }
+.badge-item.earned:hover { border-color: #3a6a3088; }
 .badge-icon { font-size: 20px; }
 .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #c8cde0; cursor: pointer; }
 .checkbox-row input { width: auto; }
@@ -242,6 +248,20 @@ textarea { resize: vertical; }
 .move-tag { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: #181e2e; border: 1px solid #252c40; color: #9099b5; }
 .boss-list-item { cursor: pointer; }
 .boss-list-item.active { border-color: #2a3d8055; background: #111a30; }
+
+/* =====================================================================
+   THREAT ANALYSIS
+   ===================================================================== */
+.threat-analysis { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.threat-section { display: flex; flex-direction: column; gap: 6px; }
+.threat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #5a6380; }
+.threat-chip-row { display: flex; gap: 5px; flex-wrap: wrap; }
+.threat-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; font-size: 12px; color: #c8cde0; }
+.threat-list li { line-height: 1.45; }
+.threat-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 999px; margin-right: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+.threat-tag.ohko   { background: #2a1010; color: #f87171; border: 1px solid #6b1a1a; }
+.threat-tag.twohko { background: #2a1f0a; color: #ffd740; border: 1px solid #6b551a; }
+.threat-tag.warn   { background: #1a2240; color: #7a9ef0; border: 1px solid #3a58cc44; }
 
 /* =====================================================================
    LOOKUP — TYPE EFFECTIVENESS
@@ -274,7 +294,11 @@ textarea { resize: vertical; }
    padding: 2px;
    flex-shrink: 0;
 }
-.pc-box-actions { display: flex; gap: 6px; margin-top: 4px; }
+.pc-box-actions { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.graveyard-card { border-color: #2a1a30; background: #110a18; filter: grayscale(0.4); }
+.graveyard-card .pc-mon-sprite { filter: grayscale(1) brightness(0.85); }
+.graveyard-card strong { color: #c0a8d0; }
+.trainer-graveyard-row .pc-mon-sprite { filter: grayscale(1) brightness(0.85); }
 
 /* =====================================================================
    GENERATION SCREEN

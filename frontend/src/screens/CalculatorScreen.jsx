@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { API_BASE } from "../data/constants";
+import { API_BASE, BOSS_PRIORITY } from "../data/constants";
 import {
   groupTrainersByRoute,
   formatTrainerRoute,
@@ -417,10 +417,69 @@ function PokemonSide({
   );
 }
 
-function FieldEffects({ weather, setWeather, crit, setCrit }) {
+function HpControl({ maxHp, currentHp, onChange }) {
+  const pct = Math.round((currentHp / maxHp) * 100);
+  const barColor = pct > 50 ? "#4ade80" : pct > 20 ? "#ffd740" : "#f87171";
+  return (
+    <div style={{display:"grid",gap:4}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:6}}>
+        <span style={{fontSize:11,color:"#5a6380",flexShrink:0}}>Current HP</span>
+        <div style={{display:"flex",alignItems:"center",gap:4}}>
+          <input
+            type="number"
+            className="no-spinner"
+            min={1}
+            max={maxHp}
+            value={currentHp}
+            onChange={e => {
+              const v = Math.max(1, Math.min(maxHp, Number(e.target.value) || 1));
+              onChange(v);
+            }}
+            style={{width:48,fontSize:11,padding:"2px 6px",textAlign:"center",
+              borderRadius:6,border:"1px solid #252c40",background:"#0b0e14",color:"#e4e6ef"}}
+          />
+          <span style={{fontSize:11,color:"#5a6380"}}>/ {maxHp} ({pct}%)</span>
+        </div>
+      </div>
+      <div style={{height:5,background:"#1a2030",borderRadius:999,overflow:"hidden"}}>
+        <div style={{height:"100%",width:`${pct}%`,background:barColor,borderRadius:999,transition:"width 0.15s"}}/>
+      </div>
+    </div>
+  );
+}
+
+function FieldEffects({
+  weather, setWeather,
+  crit, setCrit,
+  reflect, setReflect,
+  lightScreen, setLightScreen,
+  helpingHand, setHelpingHand,
+}) {
+  function Toggle({ label, val, set, color="#ffd740" }) {
+    return (
+      <button onClick={() => set(v => !v)} style={{
+        padding:"6px 8px", borderRadius:7, border:"1px solid",
+        borderColor: val ? `${color}66` : "#1a2030",
+        background: val ? "#1a2030" : "transparent",
+        color: val ? color : "#7a82a0",
+        fontSize:11, cursor:"pointer", textAlign:"left",
+        display:"flex", alignItems:"center", gap:6, transition:"all 0.12s",
+      }}>
+        <span style={{
+          width:12, height:12, borderRadius:3, flexShrink:0,
+          background: val ? color : "transparent",
+          border: `1px solid ${val ? color : "#3a3f52"}`,
+          display:"inline-flex", alignItems:"center", justifyContent:"center",
+          fontSize:9, color:"#000",
+        }}>{val ? "✓" : ""}</span>
+        {label}
+      </button>
+    );
+  }
+
   return (
     <div style={{
-      background:"#0e1120", border:"1px solid #1a2030",
+      background:"#111520", border:"1px solid #1f2638",
       borderRadius:12, padding:12, display:"flex",
       flexDirection:"column", gap:10,
     }}>
@@ -429,57 +488,47 @@ function FieldEffects({ weather, setWeather, crit, setCrit }) {
         Field
       </div>
 
-      {/* Weather */}
+      {/* Weather — Sun/Rain affect Fire/Water power; Sand boosts Rock SpD */}
       <div style={{display:"grid",gap:4}}>
         <span style={{fontSize:11,color:"#5a6380"}}>Weather</span>
         {[
-          {val:"",icon:"○",label:"None"},
-          {val:"sun",icon:"☀",label:"Sun"},
-          {val:"rain",icon:"☂",label:"Rain"},
-        ].map(({val,icon,label})=>(
-          <button key={val} onClick={()=>setWeather(val)} style={{
+          {val:"",    icon:"○", label:"None"},
+          {val:"sun", icon:"☀", label:"Sun"},
+          {val:"rain",icon:"☂", label:"Rain"},
+          {val:"sand",icon:"🌪",label:"Sandstorm"},
+          {val:"hail",icon:"❄", label:"Hail"},
+        ].map(({val,icon,label}) => (
+          <button key={val} onClick={() => setWeather(val)} style={{
             padding:"6px 8px", borderRadius:7, border:"1px solid",
-            borderColor: weather===val?"#3a58cc66":"#1a2030",
-            background: weather===val?"#1a2240":"transparent",
-            color: weather===val?"#e4e6ef":"#7a82a0",
+            borderColor: weather===val ? "#3a58cc66" : "#1a2030",
+            background: weather===val ? "#1a2240" : "transparent",
+            color: weather===val ? "#e4e6ef" : "#7a82a0",
             fontSize:11, cursor:"pointer", textAlign:"left",
-            display:"flex",alignItems:"center",gap:6,transition:"all 0.12s",
+            display:"flex", alignItems:"center", gap:6, transition:"all 0.12s",
           }}>
             <span style={{fontSize:14}}>{icon}</span>{label}
           </button>
         ))}
       </div>
 
-      {/* Conditions */}
+      {/* Screens on the defender's side — halved by crits */}
+      <div style={{display:"grid",gap:4}}>
+        <span style={{fontSize:11,color:"#5a6380"}}>Screens (defender)</span>
+        <Toggle label="Reflect"      val={reflect}     set={setReflect}     color="#7a9ef0" />
+        <Toggle label="Light Screen" val={lightScreen} set={setLightScreen} color="#7a9ef0" />
+      </div>
+
+      {/* Other conditions */}
       <div style={{display:"grid",gap:4}}>
         <span style={{fontSize:11,color:"#5a6380"}}>Conditions</span>
-        {[
-          {key:"crit",label:"Crit hit",val:crit,set:setCrit},
-        ].map(({key,label,val,set})=>(
-          <button key={key} onClick={()=>set(v=>!v)} style={{
-            padding:"6px 8px", borderRadius:7, border:"1px solid",
-            borderColor: val?"#ffd74066":"#1a2030",
-            background: val?"#2a2a0a":"transparent",
-            color: val?"#ffd740":"#7a82a0",
-            fontSize:11, cursor:"pointer", textAlign:"left",
-            display:"flex",alignItems:"center",gap:6,transition:"all 0.12s",
-          }}>
-            <span style={{
-              width:12,height:12,borderRadius:3,flexShrink:0,
-              background:val?"#ffd740":"transparent",
-              border:`1px solid ${val?"#ffd740":"#3a3f52"}`,
-              display:"inline-flex",alignItems:"center",justifyContent:"center",
-              fontSize:9,color:"#000",
-            }}>{val?"✓":""}</span>
-            {label}
-          </button>
-        ))}
+        <Toggle label="Crit hit"           val={crit}        set={setCrit}        color="#ffd740" />
+        <Toggle label="Helping Hand (atk)" val={helpingHand} set={setHelpingHand} color="#4ade80" />
       </div>
     </div>
   );
 }
 
-function DamageResult({ damageResult, defenderHp, moveName, moveType }) {
+function DamageResult({ damageResult, defenderHp, maxHp, moveName, moveType }) {
   if (!damageResult) return (
     <div style={{
       background:"#0e1120",border:"1px solid #1a2030",borderRadius:12,
@@ -489,13 +538,30 @@ function DamageResult({ damageResult, defenderHp, moveName, moveType }) {
     </div>
   );
 
-  const { min, max, rolls } = damageResult;
-  const minPct = defenderHp ? ((min/defenderHp)*100) : null;
-  const maxPct = defenderHp ? ((max/defenderHp)*100) : null;
-  const ohko = maxPct>=100;
-  const twohko = minPct && (minPct*2)>=100;
-  const koLabel = ohko?"guaranteed OHKO": twohko?"guaranteed 2HKO": maxPct>=50?"possible 2HKO":"";
+  const { min, max, rolls = [] } = damageResult;
   const typeColor = TYPE_COLORS[moveType?.toLowerCase()] || "#7a9ef0";
+  const hp = defenderHp || null;
+  const hpBase = maxHp || hp;
+  const minPct = hpBase ? (min / hpBase * 100) : null;
+  const maxPct = hpBase ? (max / hpBase * 100) : null;
+
+  const ohkoCount = hp ? rolls.filter(r => r >= hp).length : 0;
+  const ohkoPct   = ohkoCount / 16 * 100;
+
+  let twoHkoCount = 0;
+  if (hp && ohkoPct < 100) {
+    for (const r1 of rolls) for (const r2 of rolls) if (r1 + r2 >= hp) twoHkoCount++;
+  }
+  const twoHkoPct = twoHkoCount / 256 * 100;
+
+  let threeHkoCount = 0;
+  if (hp && twoHkoPct < 100 && ohkoPct < 100) {
+    for (const r1 of rolls) for (const r2 of rolls) for (const r3 of rolls)
+      if (r1 + r2 + r3 >= hp) threeHkoCount++;
+  }
+  const threeHkoPct = threeHkoCount / 4096 * 100;
+
+  const guarHits = hp && min > 0 ? Math.ceil(hp / min) : null;
 
   return (
     <div style={{
@@ -518,36 +584,67 @@ function DamageResult({ damageResult, defenderHp, moveName, moveType }) {
         <div style={{fontSize:22,fontWeight:700,color:"#e4e6ef",fontVariantNumeric:"tabular-nums"}}>
           {min} – {max}
         </div>
-        {minPct && (
+        {minPct != null && (
           <div style={{fontSize:13,color:"#7a82a0",marginTop:2}}>
             {minPct.toFixed(1)}% – {maxPct.toFixed(1)}% of max HP
-            {koLabel && (
-              <span style={{
-                marginLeft:8,fontSize:11,fontWeight:700,
-                color: ohko?"#f87171":twohko?"#ffd740":"#4ade80",
-              }}>({koLabel})</span>
-            )}
           </div>
         )}
       </div>
 
-      {/* Damage rolls */}
-      {Array.isArray(rolls) && rolls.length > 0 && (
+      {hp && (
+        <div style={{display:"flex",flexDirection:"column",gap:4}}>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
+            <span style={{color:"#5a6380"}}>OHKO</span>
+            <span style={{fontWeight:700,fontVariantNumeric:"tabular-nums",
+              color: ohkoPct===100?"#f87171": ohkoPct>0?"#ffd740":"#3a3f52"}}>
+              {ohkoPct===100?"Guaranteed": ohkoPct>0?`${ohkoCount}/16 (${ohkoPct.toFixed(1)}%)`:"No"}
+            </span>
+          </div>
+          {ohkoPct < 100 && (
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
+              <span style={{color:"#5a6380"}}>2HKO</span>
+              <span style={{fontWeight:700,fontVariantNumeric:"tabular-nums",
+                color: twoHkoPct===100?"#ffd740": twoHkoPct>0?"#c8cde0":"#3a3f52"}}>
+                {twoHkoPct===100?"Guaranteed": twoHkoPct>0?`${twoHkoPct.toFixed(1)}%`:"No"}
+              </span>
+            </div>
+          )}
+          {ohkoPct < 100 && twoHkoPct < 100 && (
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
+              <span style={{color:"#5a6380"}}>3HKO</span>
+              <span style={{fontWeight:700,fontVariantNumeric:"tabular-nums",
+                color: threeHkoPct===100?"#4ade80": threeHkoPct>0?"#c8cde0":"#3a3f52"}}>
+                {threeHkoPct===100?"Guaranteed": threeHkoPct>0?`${threeHkoPct.toFixed(1)}%`:"No"}
+              </span>
+            </div>
+          )}
+          {guarHits && guarHits > 1 && (
+            <div style={{fontSize:11,color:"#5a6380",borderTop:"1px solid #1a2030",paddingTop:4,marginTop:2}}>
+              Guaranteed KO in {guarHits} hits (min roll)
+            </div>
+          )}
+        </div>
+      )}
+
+      {rolls.length > 0 && (
         <div>
           <div style={{fontSize:11,color:"#5a6380",textTransform:"uppercase",
             letterSpacing:"0.06em",marginBottom:5}}>
             Damage rolls (16)
           </div>
           <div style={{display:"flex",gap:3,flexWrap:"wrap"}}>
-            {rolls.map((r,i)=>(
-              <span key={i} style={{
-                fontSize:11,padding:"2px 6px",borderRadius:5,
-                background: r===min?"#2a1010":r===max?"#0d2a1a":"#0b0e14",
-                color: r===min?"#f87171":r===max?"#4ade80":"#7a82a0",
-                border:`1px solid ${r===min?"#5a1a1a":r===max?"#1a5235":"#1a2030"}`,
-                fontVariantNumeric:"tabular-nums",
-              }}>{r}</span>
-            ))}
+            {rolls.map((r,i) => {
+              const isKo = hp && r >= hp;
+              return (
+                <span key={i} style={{
+                  fontSize:11,padding:"2px 6px",borderRadius:5,
+                  background: isKo?"#0d2a1a": r===min?"#2a1010":"#0b0e14",
+                  color: isKo?"#4ade80": r===min?"#f87171":"#7a82a0",
+                  border:`1px solid ${isKo?"#1a5235": r===min?"#5a1a1a":"#1a2030"}`,
+                  fontVariantNumeric:"tabular-nums",
+                }}>{r}</span>
+              );
+            })}
           </div>
         </div>
       )}
@@ -562,6 +659,11 @@ export default function CalculatorScreen({
   pcBox = [],
   onRefreshEncounters,
   visible = false,
+  // When set (e.g. from the Boss Data screen "Load into Calc" button)
+  // we pre-select that trainer + Pokémon on the enemy side, then call
+  // onCalcPreloadConsumed so the parent can clear the request.
+  calcPreload = null,
+  onCalcPreloadConsumed,
 }) {
   /* ── State ── */
   const [defMode, setDefMode] = useState("lookup");
@@ -583,8 +685,13 @@ export default function CalculatorScreen({
   const [crit, setCrit] = useState(false);
   const [burned, setBurned] = useState(false);
   const [weather, setWeather] = useState("");
+  const [reflect, setReflect] = useState(false);
+  const [lightScreen, setLightScreen] = useState(false);
+  const [helpingHand, setHelpingHand] = useState(false);
   const [lookupDefender, setLookupDefender] = useState(null);
   const [defenderHp, setDefenderHp] = useState(null);
+  const [myCurrentHp, setMyCurrentHp] = useState(null);   // null = use max
+  const [enemyCurrentHp, setEnemyCurrentHp] = useState(null);
   const [atkNature, setAtkNature] = useState("hardy");
   const [defNature, setDefNature] = useState("hardy");
   const [enemyBurned, setEnemyBurned] = useState(false);
@@ -613,6 +720,10 @@ export default function CalculatorScreen({
   /* ── Data loading ── */
   useEffect(() => {
     if (!visible) return;
+    // Static reference data — fetch once per session, not every time the
+    // screen becomes visible. Refetching also caused the trainer-data
+    // effect below to clobber preloaded selections on revisit.
+    if (moves.length > 0) return;
     let cancelled = false;
     (async () => {
       try {
@@ -624,7 +735,7 @@ export default function CalculatorScreen({
       } catch { if (!cancelled) setMoves([]); }
     })();
     return () => { cancelled = true; };
-  }, [visible]);
+  }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Fetch my mon's learnset when active mon changes */
   useEffect(() => {
@@ -676,6 +787,11 @@ export default function CalculatorScreen({
 
   useEffect(() => {
     if (!visible) return;
+    // Trainer + Pokémon data is static reference data; load once and
+    // keep it. Refetching on every visibility flip used to overwrite a
+    // pending calcPreload (e.g. boss "Load into Calc") because the
+    // fetch resolves AFTER the preload effect applies its selection.
+    if (trainerRows.length > 0) return;
     let cancelled = false;
     async function load() {
       setLookupLoading(true);
@@ -697,9 +813,15 @@ export default function CalculatorScreen({
         const rows = Array.isArray(trainerData)?trainerData:[];
         setPokemonIndex(index);
         setTrainerRows(rows);
-        const firstRoute = formatTrainerRoute(rows[0]);
-        setSelectedRoute(firstRoute||"");
-        setSelectedTrainerId(rows[0]?.id||"");
+        // Only seed defaults when nothing more specific is pending.
+        // calcPreload (if any) will run its own effect right after this
+        // and pick the right trainer; seeding here would briefly flash
+        // the wrong selection.
+        if (!calcPreload?.trainerId) {
+          const firstRoute = formatTrainerRoute(rows[0]);
+          setSelectedRoute(firstRoute||"");
+          setSelectedTrainerId(rows[0]?.id||"");
+        }
       } catch (err) {
         if (!cancelled) {
           setLookupError(err.message||"Failed to load trainer lookup data.");
@@ -711,7 +833,53 @@ export default function CalculatorScreen({
     }
     load();
     return () => { cancelled = true; };
-  }, [visible]);
+  }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ── External preload (e.g. Boss screen → Load into Calc) ──
+     Wait until the calculator is visible AND trainerRows is populated,
+     then mirror the same state changes the in-screen trainer search bar
+     would make: pick the trainer, route, sprite-strip slot, and clear
+     any other defender source so calculation uses the strip mon. */
+  useEffect(() => {
+    if (!visible) return;
+    if (!calcPreload?.trainerId) return;
+    if (!trainerRows.length) return;
+    const t = trainerRows.find((r) => r.id === calcPreload.trainerId);
+    if (!t) {
+      onCalcPreloadConsumed?.();
+      return;
+    }
+    const team = Array.isArray(t.pokemon) ? t.pokemon : [];
+    const monIdx = Math.min(
+      Math.max(0, Number(calcPreload.monIdx) || 0),
+      Math.max(0, team.length - 1)
+    );
+    setSelectedTrainerId(t.id);
+    setSelectedRoute(formatTrainerRoute(t));
+    setTrainerQuery(`${t.name}${t.party ? " (" + t.party + ")" : ""}`);
+    setTrainerSearchOpen(false);
+    setEnemyStripIdx(team.length ? monIdx : null);
+    setLookupDefender(null);
+    setDefenderId("");
+    setSelectedPokemonIndex("");
+    setPreview(null);
+    setEnemyMoveOverrides({});
+    setEnemyActiveMoveIdx(null);
+    setDamageResult(null);
+    onCalcPreloadConsumed?.();
+  }, [visible, trainerRows, calcPreload, onCalcPreloadConsumed]);
+
+  /* Auto-select first enemy Pokemon when the active trainer changes */
+  useEffect(() => {
+    if (!selectedTrainerId) { setEnemyStripIdx(null); return; }
+    setEnemyStripIdx(0);
+    setEnemyMoveOverrides({});
+    setEnemyCurrentHp(null);
+  }, [selectedTrainerId]);
+
+  /* Reset current HP when the active mon changes */
+  useEffect(() => { setMyCurrentHp(null); }, [myStripMonId, attackerPartyMonId]);
+  useEffect(() => { setEnemyCurrentHp(null); }, [enemyStripIdx]);
 
   /* ── Derived data ── */
   const groupedTrainers = groupTrainersByRoute(trainerRows);
@@ -1061,7 +1229,9 @@ export default function CalculatorScreen({
       }
 
       const activeBurned = attackerSide==="my" ? burned : enemyBurned;
-      const conditions = { isCrit:crit, isBurned:activeBurned, weather:weather||"" };
+      const moveName = (moveRow.name || "").toLowerCase().replace(/[\s_-]/g, "");
+      const explosion = moveName === "explosion" || moveName === "selfdestruct";
+      const conditions = { isCrit:crit, isBurned:activeBurned, weather:weather||"", reflect, lightScreen, helpingHand, explosion };
       const out = calculateDamage(attackerData, defenderData,
         { type:moveRow.type, basePower:moveRow.power }, conditions);
       setDamageResult(out);
@@ -1074,11 +1244,40 @@ export default function CalculatorScreen({
     setAttackerPartyMonId(""); setDefenderId(""); setCrit(false);
     setAtkNature("hardy"); setDefNature("hardy"); setWeather("");
     setBurned(false); setEnemyBurned(false);
+    setReflect(false); setLightScreen(false); setHelpingHand(false);
     setDamageResult(null); setDefenderHp(null); setCalcError(null);
+    setMyCurrentHp(null); setEnemyCurrentHp(null);
     setDefMode("lookup"); setSelectedPokemonIndex(""); setPreview(null);
     setLookupDefender(null); setMyActiveMoveIdx(null); setEnemyActiveMoveIdx(null);
     setAttackerSide("my"); setMyMoveOverrides({}); setEnemyMoveOverrides({});
     setMyStripMonId(null); setEnemyStripIdx(null); setTrainerQuery(""); setTrainerSearchOpen(false);
+  };
+
+  /* ── Boss navigation ── */
+  const sortedBossTrainers = trainerRows
+    .filter(r => BOSS_PRIORITY.includes(r.id))
+    .sort((a, b) => BOSS_PRIORITY.indexOf(a.id) - BOSS_PRIORITY.indexOf(b.id));
+  const currentBossIdx = sortedBossTrainers.findIndex(t => t.id === selectedTrainerId);
+
+  const applyTrainer = (t) => {
+    setSelectedTrainerId(t.id);
+    setSelectedRoute(formatTrainerRoute(t));
+    setTrainerQuery(`${t.name}${t.party ? ` (${t.party})` : ""}`);
+    setLookupDefender(null);
+    setDefenderId("");
+    setSelectedPokemonIndex("");
+    setPreview(null);
+    setDamageResult(null);
+  };
+
+  const goToPrevBoss = () => {
+    if (currentBossIdx <= 0) return;
+    applyTrainer(sortedBossTrainers[currentBossIdx - 1]);
+  };
+
+  const goToNextBoss = () => {
+    if (currentBossIdx === -1 || currentBossIdx >= sortedBossTrainers.length - 1) return;
+    applyTrainer(sortedBossTrainers[currentBossIdx + 1]);
   };
 
   /* Sprite helpers */
@@ -1172,8 +1371,6 @@ export default function CalculatorScreen({
                     setDefenderId("");
                     setSelectedPokemonIndex("");
                     setPreview(null);
-                    setEnemyStripIdx(null);
-                    setEnemyMoveOverrides({});
                     setDamageResult(null);
                   }}
                   style={{
@@ -1242,13 +1439,26 @@ export default function CalculatorScreen({
                 <input type="checkbox" checked={burned} onChange={e=>setBurned(e.target.checked)} style={{width:"auto"}}/>
                 Burned
               </label>
+              {myStatData?.battle?.HP && (
+                <HpControl
+                  maxHp={myStatData.battle.HP}
+                  currentHp={myCurrentHp ?? myStatData.battle.HP}
+                  onChange={setMyCurrentHp}
+                />
+              )}
             </div>
           }
         />
 
         {/* MIDDLE — Field + result */}
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
-          <FieldEffects weather={weather} setWeather={setWeather} crit={crit} setCrit={setCrit}/>
+          <FieldEffects
+            weather={weather} setWeather={setWeather}
+            crit={crit} setCrit={setCrit}
+            reflect={reflect} setReflect={setReflect}
+            lightScreen={lightScreen} setLightScreen={setLightScreen}
+            helpingHand={helpingHand} setHelpingHand={setHelpingHand}
+          />
 
           {/* Attacker direction badge */}
           <div style={{display:"flex",alignItems:"center",gap:6,padding:"2px 0"}}>
@@ -1271,7 +1481,15 @@ export default function CalculatorScreen({
           {/* Result */}
           <DamageResult
             damageResult={damageResult}
-            defenderHp={defenderHp}
+            defenderHp={(() => {
+              const enemyMaxHp = enemyStatData?.battle?.HP ?? defenderHp;
+              const myMaxHp = myStatData?.battle?.HP ?? defenderHp;
+              if (attackerSide === "my") return enemyMaxHp ? (enemyCurrentHp ?? enemyMaxHp) : null;
+              return myMaxHp ? (myCurrentHp ?? myMaxHp) : null;
+            })()}
+            maxHp={attackerSide === "my"
+              ? (enemyStatData?.battle?.HP ?? defenderHp)
+              : (myStatData?.battle?.HP ?? defenderHp)}
             moveName={activeMoveObj?.name}
             moveType={activeMoveObj?.type}
           />
@@ -1328,6 +1546,13 @@ export default function CalculatorScreen({
                 <input type="checkbox" checked={enemyBurned} onChange={e=>setEnemyBurned(e.target.checked)} style={{width:"auto"}}/>
                 Burned
               </label>
+              {(enemyStatData?.battle?.HP || defenderHp) && (
+                <HpControl
+                  maxHp={enemyStatData?.battle?.HP ?? defenderHp}
+                  currentHp={enemyCurrentHp ?? (enemyStatData?.battle?.HP ?? defenderHp)}
+                  onChange={setEnemyCurrentHp}
+                />
+              )}
             </div>
           }
         />
@@ -1407,9 +1632,41 @@ export default function CalculatorScreen({
 
         {/* Enemy side strip: selected trainer's team */}
         <div style={{background:"#111520",border:"1px solid #1f2638",borderRadius:12,padding:10}}>
-          <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",
-            letterSpacing:"0.08em",color:"#5a6380",marginBottom:8}}>
-            {selectedTrainer ? `${selectedTrainer.name}${selectedTrainer.party?" ("+selectedTrainer.party+")":""}` : "Enemy Team"}
+          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}>
+            <button
+              onClick={goToPrevBoss}
+              disabled={currentBossIdx <= 0}
+              title="Previous boss"
+              style={{
+                padding:"2px 7px",borderRadius:5,border:"1px solid #1f2638",
+                background:"transparent",color:currentBossIdx<=0?"#2a2f40":"#7a9ef0",
+                cursor:currentBossIdx<=0?"default":"pointer",fontSize:12,lineHeight:1,
+              }}
+            >‹</button>
+            <div style={{flex:1,fontSize:10,fontWeight:700,textTransform:"uppercase",
+              letterSpacing:"0.08em",color:"#5a6380",textAlign:"center",overflow:"hidden",
+              textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
+              {selectedTrainer
+                ? `${selectedTrainer.name}${selectedTrainer.party ? " (" + selectedTrainer.party + ")" : ""}`
+                : "Enemy Team"}
+              {currentBossIdx !== -1 && (
+                <span style={{color:"#3a4060",marginLeft:4,fontWeight:400}}>
+                  {currentBossIdx + 1}/{sortedBossTrainers.length}
+                </span>
+              )}
+            </div>
+            <button
+              onClick={goToNextBoss}
+              disabled={currentBossIdx === -1 || currentBossIdx >= sortedBossTrainers.length - 1}
+              title="Next boss"
+              style={{
+                padding:"2px 7px",borderRadius:5,border:"1px solid #1f2638",
+                background:"transparent",
+                color:(currentBossIdx===-1||currentBossIdx>=sortedBossTrainers.length-1)?"#2a2f40":"#7a9ef0",
+                cursor:(currentBossIdx===-1||currentBossIdx>=sortedBossTrainers.length-1)?"default":"pointer",
+                fontSize:12,lineHeight:1,
+              }}
+            >›</button>
           </div>
           {selectedTeam.length === 0 ? (
             <div style={{fontSize:12,color:"#3a3f52"}}>Search a trainer above to load their team</div>
