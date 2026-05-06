@@ -31,6 +31,29 @@ const TYPE_BG = {
 };
 
 const STAT_KEYS = ["hp","atk","def","spa","spd","spe"];
+
+const CALC_ITEMS = [
+  { value: "",               label: "None" },
+  { value: "choice_band",    label: "Choice Band (Phys ×1.5)" },
+  { value: "black_belt",     label: "Black Belt (Fighting ×1.1)" },
+  { value: "black_glasses",  label: "Black Glasses (Dark ×1.1)" },
+  { value: "charcoal",       label: "Charcoal (Fire ×1.1)" },
+  { value: "dragon_fang",    label: "Dragon Fang (Dragon ×1.1)" },
+  { value: "hard_stone",     label: "Hard Stone (Rock ×1.1)" },
+  { value: "magnet",         label: "Magnet (Electric ×1.1)" },
+  { value: "metal_coat",     label: "Metal Coat (Steel ×1.1)" },
+  { value: "miracle_seed",   label: "Miracle Seed (Grass ×1.1)" },
+  { value: "mystic_water",   label: "Mystic Water (Water ×1.1)" },
+  { value: "never_melt_ice", label: "Never-Melt Ice (Ice ×1.1)" },
+  { value: "poison_barb",    label: "Poison Barb (Poison ×1.1)" },
+  { value: "sea_incense",    label: "Sea Incense (Water ×1.05)" },
+  { value: "sharp_beak",     label: "Sharp Beak (Flying ×1.1)" },
+  { value: "silk_scarf",     label: "Silk Scarf (Normal ×1.1)" },
+  { value: "silver_powder",  label: "Silver Powder (Bug ×1.1)" },
+  { value: "soft_sand",      label: "Soft Sand (Ground ×1.1)" },
+  { value: "spell_tag",      label: "Spell Tag (Ghost ×1.1)" },
+  { value: "twisted_spoon",  label: "Twisted Spoon (Psychic ×1.1)" },
+];
 const STAT_LABELS = { hp:"HP", atk:"Atk", def:"Def", spa:"SpA", spd:"SpD", spe:"Spe" };
 
 // Returns up to 4 move names a Pokémon would know at `level` via level-up moves only.
@@ -276,20 +299,36 @@ function MoveSlot({ move, active, onMoveClick, disabled, slotIdx, learnset, allM
   );
 }
 
-function StatRow({ label, base, iv, ev, battle }) {
+function StatRow({ label, base, iv, ev, battle, stage, onStageChange }) {
   const display = battle ?? base ?? 0;
   const pct = Math.min(100, Math.round((display / (battle != null ? 400 : 255)) * 100));
   const color = display >= 120 ? "#4ade80" : display >= 70 ? "#ffd740" : "#f87171";
+  const stageColor = stage > 0 ? "#4ade80" : stage < 0 ? "#f87171" : "#3a3f52";
+  const btnStyle = {
+    width:14, height:14, borderRadius:3, border:"1px solid #252c40",
+    background:"#0b0e14", color:"#c8cde0", cursor:"pointer",
+    fontSize:11, lineHeight:1, display:"flex", alignItems:"center",
+    justifyContent:"center", flexShrink:0, padding:0,
+  };
   return (
-    <div style={{display:"grid",gridTemplateColumns:"28px 1fr 30px 22px 26px 32px",gap:4,alignItems:"center",fontSize:11}}>
+    <div style={{display:"grid",gridTemplateColumns:"28px 50px 30px 22px 26px 32px 60px",gap:4,alignItems:"center",fontSize:11}}>
       <span style={{color:"#5a6380",textAlign:"right"}}>{label}</span>
       <div style={{height:8,background:"#1a2030",borderRadius:999,overflow:"hidden"}}>
         <div style={{height:"100%",width:`${pct}%`,background:color,borderRadius:999,transition:"width 0.3s"}}/>
       </div>
-      <span style={{color:"#c0c4d8",textAlign:"right"}}>{base??"-"}</span>
-      <span style={{color:"#5a6a8a",textAlign:"right"}}>{iv??"-"}</span>
-      <span style={{color:"#4a6a4a",textAlign:"right"}}>{ev??"-"}</span>
-      <span style={{color:"#e4e6ef",textAlign:"right",fontWeight:700}}>{battle??"-"}</span>
+      <span style={{color:"#c0c4d8"}}>{base??"-"}</span>
+      <span style={{color:"#5a6a8a"}}>{iv??"-"}</span>
+      <span style={{color:"#4a6a4a"}}>{ev??"-"}</span>
+      <span style={{color:"#e4e6ef",fontWeight:700}}>{battle??"-"}</span>
+      {onStageChange ? (
+        <div style={{display:"flex",alignItems:"center",gap:2}}>
+          <button style={btnStyle} onClick={() => onStageChange(Math.max(-6, (stage??0) - 1))}>−</button>
+          <span style={{width:18,textAlign:"center",fontWeight:700,color:stageColor,fontVariantNumeric:"tabular-nums"}}>
+            {(stage??0) > 0 ? `+${stage}` : (stage??0)}
+          </span>
+          <button style={btnStyle} onClick={() => onStageChange(Math.min(6, (stage??0) + 1))}>+</button>
+        </div>
+      ) : <div/>}
     </div>
   );
 }
@@ -298,6 +337,7 @@ function PokemonSide({
   label, mon, moves, activeMoveIdx, onMoveClick,
   isAttacker, extraControls, spriteUrl,
   learnset, allMoves, onSwap, statData,
+  stages, onStageChange,
 }) {
   return (
     <div style={{
@@ -367,14 +407,15 @@ function PokemonSide({
       {/* Stats: Base / IV / EV / Stat */}
       {statData && (
         <div style={{display:"grid",gap:3}}>
-          <div style={{display:"grid",gridTemplateColumns:"28px 1fr 30px 22px 26px 32px",gap:4,
+          <div style={{display:"grid",gridTemplateColumns:"28px 50px 30px 22px 26px 32px 60px",gap:4,
             fontSize:9,color:"#3a3f52",textTransform:"uppercase",letterSpacing:"0.06em",
             paddingBottom:3,borderBottom:"1px solid #1a2030"}}>
             <span/><span/>
-            <span style={{textAlign:"right"}}>Base</span>
-            <span style={{textAlign:"right"}}>IV</span>
-            <span style={{textAlign:"right"}}>EV</span>
-            <span style={{textAlign:"right"}}>Stat</span>
+            <span>Base</span>
+            <span>IV</span>
+            <span>EV</span>
+            <span>Stat</span>
+            <span>Stage</span>
           </div>
           {STAT_KEYS.map(k=>(
             <StatRow
@@ -384,6 +425,8 @@ function PokemonSide({
               iv={statData.ivs?.[STAT_LABELS[k]]}
               ev={statData.evs?.[STAT_LABELS[k]]}
               battle={statData.battle?.[STAT_LABELS[k]]}
+              stage={stages?.[k]}
+              onStageChange={onStageChange?.[k]}
             />
           ))}
         </div>
@@ -413,6 +456,26 @@ function PokemonSide({
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+function StageControl({ label, value, onChange }) {
+  const color = value > 0 ? "#4ade80" : value < 0 ? "#f87171" : "#5a6380";
+  const btnStyle = {
+    width:18, height:18, borderRadius:4, border:"1px solid #252c40",
+    background:"#0b0e14", color:"#c8cde0", cursor:"pointer",
+    fontSize:13, lineHeight:1, display:"flex", alignItems:"center", justifyContent:"center",
+    flexShrink:0, padding:0,
+  };
+  return (
+    <div style={{display:"flex",alignItems:"center",gap:5}}>
+      <span style={{fontSize:11,color:"#5a6380",width:32,flexShrink:0}}>{label}</span>
+      <button style={btnStyle} onClick={() => onChange(Math.max(-6, value - 1))}>−</button>
+      <span style={{width:24,textAlign:"center",fontSize:11,fontWeight:700,color,fontVariantNumeric:"tabular-nums"}}>
+        {value > 0 ? `+${value}` : value}
+      </span>
+      <button style={btnStyle} onClick={() => onChange(Math.min(6, value + 1))}>+</button>
     </div>
   );
 }
@@ -450,10 +513,6 @@ function HpControl({ maxHp, currentHp, onChange }) {
 
 function FieldEffects({
   weather, setWeather,
-  crit, setCrit,
-  reflect, setReflect,
-  lightScreen, setLightScreen,
-  helpingHand, setHelpingHand,
 }) {
   function Toggle({ label, val, set, color="#ffd740" }) {
     return (
@@ -511,19 +570,6 @@ function FieldEffects({
         ))}
       </div>
 
-      {/* Screens on the defender's side — halved by crits */}
-      <div style={{display:"grid",gap:4}}>
-        <span style={{fontSize:11,color:"#5a6380"}}>Screens (defender)</span>
-        <Toggle label="Reflect"      val={reflect}     set={setReflect}     color="#7a9ef0" />
-        <Toggle label="Light Screen" val={lightScreen} set={setLightScreen} color="#7a9ef0" />
-      </div>
-
-      {/* Other conditions */}
-      <div style={{display:"grid",gap:4}}>
-        <span style={{fontSize:11,color:"#5a6380"}}>Conditions</span>
-        <Toggle label="Crit hit"           val={crit}        set={setCrit}        color="#ffd740" />
-        <Toggle label="Helping Hand (atk)" val={helpingHand} set={setHelpingHand} color="#4ade80" />
-      </div>
     </div>
   );
 }
@@ -677,16 +723,20 @@ export default function CalculatorScreen({
   const [calcLoading, setCalcLoading] = useState(false);
   const [calcError, setCalcError] = useState(null);
   const [damageResult, setDamageResult] = useState(null);
-  const [crit, setCrit] = useState(false);
+  const [myCrit, setMyCrit] = useState(false);
+  const [enemyCrit, setEnemyCrit] = useState(false);
   const [burned, setBurned] = useState(false);
   const [weather, setWeather] = useState("");
-  const [reflect, setReflect] = useState(false);
-  const [lightScreen, setLightScreen] = useState(false);
-  const [helpingHand, setHelpingHand] = useState(false);
+  const [myReflect, setMyReflect] = useState(false);
+  const [myLightScreen, setMyLightScreen] = useState(false);
+  const [enemyReflect, setEnemyReflect] = useState(false);
+  const [enemyLightScreen, setEnemyLightScreen] = useState(false);
   const [lookupDefender, setLookupDefender] = useState(null);
   const [defenderHp, setDefenderHp] = useState(null);
   const [myCurrentHp, setMyCurrentHp] = useState(null);   // null = use max
   const [enemyCurrentHp, setEnemyCurrentHp] = useState(null);
+  const [myCalcItem, setMyCalcItem] = useState("");
+  const [enemyCalcItem, setEnemyCalcItem] = useState("");
   const [atkNature, setAtkNature] = useState("hardy");
   const [defNature, setDefNature] = useState("hardy");
   const [enemyBurned, setEnemyBurned] = useState(false);
@@ -699,6 +749,18 @@ export default function CalculatorScreen({
   /* Temp move overrides (for testing without saving) */
   const [myMoveOverrides, setMyMoveOverrides] = useState({});
   const [enemyMoveOverrides, setEnemyMoveOverrides] = useState({});
+
+  /* Stat stages (-6 to +6) */
+  const [myAtkStage, setMyAtkStage] = useState(0);
+  const [mySpAStage, setMySpAStage] = useState(0);
+  const [myDefStage, setMyDefStage] = useState(0);
+  const [mySpDStage, setMySpDStage] = useState(0);
+  const [mySpeStage, setMySpeStage] = useState(0);
+  const [enemyAtkStage, setEnemyAtkStage] = useState(0);
+  const [enemySpAStage, setEnemySpAStage] = useState(0);
+  const [enemyDefStage, setEnemyDefStage] = useState(0);
+  const [enemySpDStage, setEnemySpDStage] = useState(0);
+  const [enemySpeStage, setEnemySpeStage] = useState(0);
 
   /* ── Trainer search ── */
   const [trainerQuery, setTrainerQuery] = useState("");
@@ -829,9 +891,15 @@ export default function CalculatorScreen({
     setEnemyCurrentHp(null);
   }, [selectedTrainerId]);
 
-  /* Reset current HP when the active mon changes */
-  useEffect(() => { setMyCurrentHp(null); }, [myStripMonId, attackerPartyMonId]);
-  useEffect(() => { setEnemyCurrentHp(null); }, [enemyStripIdx]);
+  /* Reset current HP and stages when the active mon changes */
+  useEffect(() => {
+    setMyCurrentHp(null); setMyCalcItem("");
+    setMyAtkStage(0); setMySpAStage(0); setMyDefStage(0); setMySpDStage(0); setMySpeStage(0);
+  }, [myStripMonId, attackerPartyMonId]);
+  useEffect(() => {
+    setEnemyCurrentHp(null); setEnemyCalcItem("");
+    setEnemyAtkStage(0); setEnemySpAStage(0); setEnemyDefStage(0); setEnemySpDStage(0); setEnemySpeStage(0);
+  }, [enemyStripIdx]);
 
   /* ── Derived data ── */
   const groupedTrainers = groupTrainersByRoute(trainerRows);
@@ -1065,7 +1133,11 @@ export default function CalculatorScreen({
   }, [
     myActiveMoveIdx, enemyActiveMoveIdx, attackerSide,
     myMoveOverrides, enemyMoveOverrides,
-    crit, burned, enemyBurned, weather, atkNature, defNature,
+    myCrit, enemyCrit, burned, enemyBurned, weather, atkNature, defNature,
+    myCalcItem, enemyCalcItem,
+    myReflect, myLightScreen, enemyReflect, enemyLightScreen,
+    myAtkStage, mySpAStage, myDefStage, mySpDStage,
+    enemyAtkStage, enemySpAStage, enemyDefStage, enemySpDStage,
     attackerPartyMonId, myStripMonId, defenderId, lookupDefender, enemyStripIdx,
   ]);
 
@@ -1090,7 +1162,7 @@ export default function CalculatorScreen({
           sp_attack: applyNatureModifier(spaStat,"spa",atkNature),
           type1:(atkMon.types||[])[0]||null,
           type2:(atkMon.types||[])[1]||null,
-          item:atkMon.item||null, atkStage:0, spAtkStage:0,
+          item:myCalcItem||atkMon.item||null, atkStage:myAtkStage, spAtkStage:mySpAStage,
         };
 
         if (!defMon) { setCalcError("Select a defender."); setCalcLoading(false); return; }
@@ -1122,7 +1194,7 @@ export default function CalculatorScreen({
         } else {
           setCalcError("No defender stats available."); setCalcLoading(false); return;
         }
-        defenderData = { defense:defStat, sp_defense:spdStat, type1, type2, defStage:0, spDefStage:0 };
+        defenderData = { defense:defStat, sp_defense:spdStat, type1, type2, defStage:enemyDefStage, spDefStage:enemySpDStage };
         setDefenderHp(hpStat??null);
       } else {
         // enemy attacking my mon
@@ -1158,7 +1230,7 @@ export default function CalculatorScreen({
           level:enemyLevel,
           attack: applyNatureModifier(enemyAtk, "atk", defNature),
           sp_attack: applyNatureModifier(enemySpa, "spa", defNature),
-          type1:enemyType1, type2:enemyType2, item:null, atkStage:0, spAtkStage:0,
+          type1:enemyType1, type2:enemyType2, item:enemyCalcItem||null, atkStage:enemyAtkStage, spAtkStage:enemySpAStage,
         };
 
         // my mon as defender
@@ -1175,7 +1247,7 @@ export default function CalculatorScreen({
           defense:defStatVal, sp_defense:spdStatVal,
           type1:(atkMon.types||[])[0]||null,
           type2:(atkMon.types||[])[1]||null,
-          defStage:0, spDefStage:0,
+          defStage:myDefStage, spDefStage:mySpDStage,
         };
         setDefenderHp(hpVal);
       }
@@ -1183,7 +1255,10 @@ export default function CalculatorScreen({
       const activeBurned = attackerSide==="my" ? burned : enemyBurned;
       const moveName = (moveRow.name || "").toLowerCase().replace(/[\s_-]/g, "");
       const explosion = moveName === "explosion" || moveName === "selfdestruct";
-      const conditions = { isCrit:crit, isBurned:activeBurned, weather:weather||"", reflect, lightScreen, helpingHand, explosion };
+      const reflect     = attackerSide === "my" ? enemyReflect     : myReflect;
+      const lightScreen = attackerSide === "my" ? enemyLightScreen : myLightScreen;
+      const crit        = attackerSide === "my" ? myCrit           : enemyCrit;
+      const conditions = { isCrit:crit, isBurned:activeBurned, weather:weather||"", reflect, lightScreen, explosion };
       const out = calculateDamage(attackerData, defenderData,
         { type:moveRow.type, basePower:moveRow.power }, conditions);
       setDamageResult(out);
@@ -1196,9 +1271,13 @@ export default function CalculatorScreen({
     setAttackerPartyMonId(""); setDefenderId(""); setCrit(false);
     setAtkNature("hardy"); setDefNature("hardy"); setWeather("");
     setBurned(false); setEnemyBurned(false);
-    setReflect(false); setLightScreen(false); setHelpingHand(false);
+    setMyCrit(false); setEnemyCrit(false);
+    setMyReflect(false); setMyLightScreen(false); setEnemyReflect(false); setEnemyLightScreen(false);
     setDamageResult(null); setDefenderHp(null); setCalcError(null);
     setMyCurrentHp(null); setEnemyCurrentHp(null);
+    setMyCalcItem(""); setEnemyCalcItem("");
+    setMyAtkStage(0); setMySpAStage(0); setMyDefStage(0); setMySpDStage(0); setMySpeStage(0);
+    setEnemyAtkStage(0); setEnemySpAStage(0); setEnemyDefStage(0); setEnemySpDStage(0); setEnemySpeStage(0);
     setDefMode("lookup"); setSelectedPokemonIndex(""); setPreview(null);
     setLookupDefender(null); setMyActiveMoveIdx(null); setEnemyActiveMoveIdx(null);
     setAttackerSide("my"); setMyMoveOverrides({}); setEnemyMoveOverrides({});
@@ -1368,6 +1447,8 @@ export default function CalculatorScreen({
           allMoves={moves}
           onSwap={(idx, m) => setMyMoveOverrides(ov=>({...ov,[idx]:m}))}
           statData={myStatData}
+          stages={{atk:myAtkStage, spa:mySpAStage, def:myDefStage, spd:mySpDStage, spe:mySpeStage}}
+          onStageChange={{atk:setMyAtkStage, spa:setMySpAStage, def:setMyDefStage, spd:setMySpDStage, spe:setMySpeStage}}
           extraControls={
             <div style={{display:"grid",gap:6}}>
               <label style={{color:"#5a6380",fontSize:11,display:"grid",gap:3}}>
@@ -1387,10 +1468,32 @@ export default function CalculatorScreen({
                   })}
                 </select>
               </label>
-              <label style={{display:"flex",alignItems:"center",gap:6,fontSize:11,color:"#5a6380",cursor:"pointer"}}>
-                <input type="checkbox" checked={burned} onChange={e=>setBurned(e.target.checked)} style={{width:"auto"}}/>
-                Burned
+              <label style={{color:"#5a6380",fontSize:11,display:"grid",gap:3}}>
+                Item
+                <select
+                  className="mini-select"
+                  value={myCalcItem}
+                  onChange={e=>setMyCalcItem(e.target.value)}
+                  style={{width:"100%"}}
+                >
+                  {CALC_ITEMS.map(({value,label})=>(
+                    <option key={value} value={value}>{label}</option>
+                  ))}
+                </select>
               </label>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"4px 8px"}}>
+                {[
+                  {label:"Burned",       checked:burned,       set:setBurned},
+                  {label:"Reflect",      checked:myReflect,    set:setMyReflect},
+                  {label:"Light Screen", checked:myLightScreen,set:setMyLightScreen},
+                  {label:"Crit hit",     checked:myCrit,       set:setMyCrit},
+                ].map(({label,checked,set})=>(
+                  <label key={label} style={{display:"flex",alignItems:"center",gap:5,fontSize:11,color:"#5a6380",cursor:"pointer"}}>
+                    <input type="checkbox" checked={checked} onChange={e=>set(e.target.checked)} style={{width:"auto"}}/>
+                    {label}
+                  </label>
+                ))}
+              </div>
               {myStatData?.battle?.HP && (
                 <HpControl
                   maxHp={myStatData.battle.HP}
@@ -1406,10 +1509,6 @@ export default function CalculatorScreen({
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
           <FieldEffects
             weather={weather} setWeather={setWeather}
-            crit={crit} setCrit={setCrit}
-            reflect={reflect} setReflect={setReflect}
-            lightScreen={lightScreen} setLightScreen={setLightScreen}
-            helpingHand={helpingHand} setHelpingHand={setHelpingHand}
           />
 
           {/* Attacker direction badge */}
@@ -1475,6 +1574,8 @@ export default function CalculatorScreen({
           allMoves={moves}
           onSwap={(idx, m) => setEnemyMoveOverrides(ov=>({...ov,[idx]:m}))}
           statData={enemyStatData}
+          stages={{atk:enemyAtkStage, spa:enemySpAStage, def:enemyDefStage, spd:enemySpDStage, spe:enemySpeStage}}
+          onStageChange={{atk:setEnemyAtkStage, spa:setEnemySpAStage, def:setEnemyDefStage, spd:setEnemySpDStage, spe:setEnemySpeStage}}
           extraControls={
             <div style={{display:"grid",gap:6}}>
               <label style={{color:"#5a6380",fontSize:11,display:"grid",gap:3}}>
@@ -1494,10 +1595,32 @@ export default function CalculatorScreen({
                   })}
                 </select>
               </label>
-              <label style={{display:"flex",alignItems:"center",gap:6,fontSize:11,color:"#5a6380",cursor:"pointer"}}>
-                <input type="checkbox" checked={enemyBurned} onChange={e=>setEnemyBurned(e.target.checked)} style={{width:"auto"}}/>
-                Burned
+              <label style={{color:"#5a6380",fontSize:11,display:"grid",gap:3}}>
+                Item
+                <select
+                  className="mini-select"
+                  value={enemyCalcItem}
+                  onChange={e=>setEnemyCalcItem(e.target.value)}
+                  style={{width:"100%"}}
+                >
+                  {CALC_ITEMS.map(({value,label})=>(
+                    <option key={value} value={value}>{label}</option>
+                  ))}
+                </select>
               </label>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"4px 8px"}}>
+                {[
+                  {label:"Burned",       checked:enemyBurned,      set:setEnemyBurned},
+                  {label:"Reflect",      checked:enemyReflect,     set:setEnemyReflect},
+                  {label:"Light Screen", checked:enemyLightScreen,  set:setEnemyLightScreen},
+                  {label:"Crit hit",     checked:enemyCrit,        set:setEnemyCrit},
+                ].map(({label,checked,set})=>(
+                  <label key={label} style={{display:"flex",alignItems:"center",gap:5,fontSize:11,color:"#5a6380",cursor:"pointer"}}>
+                    <input type="checkbox" checked={checked} onChange={e=>set(e.target.checked)} style={{width:"auto"}}/>
+                    {label}
+                  </label>
+                ))}
+              </div>
               {(enemyStatData?.battle?.HP || defenderHp) && (
                 <HpControl
                   maxHp={enemyStatData?.battle?.HP ?? defenderHp}
