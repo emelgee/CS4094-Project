@@ -27,13 +27,19 @@ const PHYSICAL_TYPES = new Set([
   "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost", "steel",
 ]);
 
-function getTypeEffectiveness(moveType, defType1, defType2) {
+export function getTypeEffectiveness(moveType, defType1, defType2) {
   const row = typeChart[moveType];
   if (!row) return 1;
   const mult1 = row[defType1] ?? 1;
   const mult2 = defType2 ? (row[defType2] ?? 1) : 1;
   return mult1 * mult2;
 }
+
+export const TYPE_LIST = [
+  "normal", "fire", "water", "electric", "grass", "ice", "fighting",
+  "poison", "ground", "flying", "psychic", "bug", "rock", "ghost",
+  "dragon", "dark", "steel",
+];
 
 function getWeatherModifier(moveType, weather) {
   if (weather === "sun")  { if (moveType === "fire") return 1.5; if (moveType === "water") return 0.5; }

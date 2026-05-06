@@ -659,6 +659,11 @@ export default function CalculatorScreen({
   pcBox = [],
   onRefreshEncounters,
   visible = false,
+  // When set (e.g. from the Boss Data screen "Load into Calc" button)
+  // we pre-select that trainer + Pokémon on the enemy side, then call
+  // onCalcPreloadConsumed so the parent can clear the request.
+  calcPreload = null,
+  onCalcPreloadConsumed,
 }) {
   /* ── State ── */
   const [defMode, setDefMode] = useState("lookup");
@@ -715,6 +720,10 @@ export default function CalculatorScreen({
   /* ── Data loading ── */
   useEffect(() => {
     if (!visible) return;
+    // Static reference data — fetch once per session, not every time the
+    // screen becomes visible. Refetching also caused the trainer-data
+    // effect below to clobber preloaded selections on revisit.
+    if (moves.length > 0) return;
     let cancelled = false;
     (async () => {
       try {
@@ -726,7 +735,7 @@ export default function CalculatorScreen({
       } catch { if (!cancelled) setMoves([]); }
     })();
     return () => { cancelled = true; };
-  }, [visible]);
+  }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Fetch my mon's learnset when active mon changes */
   useEffect(() => {
@@ -778,6 +787,11 @@ export default function CalculatorScreen({
 
   useEffect(() => {
     if (!visible) return;
+    // Trainer + Pokémon data is static reference data; load once and
+    // keep it. Refetching on every visibility flip used to overwrite a
+    // pending calcPreload (e.g. boss "Load into Calc") because the
+    // fetch resolves AFTER the preload effect applies its selection.
+    if (trainerRows.length > 0) return;
     let cancelled = false;
     async function load() {
       setLookupLoading(true);
@@ -799,14 +813,14 @@ export default function CalculatorScreen({
         const rows = Array.isArray(trainerData)?trainerData:[];
         setPokemonIndex(index);
         setTrainerRows(rows);
-        const sortedBosses = rows
-          .filter(r => BOSS_PRIORITY.includes(r.id))
-          .sort((a, b) => BOSS_PRIORITY.indexOf(a.id) - BOSS_PRIORITY.indexOf(b.id));
-        const defaultTrainer = sortedBosses[0] || rows[0];
-        if (defaultTrainer) {
-          setSelectedRoute(formatTrainerRoute(defaultTrainer) || "");
-          setSelectedTrainerId(defaultTrainer.id || "");
-          setTrainerQuery(`${defaultTrainer.name}${defaultTrainer.party ? ` (${defaultTrainer.party})` : ""}`);
+        // Only seed defaults when nothing more specific is pending.
+        // calcPreload (if any) will run its own effect right after this
+        // and pick the right trainer; seeding here would briefly flash
+        // the wrong selection.
+        if (!calcPreload?.trainerId) {
+          const firstRoute = formatTrainerRoute(rows[0]);
+          setSelectedRoute(firstRoute||"");
+          setSelectedTrainerId(rows[0]?.id||"");
         }
       } catch (err) {
         if (!cancelled) {
@@ -819,7 +833,41 @@ export default function CalculatorScreen({
     }
     load();
     return () => { cancelled = true; };
-  }, [visible]);
+  }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ── External preload (e.g. Boss screen → Load into Calc) ──
+     Wait until the calculator is visible AND trainerRows is populated,
+     then mirror the same state changes the in-screen trainer search bar
+     would make: pick the trainer, route, sprite-strip slot, and clear
+     any other defender source so calculation uses the strip mon. */
+  useEffect(() => {
+    if (!visible) return;
+    if (!calcPreload?.trainerId) return;
+    if (!trainerRows.length) return;
+    const t = trainerRows.find((r) => r.id === calcPreload.trainerId);
+    if (!t) {
+      onCalcPreloadConsumed?.();
+      return;
+    }
+    const team = Array.isArray(t.pokemon) ? t.pokemon : [];
+    const monIdx = Math.min(
+      Math.max(0, Number(calcPreload.monIdx) || 0),
+      Math.max(0, team.length - 1)
+    );
+    setSelectedTrainerId(t.id);
+    setSelectedRoute(formatTrainerRoute(t));
+    setTrainerQuery(`${t.name}${t.party ? " (" + t.party + ")" : ""}`);
+    setTrainerSearchOpen(false);
+    setEnemyStripIdx(team.length ? monIdx : null);
+    setLookupDefender(null);
+    setDefenderId("");
+    setSelectedPokemonIndex("");
+    setPreview(null);
+    setEnemyMoveOverrides({});
+    setEnemyActiveMoveIdx(null);
+    setDamageResult(null);
+    onCalcPreloadConsumed?.();
+  }, [visible, trainerRows, calcPreload, onCalcPreloadConsumed]);
 
   /* Auto-select first enemy Pokemon when the active trainer changes */
   useEffect(() => {
